@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentation\Presentation.csproj", "{55DA51ED-B384-42C5-BC31-89C9864EE502}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match.Presentation", "Match.Presentation\Match.Presentation.csproj", "{55DA51ED-B384-42C5-BC31-89C9864EE502}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{522D1661-39AE-4AD5-9FB8-D03A8C23C4F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match.Application", "Match.Application\Match.Application.csproj", "{522D1661-39AE-4AD5-9FB8-D03A8C23C4F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{5045523D-4AFC-4F32-9DB9-E019E82A8010}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match.Infrastructure", "Match.Infrastructure\Match.Infrastructure.csproj", "{5045523D-4AFC-4F32-9DB9-E019E82A8010}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{87D67BCB-1821-44E7-8588-8FE409751B63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match.Domain", "Match.Domain\Match.Domain.csproj", "{87D67BCB-1821-44E7-8588-8FE409751B63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
