@@ -1,4 +1,4 @@
-namespace BusinessLogic.DTOs.Request;
+namespace Authentication.BusinessLogic.DTOs.Request;
 
 public class UserRequestDto
 {

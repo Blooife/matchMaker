@@ -1,11 +1,11 @@
 using System.Reflection;
-using DataLayer.Models;
+using Authentication.DataLayer.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataLayer.Contexts;
+namespace Authentication.DataLayer.Contexts;
 
-public class AuthContext : IdentityDbContext<User>
+public class AuthContext : IdentityDbContext<User, Role, string>
 {
     public AuthContext(DbContextOptions<AuthContext> options) : base(options){ }
     

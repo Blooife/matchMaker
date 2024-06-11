@@ -1,7 +1,7 @@
-using DataLayer.Models;
+using Authentication.DataLayer.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace DataLayer.Repositories.Interfaces;
+namespace Authentication.DataLayer.Repositories.Interfaces;
 
 public interface IRoleRepository
 {

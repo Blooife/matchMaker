@@ -1,9 +1,9 @@
-using DataLayer.Models;
-using DataLayer.Repositories.Interfaces;
+using Authentication.DataLayer.Models;
+using Authentication.DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataLayer.Repositories.Implementations;
+namespace Authentication.DataLayer.Repositories.Implementations;
 
 public class RoleRepository(RoleManager<Role> _roleManager) : IRoleRepository
 {

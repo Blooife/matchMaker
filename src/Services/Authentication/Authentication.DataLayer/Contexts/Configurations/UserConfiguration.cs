@@ -1,8 +1,8 @@
-using DataLayer.Models;
+using Authentication.DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DataLayer.Contexts.Configurations;
+namespace Authentication.DataLayer.Contexts.Configurations;
 
 public class UserConfiguration: IEntityTypeConfiguration<User>
 {
@@ -14,5 +14,7 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
         builder.Ignore(e => e.LockoutEnd);
         builder.Ignore(e => e.LockoutEnabled);
         builder.Ignore(e => e.PhoneNumber);
+        builder.Property(e => e.Email).IsRequired();
+        builder.Property(e => e.PasswordHash).IsRequired();
     }
 }

@@ -1,7 +1,7 @@
-using DataLayer.Models;
+using Authentication.DataLayer.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace DataLayer.Repositories.Interfaces;
+namespace Authentication.DataLayer.Repositories.Interfaces;
 
 public interface IUserRepository
 {
@@ -10,7 +10,10 @@ public interface IUserRepository
     Task<IdentityResult> RegisterAsync(User user, string password);
     Task<bool> CheckPasswordAsync(User user, string password);
     Task<IList<string>> GetRolesAsync(User user);
-    Task AddToRoleAsync(User user, string roleName);
+    Task<IdentityResult> AddToRoleAsync(User user, string roleName);
+    Task<IdentityResult> RemoveFromRoleAsync(User user, string roleName);
     Task<User?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken);
     Task<IdentityResult> DeleteUserByIdAsync(User user);
+    Task<IdentityResult> UpdateUserAsync(User user);
+    Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken);
 }

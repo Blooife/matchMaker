@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace DataLayer.Models;
+namespace Authentication.DataLayer.Models;
 
 public class Role : IdentityRole
 {

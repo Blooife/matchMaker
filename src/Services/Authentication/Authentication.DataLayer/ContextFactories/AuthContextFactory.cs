@@ -1,10 +1,10 @@
-using DataLayer.Contexts;
+using Authentication.DataLayer.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace DataLayer.ContextFactories;
+namespace Authentication.DataLayer.ContextFactories;
 
 internal class AuthContextFactory : IDesignTimeDbContextFactory<AuthContext>
 {
@@ -13,7 +13,7 @@ internal class AuthContextFactory : IDesignTimeDbContextFactory<AuthContext>
         var basePath = Directory.GetCurrentDirectory();
         
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(basePath, "../API"))
+            .SetBasePath(Path.Combine(basePath, "../Authentication.API"))
             .AddJsonFile("appsettings.json")
             .Build();
 

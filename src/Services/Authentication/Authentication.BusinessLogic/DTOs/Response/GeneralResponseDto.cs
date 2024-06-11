@@ -1,4 +1,4 @@
-namespace BusinessLogic.DTOs.Response;
+namespace Authentication.BusinessLogic.DTOs.Response;
 
 public class GeneralResponseDto
 {

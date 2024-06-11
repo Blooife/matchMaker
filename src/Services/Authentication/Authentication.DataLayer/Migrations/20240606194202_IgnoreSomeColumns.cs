@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DataLayer.Migrations
+namespace Authentication.DataLayer.Migrations
 {
     /// <inheritdoc />
     public partial class IgnoreSomeColumns : Migration

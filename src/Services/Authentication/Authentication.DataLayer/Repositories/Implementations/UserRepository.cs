@@ -1,10 +1,10 @@
-using DataLayer.Contexts;
-using DataLayer.Models;
-using DataLayer.Repositories.Interfaces;
+using Authentication.DataLayer.Contexts;
+using Authentication.DataLayer.Models;
+using Authentication.DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataLayer.Repositories.Implementations;
+namespace Authentication.DataLayer.Repositories.Implementations;
 
 public class UserRepository(AuthContext _dbContext, UserManager<User> _userManager) : IUserRepository
 {
@@ -28,9 +28,19 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
         return await _userManager.GetRolesAsync(user);
     }
 
-    public async Task AddToRoleAsync(User user, string roleName)
+    public async Task<IdentityResult> AddToRoleAsync(User user, string roleName)
     {
-        await _userManager.AddToRoleAsync(user, roleName);
+        return await _userManager.AddToRoleAsync(user, roleName);
+    }
+    
+    public async Task<IdentityResult> RemoveFromRoleAsync(User user, string roleName)
+    {
+        var roles = await _userManager.GetRolesAsync(user);
+        if (roles.Count == 1)
+        {
+            return IdentityResult.Failed(new IdentityError(){Description = "User can't have less than 1 role"});
+        }
+        return await _userManager.RemoveFromRoleAsync(user, roleName);
     }
 
     public async Task<User?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken)
@@ -43,6 +53,11 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
         return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
     
+    public async Task<IdentityResult> UpdateUserAsync(User user)
+    {
+        return await _userManager.UpdateAsync(user);
+    }
+    
     public async Task<IdentityResult> DeleteUserByIdAsync(User user)
     {
         return await _userManager.DeleteAsync(user);
@@ -52,4 +67,5 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
     {
         return await _userManager.Users.AsNoTracking().ToListAsync(cancellationToken);
     }
+    
 }

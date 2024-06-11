@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DataLayer.Migrations
+namespace Authentication.DataLayer.Migrations
 {
     /// <inheritdoc />
     public partial class InitialAuthDb : Migration

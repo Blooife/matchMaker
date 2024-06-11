@@ -1,4 +1,4 @@
-namespace BusinessLogic.Exceptions;
+namespace Authentication.BusinessLogic.Exceptions;
 
 public class RegisterException : Exception
 {
