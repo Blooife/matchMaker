@@ -1,0 +1,20 @@
+using AutoMapper;
+using MediatR;
+using Profile.Application.DTOs.Profile.Response;
+using Profile.Domain.Repositories;
+
+namespace Profile.Application.UseCases.ProfileUseCases.Commands.Delete;
+
+public class DeleteProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<DeleteProfileCommand, ProfileResponseDto>
+{
+    public async Task<ProfileResponseDto> Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
+    {
+        var profile = await _unitOfWork.ProfileRepository.GetProfileByIdAsync(request.ProfileId, cancellationToken);
+        if (profile == null)
+        {
+            
+        }
+        await _unitOfWork.ProfileRepository.DeleteProfileAsync(profile, cancellationToken);
+        return _mapper.Map<ProfileResponseDto>(profile);
+    }
+}
