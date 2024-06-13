@@ -14,6 +14,5 @@ public class AuthContext : IdentityDbContext<User, Role, string>
         base.OnModelCreating(modelBuilder);
         
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        
     }
 }

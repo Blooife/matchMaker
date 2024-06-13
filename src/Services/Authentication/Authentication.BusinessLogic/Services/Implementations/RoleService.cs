@@ -19,7 +19,7 @@ public class RoleService(IRoleRepository _roleRepository, IMapper _mapper) : IRo
         }
         return new GeneralResponseDto() { Message = "Role created successfully" };
     }
-
+    
     public async Task<IEnumerable<RoleResponseDto>> GetAllRolesAsync(CancellationToken cancellationToken)
     {
         var roles =  await _roleRepository.GetAllRolesAsync(cancellationToken);

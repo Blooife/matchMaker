@@ -4,16 +4,19 @@ using Authentication.BusinessLogic.Exceptions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Shared.Models;
 
 namespace Authentication.API.MiddlewareHandlers
 {
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
+        
         public ExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
         }
+        
         public async Task InvokeAsync(HttpContext httpContext)
         {
             try
@@ -25,6 +28,7 @@ namespace Authentication.API.MiddlewareHandlers
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
+        
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
@@ -68,13 +72,8 @@ namespace Authentication.API.MiddlewareHandlers
             }
 
             context.Response.StatusCode = (int)statusCode;
+            
             return context.Response.WriteAsync(result);
         }
-    }
-
-    public class ErrorDetails
-    {
-        public string ErrorType { get; set; }
-        public string ErrorMessage { get; set; }
     }
 }

@@ -72,14 +72,13 @@ public static class ServicesExtension
 
         var key = Encoding.ASCII.GetBytes(secret);
 
-
-        services.AddAuthentication(x =>
+        services.AddAuthentication(authOptions =>
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(x =>
+            authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(jwtOptions =>
         {
-            x.TokenValidationParameters = new TokenValidationParameters
+            jwtOptions.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -133,6 +132,4 @@ public static class ServicesExtension
             db.Database.Migrate();
         }
     }
-    
-    
 }

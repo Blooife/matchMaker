@@ -112,24 +112,28 @@ public class UserService(IUserRepository _userRepository, IRoleRepository _roleR
         {
             throw new DeleteUserException(ExceptionMessages.DeleteUserFailed);
         }
+        
         return new GeneralResponseDto() { Message = "User deleted successfully" };
     }
 
     public async Task<IEnumerable<UserDto>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
         var users = await _userRepository.GetAllUsersAsync(cancellationToken);
+        
         return _mapper.Map<IEnumerable<UserDto>>(users);
     }
 
     public async Task<UserDto> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        
         return _mapper.Map<UserDto>(user);
     }
     
     public async Task<UserDto> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
+        
         return _mapper.Map<UserDto>(user);
     }
 
@@ -142,6 +146,7 @@ public class UserService(IUserRepository _userRepository, IRoleRepository _roleR
         }
 
         var roles = _userRepository.GetRolesAsync(user);
+        
         return _mapper.Map<IEnumerable<RoleResponseDto>>(roles);
     }
     
