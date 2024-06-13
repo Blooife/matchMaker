@@ -13,7 +13,7 @@ public class UsersController(IUserService _userService): ControllerBase
 {
     [HttpDelete("{userId}")]
     [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
-    public async Task<IActionResult> DeleteUserById(string userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteUserById([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var response = await _userService.DeleteUserByIdAsync(userId, cancellationToken);
         
@@ -22,7 +22,7 @@ public class UsersController(IUserService _userService): ControllerBase
     
     [HttpGet("{userId}")]
     [Authorize]
-    public async Task<IActionResult> GetUserById(string userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserById([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
         return Ok(user);
@@ -30,7 +30,7 @@ public class UsersController(IUserService _userService): ControllerBase
     
     [HttpGet("get/by/email/{email}")]
     [Authorize]
-    public async Task<IActionResult> GetUserByEmail(string email, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserByEmail([FromRoute] string email, CancellationToken cancellationToken)
     {
         var user = await _userService.GetUserByEmailAsync(email, cancellationToken);
         return Ok(user);
@@ -38,7 +38,7 @@ public class UsersController(IUserService _userService): ControllerBase
     
     [HttpGet("roles/{userId}")]
     [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
-    public async Task<IActionResult> GetUsersRoles(string userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUsersRoles([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var roles = await _userService.GetUsersRoles(userId, cancellationToken);
         return Ok(roles);
@@ -49,6 +49,14 @@ public class UsersController(IUserService _userService): ControllerBase
     public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
         var users = await _userService.GetAllUsersAsync(cancellationToken);
+        return Ok(users);
+    } 
+    
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetPaginatedUsers([FromQuery] int pageSize, [FromQuery] int pageNumber, CancellationToken cancellationToken)
+    {
+        var users = await _userService.GetPaginatedUsersAsync(pageSize, pageNumber, cancellationToken);
         return Ok(users);
     } 
 }

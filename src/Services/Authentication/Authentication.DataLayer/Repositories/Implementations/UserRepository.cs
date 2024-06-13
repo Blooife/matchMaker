@@ -45,7 +45,7 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
 
     public async Task<User?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken)
     {
-        return new User();
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.RefreshToken == token, cancellationToken);
     }
 
     public async Task<User?> GetByIdAsync(string id, CancellationToken cancellationToken)
@@ -66,6 +66,13 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
     public async Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
         return await _userManager.Users.AsNoTracking().ToListAsync(cancellationToken);
+    }
+    
+    public async Task<IEnumerable<User>> GetPaginatedUsersAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
+    {
+        IQueryable<User> query = _dbContext.Set<User>();
+        return await query.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+            .ToListAsync(cancellationToken);
     }
     
 }

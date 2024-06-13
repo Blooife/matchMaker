@@ -122,6 +122,13 @@ public class UserService(IUserRepository _userRepository, IRoleRepository _roleR
         
         return _mapper.Map<IEnumerable<UserDto>>(users);
     }
+    
+    public async Task<IEnumerable<UserDto>> GetPaginatedUsersAsync(int pageSize, int pageNumber, CancellationToken cancellationToken)
+    {
+        var users = await _userRepository.GetPaginatedUsersAsync(pageSize, pageNumber, cancellationToken);
+        
+        return _mapper.Map<IEnumerable<UserDto>>(users);
+    }
 
     public async Task<UserDto> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
     {
