@@ -3,6 +3,7 @@ using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Shared.Models;
 
 namespace Authentication.DataLayer.Repositories.Implementations;
 
@@ -35,17 +36,12 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
     
     public async Task<IdentityResult> RemoveFromRoleAsync(User user, string roleName)
     {
-        var roles = await _userManager.GetRolesAsync(user);
-        if (roles.Count == 1)
-        {
-            return IdentityResult.Failed(new IdentityError(){Description = "User can't have less than 1 role"});
-        }
         return await _userManager.RemoveFromRoleAsync(user, roleName);
     }
 
     public async Task<User?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken)
     {
-        return new User();
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.RefreshToken == token, cancellationToken);
     }
 
     public async Task<User?> GetByIdAsync(string id, CancellationToken cancellationToken)
@@ -68,4 +64,11 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
         return await _userManager.Users.AsNoTracking().ToListAsync(cancellationToken);
     }
     
+    public async Task<PagedList<User>> GetPaginatedUsersAsync(int pageNumber, int pageSize)
+    {
+        IQueryable<User> query = _dbContext.Set<User>();
+        return PagedList<User>.ToPagedList(query.OrderBy(e=>e.Email),
+            pageNumber,
+            pageSize);
+    }
 }
