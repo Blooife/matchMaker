@@ -7,6 +7,7 @@ using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
 using Shared.Constants;
+using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
