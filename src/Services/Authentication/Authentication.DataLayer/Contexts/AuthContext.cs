@@ -1,5 +1,6 @@
 using System.Reflection;
 using Authentication.DataLayer.Models;
+using Authentication.DataLayer.Seed;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +12,11 @@ public class AuthContext : IdentityDbContext<User, Role, string>
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        
         base.OnModelCreating(modelBuilder);
         
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        SeedRoles.Seed(modelBuilder);
+        SeedUsers.Seed(modelBuilder);
     }
 }
