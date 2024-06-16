@@ -13,4 +13,6 @@ public interface IUserService
     Task<IEnumerable<RoleResponseDto>> GetUsersRoles(string userId, CancellationToken cancellationToken);
     Task<IEnumerable<UserResponseDto>>
         GetPaginatedUsersAsync(int pageSize, int pageNumber, CancellationToken cancellationToken);
+
+    Task<GeneralResponseDto> UpdateUser(UserRequestDto userDto);
 }

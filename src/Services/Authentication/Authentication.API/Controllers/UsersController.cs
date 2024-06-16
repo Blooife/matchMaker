@@ -55,4 +55,23 @@ public class UsersController(IUserService _userService): ControllerBase
         
         return Ok(users);
     } 
+    
+    [HttpDelete("{userId}")]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteUserById([FromRoute] string userId, CancellationToken cancellationToken)
+    {
+        var users = await _userService.DeleteUserByIdAsync(userId, cancellationToken);
+        
+        return Ok(users);
+    } 
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<IActionResult> UpdateUser([FromBody] UserRequestDto userRequestDto)
+    {
+        var users = await _userService.UpdateUser(userRequestDto);
+        
+        return Ok(users);
+    } 
 }
