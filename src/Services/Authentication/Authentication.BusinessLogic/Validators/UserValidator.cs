@@ -11,6 +11,7 @@ public class UserValidator : AbstractValidator<UserRequestDto>
             .NotEmpty().WithMessage("Email is required")
             .MaximumLength(100).WithMessage("Email length must be less than 100")
             .EmailAddress().WithMessage("Invalid email");
+        
         RuleFor(dto => dto.Password)
             .NotEmpty().WithMessage("Password is required");
     }

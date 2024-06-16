@@ -1,6 +1,6 @@
+using System.Reflection;
 using System.Text;
 using Authentication.BusinessLogic.DTOs.Request;
-using Authentication.BusinessLogic.Mappers;
 using Authentication.BusinessLogic.Providers.Implementations;
 using Authentication.BusinessLogic.Providers.Interfaces;
 using Authentication.BusinessLogic.Services.Implementations;
@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Shared.Models;
 
 namespace Authentication.API.Extensions;
 
@@ -41,11 +42,12 @@ public static class ServicesExtension
     
     public static void ConfigureServices(this IServiceCollection services)
     {
-        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddScoped<IValidator<UserRequestDto>, UserValidator>();
         
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IAuthService, AuthService>();
     }
     
     public static void ConfigureRepositories(this IServiceCollection services)
@@ -70,7 +72,7 @@ public static class ServicesExtension
         var issuer = settingsSection.GetValue<string>("Issuer");
         var audience = settingsSection.GetValue<string>("Audience");
 
-        var key = Encoding.ASCII.GetBytes(secret);
+        var key = Encoding.ASCII.GetBytes(secret!);
 
         services.AddAuthentication(authOptions =>
         {

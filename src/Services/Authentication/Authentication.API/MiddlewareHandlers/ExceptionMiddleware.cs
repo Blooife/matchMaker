@@ -51,6 +51,9 @@ namespace Authentication.API.MiddlewareHandlers
                 case AssignRoleException assignRoleException:
                     statusCode = HttpStatusCode.BadRequest;
                     break;
+                case RemoveRoleException removeRoleException:
+                    statusCode = HttpStatusCode.BadRequest;
+                    break;
                 case LoginException loginException:
                     statusCode = HttpStatusCode.Unauthorized;
                     break;

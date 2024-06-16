@@ -1,4 +1,4 @@
-﻿namespace Authentication.DataLayer.Models
+﻿namespace Shared.Models
 {
     public class JwtOptions
     {
