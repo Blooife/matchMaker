@@ -14,6 +14,7 @@ public class RolesController(IRoleService _roleService): ControllerBase
     public async Task<IActionResult> GetAllRoles(CancellationToken cancellationToken)
     {
         var roles = await _roleService.GetAllRolesAsync(cancellationToken);
+        
         return Ok(roles);
     } 
 }

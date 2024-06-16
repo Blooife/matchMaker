@@ -12,11 +12,6 @@ public class RoleRepository(RoleManager<Role> _roleManager) : IRoleRepository
         return await _roleManager.RoleExistsAsync(roleName);
     }
 
-    public async Task<IdentityResult> CreateRoleAsync(Role role)
-    {
-        return await _roleManager.CreateAsync(role);
-    }
-
     public async Task<IEnumerable<Role>> GetAllRolesAsync(CancellationToken cancellationToken)
     {
         return await _roleManager.Roles.AsNoTracking().ToListAsync(cancellationToken);

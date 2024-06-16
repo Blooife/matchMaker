@@ -35,11 +35,6 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
     
     public async Task<IdentityResult> RemoveFromRoleAsync(User user, string roleName)
     {
-        var roles = await _userManager.GetRolesAsync(user);
-        if (roles.Count == 1)
-        {
-            return IdentityResult.Failed(new IdentityError(){Description = "User can't have less than 1 role"});
-        }
         return await _userManager.RemoveFromRoleAsync(user, roleName);
     }
 

@@ -8,12 +8,12 @@ namespace Authentication.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController(IUserService _userService) : ControllerBase
+public class AuthController(IAuthService _authService) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] UserRequestDto model)
     {
-        var response = await _userService.RegisterAsync(model);
+        var response = await _authService.RegisterAsync(model);
         
         return Ok(response);
     }
@@ -21,7 +21,7 @@ public class AuthController(IUserService _userService) : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] UserRequestDto model, CancellationToken cancellationToken)
     {
-        var response = await _userService.LoginAsync(model, cancellationToken);
+        var response = await _authService.LoginAsync(model, cancellationToken);
         
         return Ok(response);
     }
@@ -30,16 +30,16 @@ public class AuthController(IUserService _userService) : ControllerBase
     [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> AssignRole([FromBody] AssignRoleRequestDto model, CancellationToken cancellationToken)
     {
-        var response = await _userService.AssignRoleAsync(model.Email, model.Role, cancellationToken);
+        var response = await _authService.AssignRoleAsync(model.Email, model.Role, cancellationToken);
         
         return Ok(response);
     }
     
-    [HttpPost("remove/from/role")]
+    [HttpDelete("remove/from/role")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> RemoveFromRole([FromBody] AssignRoleRequestDto model, CancellationToken cancellationToken)
     {
-        var response = await _userService.RemoveUserFromRoleAsync(model.Email, model.Role, cancellationToken);
+        var response = await _authService.RemoveUserFromRoleAsync(model.Email, model.Role, cancellationToken);
         
         return Ok(response);
     }
@@ -48,7 +48,7 @@ public class AuthController(IUserService _userService) : ControllerBase
     [Authorize]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshRequestDto refreshToken, CancellationToken cancellationToken)
     {
-        var response = await _userService.RefreshToken(refreshToken.refreshToken, cancellationToken);
+        var response = await _authService.RefreshToken(refreshToken.refreshToken, cancellationToken);
 
         return Ok(response);
     }

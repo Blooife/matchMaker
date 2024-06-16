@@ -11,20 +11,12 @@ namespace Authentication.API.Controllers;
 [ApiController]
 public class UsersController(IUserService _userService): ControllerBase
 {
-    [HttpDelete("{userId}")]
-    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
-    public async Task<IActionResult> DeleteUserById([FromRoute] string userId, CancellationToken cancellationToken)
-    {
-        var response = await _userService.DeleteUserByIdAsync(userId, cancellationToken);
-        
-        return Ok(response);
-    }
-    
     [HttpGet("{userId}")]
     [Authorize]
     public async Task<IActionResult> GetUserById([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
+        
         return Ok(user);
     } 
     
@@ -33,6 +25,7 @@ public class UsersController(IUserService _userService): ControllerBase
     public async Task<IActionResult> GetUserByEmail([FromRoute] string email, CancellationToken cancellationToken)
     {
         var user = await _userService.GetUserByEmailAsync(email, cancellationToken);
+        
         return Ok(user);
     } 
     
@@ -41,6 +34,7 @@ public class UsersController(IUserService _userService): ControllerBase
     public async Task<IActionResult> GetUsersRoles([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var roles = await _userService.GetUsersRoles(userId, cancellationToken);
+        
         return Ok(roles);
     } 
     
@@ -49,14 +43,16 @@ public class UsersController(IUserService _userService): ControllerBase
     public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
         var users = await _userService.GetAllUsersAsync(cancellationToken);
+        
         return Ok(users);
     } 
     
-    [HttpGet]
-    [Authorize]
+    [HttpGet("paginated/users")]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
     public async Task<IActionResult> GetPaginatedUsers([FromQuery] int pageSize, [FromQuery] int pageNumber, CancellationToken cancellationToken)
     {
         var users = await _userService.GetPaginatedUsersAsync(pageSize, pageNumber, cancellationToken);
+        
         return Ok(users);
     } 
 }
