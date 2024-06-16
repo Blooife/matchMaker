@@ -1,5 +1,6 @@
 using Authentication.DataLayer.Models;
 using Microsoft.AspNetCore.Identity;
+using Shared.Models;
 
 namespace Authentication.DataLayer.Repositories.Interfaces;
 
@@ -16,5 +17,5 @@ public interface IUserRepository
     Task<IdentityResult> DeleteUserByIdAsync(User user);
     Task<IdentityResult> UpdateUserAsync(User user);
     Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken);
-    Task<IEnumerable<User>> GetPaginatedUsersAsync(int pageNumber, int pageSize, CancellationToken cancellationToken);
+    Task<PagedList<User>> GetPaginatedUsersAsync(int pageNumber, int pageSize);
 }

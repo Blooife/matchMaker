@@ -8,6 +8,7 @@ using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
 using Shared.Constants;
+using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
@@ -53,11 +54,11 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
         return _mapper.Map<IEnumerable<UserResponseDto>>(users);
     }
     
-    public async Task<IEnumerable<UserResponseDto>> GetPaginatedUsersAsync(int pageSize, int pageNumber, CancellationToken cancellationToken)
+    public async Task<PagedList<User>> GetPaginatedUsersAsync(int pageSize, int pageNumber)
     {
-        var users = await _userRepository.GetPaginatedUsersAsync(pageSize, pageNumber, cancellationToken);
+        var result = await _userRepository.GetPaginatedUsersAsync(pageNumber, pageSize);
         
-        return _mapper.Map<IEnumerable<UserResponseDto>>(users);
+        return result;
     }
 
     public async Task<UserResponseDto> GetUserByIdAsync(string userId, CancellationToken cancellationToken)

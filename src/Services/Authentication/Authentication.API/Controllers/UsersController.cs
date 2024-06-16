@@ -2,6 +2,7 @@ using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Shared.Constants;
 
 namespace Authentication.API.Controllers;
@@ -51,9 +52,20 @@ public class UsersController(IUserService _userService): ControllerBase
     [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
     public async Task<IActionResult> GetPaginatedUsers([FromQuery] int pageSize, [FromQuery] int pageNumber, CancellationToken cancellationToken)
     {
-        var users = await _userService.GetPaginatedUsersAsync(pageSize, pageNumber, cancellationToken);
+        var pagedList = await _userService.GetPaginatedUsersAsync(pageSize, pageNumber);
+        var metadata = new
+        {
+            pagedList.TotalCount,
+            pagedList.PageSize,
+            pagedList.CurrentPage,
+            pagedList.TotalPages,
+            pagedList.HasNext,
+            pagedList.HasPrevious
+        };
+
+        HttpContext.Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
         
-        return Ok(users);
+        return Ok(pagedList);
     } 
     
     [HttpDelete("{userId}")]
