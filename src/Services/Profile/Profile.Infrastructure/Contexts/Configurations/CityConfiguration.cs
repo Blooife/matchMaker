@@ -8,7 +8,7 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
 {
     public void Configure(EntityTypeBuilder<City> builder)
     {
-        builder.HasKey(c => c.Id);
-        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.HasKey(city => city.Id);
+        builder.Property(city => city.Id).IsRequired().ValueGeneratedOnAdd();
     }
 }

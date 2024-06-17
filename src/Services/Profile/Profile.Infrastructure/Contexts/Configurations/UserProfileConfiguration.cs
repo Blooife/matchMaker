@@ -8,12 +8,12 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 {
     public void Configure(EntityTypeBuilder<UserProfile> builder)
     {
-        builder.HasKey(u => u.Id);
-        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.HasOne(u => u.Preference)
-            .WithOne(p => p.Profile)
-            .HasForeignKey<Preference>(p => p.ProfileId);
+        builder.HasKey(userProfile => userProfile.Id);
+        builder.Property(userProfile => userProfile.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.HasOne(userProfile => userProfile.Preference)
+            .WithOne(preference => preference.Profile)
+            .HasForeignKey<Preference>(preference => preference.ProfileId);
 
-        builder.HasMany(p => p.Interests).WithMany(i => i.Profiles);
+        builder.HasMany(p => p.Interests).WithMany(interest => interest.Profiles);
     }
 }

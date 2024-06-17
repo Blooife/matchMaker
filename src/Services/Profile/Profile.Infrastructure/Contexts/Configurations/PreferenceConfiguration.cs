@@ -8,6 +8,6 @@ public class PreferenceConfiguration : IEntityTypeConfiguration<Preference>
 {
     public void Configure(EntityTypeBuilder<Preference> builder)
     {
-        builder.HasKey(p => p.ProfileId);
+        builder.HasKey(preference => preference.ProfileId);
     }
 }

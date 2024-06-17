@@ -8,8 +8,8 @@ public class LanguageConfiguration : IEntityTypeConfiguration<Language>
 {
     public void Configure(EntityTypeBuilder<Language> builder)
     {
-        builder.HasKey(l => l.Id);
-        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.HasIndex(l => l.Name).IsUnique();
+        builder.HasKey(language => language.Id);
+        builder.Property(language => language.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.HasIndex(language => language.Name).IsUnique();
     }
 }

@@ -8,9 +8,9 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
 {
     public void Configure(EntityTypeBuilder<Country> builder)
     {
-        builder.HasKey(c => c.Id);
-        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.HasIndex(c => c.Name).IsUnique();
+        builder.HasKey(country => country.Id);
+        builder.Property(country => country.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.HasIndex(country => country.Name).IsUnique();
         
         
     }

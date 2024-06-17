@@ -8,8 +8,8 @@ public class GoalConfiguration : IEntityTypeConfiguration<Goal>
 {
     public void Configure(EntityTypeBuilder<Goal> builder)
     {
-        builder.HasKey(g => g.Id);
-        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.HasIndex(g => g.Name).IsUnique();
+        builder.HasKey(goal => goal.Id);
+        builder.Property(goal => goal.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.HasIndex(goal => goal.Name).IsUnique();
     }
 }

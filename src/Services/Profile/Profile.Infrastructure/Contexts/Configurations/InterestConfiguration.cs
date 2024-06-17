@@ -8,8 +8,8 @@ public class InterestConfiguration : IEntityTypeConfiguration<Interest>
 {
     public void Configure(EntityTypeBuilder<Interest> builder)
     {
-        builder.HasKey(i => i.Id);
-        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
-        builder.HasIndex(i => i.Name).IsUnique();
+        builder.HasKey(interest => interest.Id);
+        builder.Property(interest => interest.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.HasIndex(interest=> interest.Name).IsUnique();
     }
 }

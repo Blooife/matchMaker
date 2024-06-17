@@ -16,22 +16,8 @@
         
       <PackageReference Include="FluentValidation" Version="11.9.0" />  
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
-      <Folder Include="DTOs\City\Request\" />  
-      <Folder Include="DTOs\City\Response\" />
       <Folder Include="DTOs\Country\Request\" />
-      <Folder Include="DTOs\Country\Response\" />
-      <Folder Include="DTOs\Goal\Request\" />
-      <Folder Include="DTOs\Goal\Response\" />
-      <Folder Include="DTOs\Preference\Request\" />
-      <Folder Include="UseCases\CityUseCases\Commands\" />
-      <Folder Include="UseCases\CityUseCases\Queries\" />
       <Folder Include="UseCases\CountryUseCases\Commands\" />
-      <Folder Include="UseCases\CountryUseCases\Queries\" />
-      <Folder Include="UseCases\EducationUseCases\Commands\" />
-      <Folder Include="UseCases\EducationUseCases\Queries\" />
-      <Folder Include="UseCases\GoalUseCases\Commands\" />
-      <Folder Include="UseCases\GoalUseCases\Queries\" />
-      <Folder Include="UseCases\PreferenceUseCases\Commands\" />
     </ItemGroup>
 
     <ItemGroup>
