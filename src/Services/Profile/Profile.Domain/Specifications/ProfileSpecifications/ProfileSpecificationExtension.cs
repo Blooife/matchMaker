@@ -24,4 +24,11 @@ public static class ProfileSpecificationExtension
         bool result = spec.IsSatisfied(profile);
         return result;
     }
+    
+    public static bool ContainsEducation(this UserProfile profile, int educationId)
+    {
+        var spec = new ContainsEducationSpecification(educationId);
+        bool result = spec.IsSatisfied(profile);
+        return result;
+    }
 }
