@@ -23,25 +23,25 @@ public class InterestsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllInterests(CancellationToken cancellationToken)
     {
-        var profiles = await _mediator.Send(new GetAllInterestsQuery(), cancellationToken);
+        var interests = await _mediator.Send(new GetAllInterestsQuery(), cancellationToken);
         
-        return Ok(profiles);
+        return Ok(interests);
     }
     
     [HttpGet("{id}")]
     public async Task<IActionResult> GetInterestById([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var profile = await _mediator.Send(new GetInterestByIdQuery(id), cancellationToken);
+        var interest = await _mediator.Send(new GetInterestByIdQuery(id), cancellationToken);
         
-        return Ok(profile);
+        return Ok(interest);
     }
     
     [HttpGet("user/{id}")]
     public async Task<IActionResult> GetUserInterests(string id, CancellationToken cancellationToken)
     {
-        var profiles = await _mediator.Send(new GetUsersInterestsQuery(id), cancellationToken);
+        var interests = await _mediator.Send(new GetUsersInterestsQuery(id), cancellationToken);
         
-        return Ok(profiles);
+        return Ok(interests);
     }
 
     [HttpPost("add/to/profile")]

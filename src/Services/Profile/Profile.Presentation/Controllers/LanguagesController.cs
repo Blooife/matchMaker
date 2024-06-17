@@ -23,25 +23,25 @@ public class LanguagesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllLanguages(CancellationToken cancellationToken)
     {
-        var profiles = await _mediator.Send(new GetAllLanguagesQuery(), cancellationToken);
+        var languages = await _mediator.Send(new GetAllLanguagesQuery(), cancellationToken);
         
-        return Ok(profiles);
+        return Ok(languages);
     }
     
     [HttpGet("{id}")]
     public async Task<IActionResult> GetLanguageById([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var profile = await _mediator.Send(new GetLanguageByIdQuery(id), cancellationToken);
+        var language = await _mediator.Send(new GetLanguageByIdQuery(id), cancellationToken);
         
-        return Ok(profile);
+        return Ok(language);
     }
     
     [HttpGet("user/{id}")]
     public async Task<IActionResult> GetUserLanguages(string id, CancellationToken cancellationToken)
     {
-        var profiles = await _mediator.Send(new GetUsersLanguagesQuery(id), cancellationToken);
+        var languages = await _mediator.Send(new GetUsersLanguagesQuery(id), cancellationToken);
         
-        return Ok(profiles);
+        return Ok(languages);
     }
 
     [HttpPost("add/to/profile")]
