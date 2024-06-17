@@ -1,4 +1,3 @@
-/*using Application.Exceptions;
 using FluentValidation;
 using MediatR;
 
@@ -29,8 +28,8 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
             .ToArray();
 
         if (errors.Any())
-            throw new BadRequestException(errors.First());
+            throw new ValidationException(errors.First());
 
         return await next();
     }
-}*/
+}

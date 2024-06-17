@@ -1,0 +1,12 @@
+using FluentValidation;
+
+namespace Profile.Application.UseCases.EducationUseCases.Commands.AddEducationToProfile;
+
+public class AddEducationToProfileValidator : AbstractValidator<AddEducationToProfileCommand>
+{
+    public AddEducationToProfileValidator()
+    {
+        RuleFor(command => command.Dto.ProfileId).NotEmpty().WithMessage("Profile id cant be empty");
+        RuleFor(command => command.Dto.EducationId).NotEmpty().WithMessage("Education id cant be empty");
+    }
+}
