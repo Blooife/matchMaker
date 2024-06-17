@@ -20,17 +20,18 @@ public class ProfileDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserProfile>()
-            .HasMany(up => up.UserEducations)
-            .WithOne(ue => ue.Profile)
-            .HasForeignKey(ue => ue.ProfileId);
+            .HasMany(userProfile => userProfile.UserEducations)
+            .WithOne(userEducation => userEducation.Profile)
+            .HasForeignKey(userEducation => userEducation.ProfileId);
 
         modelBuilder.Entity<Education>()
-            .HasMany(e => e.UserEducations)
-            .WithOne(ue => ue.Education)
-            .HasForeignKey(ue => ue.EducationId);
+            .HasMany(education => education.UserEducations)
+            .WithOne(userEducation => userEducation.Education)
+            .HasForeignKey(userEducation => userEducation.EducationId);
 
         modelBuilder.Entity<UserEducation>()
-            .HasKey(ue => new { ue.ProfileId, ue.EducationId });
+            .HasKey(userEducation => new { userEducation.ProfileId, userEducation.EducationId });
+        
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
         

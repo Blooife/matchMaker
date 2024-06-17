@@ -31,7 +31,7 @@ public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHand
             throw new Exception();
         }
         
-        var lessThan = profileWithInterests.InterestsLessThan(4);
+        var lessThan = profileWithInterests.InterestsLessThan(6);
 
         if (!lessThan)
         {

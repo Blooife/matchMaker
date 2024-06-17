@@ -14,9 +14,9 @@ public class Preference
 
     public Preference()
     {
-        AgeFrom = -1;
-        AgeTo = -1;
-        MaxDistance = -1;
+        AgeFrom = 0;
+        AgeTo = 0;
+        MaxDistance = 0;
         Gender = Gender.Undefined;
         IsActive = false;
     }

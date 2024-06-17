@@ -1,0 +1,23 @@
+using MediatR;
+using Profile.Domain.Repositories;
+using Shared.Models;
+
+namespace Profile.Application.UseCases.GoalUseCases.Commands.RemoveGoalFromProfile;
+
+public class RemoveGoalFromProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<RemoveGoalFromProfileCommand, GeneralResponseDto>
+{
+    public async Task<GeneralResponseDto> Handle(RemoveGoalFromProfileCommand request, CancellationToken cancellationToken)
+    {
+        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(request.Dto.ProfileId, cancellationToken);
+        
+        if (profile is null)
+        {
+            throw new Exception();
+        }
+        
+        await _unitOfWork.GoalRepository.RemoveGoalFromProfile(profile, cancellationToken);
+        await _unitOfWork.SaveAsync(cancellationToken);
+        
+        return new GeneralResponseDto();
+    }
+}

@@ -9,5 +9,6 @@ public interface IUnitOfWork : IDisposable
     ICountryRepository CountryRepository { get; }
     ICityRepository CityRepository { get; }
     IInterestRepository InterestRepository { get; }
+    IEducationRepository EducationRepository { get; }
     Task SaveAsync(CancellationToken cancellationToken);
 }
