@@ -9,7 +9,7 @@ public class GetUsersLanguagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) 
 {
     public async Task<IEnumerable<LanguageResponseDto>> Handle(GetUsersLanguagesQuery request, CancellationToken cancellationToken)
     {
-        var profile = await _unitOfWork.ProfileRepository.GetProfileByIdAsync(request.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
         if (profile == null)
         {
             //

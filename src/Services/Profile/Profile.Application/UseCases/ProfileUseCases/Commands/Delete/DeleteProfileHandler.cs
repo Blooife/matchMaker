@@ -9,12 +9,14 @@ public class DeleteProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
 {
     public async Task<ProfileResponseDto> Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
     {
-        var profile = await _unitOfWork.ProfileRepository.GetProfileByIdAsync(request.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
         if (profile == null)
         {
             
         }
         await _unitOfWork.ProfileRepository.DeleteProfileAsync(profile, cancellationToken);
+        await _unitOfWork.SaveAsync(cancellationToken);
+        
         return _mapper.Map<ProfileResponseDto>(profile);
     }
 }

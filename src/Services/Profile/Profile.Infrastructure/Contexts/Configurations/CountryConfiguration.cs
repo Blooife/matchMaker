@@ -12,5 +12,6 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
         builder.HasIndex(c => c.Name).IsUnique();
         
+        
     }
 }

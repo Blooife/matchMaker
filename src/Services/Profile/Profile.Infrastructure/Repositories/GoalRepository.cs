@@ -2,19 +2,16 @@ using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
+using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class GoalRepository(ProfileDbContext _dbContext) : IGoalRepository
+public class GoalRepository : GenericRepository<Goal, int>, IGoalRepository
 {
-    public async Task<IEnumerable<Goal>> GetAllAsync(CancellationToken cancellationToken)
+    private readonly ProfileDbContext _dbContext;
+    public GoalRepository(ProfileDbContext dbContext) : base(dbContext)
     {
-        return await _dbContext.Goals.AsNoTracking().ToListAsync(cancellationToken);
-    }
-
-    public async Task<Goal?> GetByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Goals.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
+        _dbContext = dbContext;
     }
     
     public async Task<Goal?> GetByNameAsync(string name, CancellationToken cancellationToken)
@@ -26,13 +23,11 @@ public class GoalRepository(ProfileDbContext _dbContext) : IGoalRepository
     {
         profile.GoalId = goal.Id;
         _dbContext.Entry(profile).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
     
     public async Task RemoveGoalFromProfile(UserProfile profile, CancellationToken cancellationToken)
     {
         profile.GoalId = null;
         _dbContext.Entry(profile).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -2,19 +2,16 @@ using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
+using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class InterestRepository(ProfileDbContext _dbContext) : IInterestRepository
+public class InterestRepository : GenericRepository<Interest, int>, IInterestRepository
 {
-    public async Task<IEnumerable<Interest>> GetAllAsync(CancellationToken cancellationToken)
+    private readonly ProfileDbContext _dbContext;
+    public InterestRepository(ProfileDbContext dbContext) : base(dbContext)
     {
-        return await _dbContext.Interests.AsNoTracking().ToListAsync(cancellationToken);
-    }
-
-    public async Task<Interest?> GetByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Interests.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
+        _dbContext = dbContext;
     }
     
     public async Task<Interest?> GetByNameAsync(string name, CancellationToken cancellationToken)
@@ -22,41 +19,29 @@ public class InterestRepository(ProfileDbContext _dbContext) : IInterestReposito
         return await _dbContext.Interests.AsNoTracking().FirstOrDefaultAsync(l => l.Name == name, cancellationToken);
     }
     
-    public async Task AddInterestToProfile(UserProfile profile, Interest interest, CancellationToken cancellationToken)
+    public async Task AddInterestToProfile(UserProfile profile, Interest interest)
     {
-        var userProfile = await _dbContext.Profiles.Include(p => p.Interests).FirstOrDefaultAsync(p => p.Id == profile.Id, cancellationToken);
-        userProfile?.Interests.Add(interest);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        profile.Interests.Add(interest);
     }
     
-    public async Task RemoveInterestFromProfile(string profileId, int  interestId, CancellationToken cancellationToken)
+    public async Task RemoveInterestFromProfile(UserProfile profile, Interest interest)
     {
-        var userProfile = await _dbContext.Profiles.Include(p => p.Interests).FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
-    
-        if (userProfile == null)
-        {
-            //
-        }
-    
-        var interestToRemove = userProfile.Interests.FirstOrDefault(i => i.Id == interestId);
-
-        if (interestToRemove == null)
-        {
-            //
-        }
-
-        userProfile.Interests.Remove(interestToRemove);
-
-        _dbContext.Update(userProfile);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        profile.Interests.Remove(interest);
     }
 
-    public async Task<List<Interest>> GetUsersInterests(UserProfile profile, CancellationToken cancellationToken)
+    public async Task<List<Interest>> GetUsersInterests(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Interests).AsNoTracking()
-            .FirstOrDefaultAsync(p => p == profile, cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
 
         return userProfile!.Interests;
+    }
+    
+    public async Task<UserProfile?> GetUserWithInterests(string profileId, CancellationToken cancellationToken)
+    {
+        var userProfile = await _dbContext.Profiles.Include(p => p.Interests)
+            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
+
+        return userProfile;
     }
 }

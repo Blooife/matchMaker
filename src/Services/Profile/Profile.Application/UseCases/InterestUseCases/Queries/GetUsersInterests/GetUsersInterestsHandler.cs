@@ -9,13 +9,13 @@ public class GetUsersInterestsHandler(IUnitOfWork _unitOfWork, IMapper _mapper) 
 {
     public async Task<IEnumerable<InterestResponseDto>> Handle(GetUsersInterestsQuery request, CancellationToken cancellationToken)
     {
-        var profile = await _unitOfWork.ProfileRepository.GetProfileByIdAsync(request.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
         if (profile == null)
         {
             //
         }
         
-        var interests = await _unitOfWork.InterestRepository.GetUsersInterests(profile, cancellationToken);
+        var interests = await _unitOfWork.InterestRepository.GetUsersInterests(request.ProfileId, cancellationToken);
         return _mapper.Map<IEnumerable<InterestResponseDto>>(interests);
     }
 }

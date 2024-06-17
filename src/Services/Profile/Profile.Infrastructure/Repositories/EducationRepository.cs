@@ -2,19 +2,16 @@ using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
+using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class EducationRepository(ProfileDbContext _dbContext) : IEducationRepository
+public class EducationRepository : GenericRepository<Education, int>, IEducationRepository
 {
-    public async Task<IEnumerable<Education>> GetAllAsync(CancellationToken cancellationToken)
+    private readonly ProfileDbContext _dbContext;
+    public EducationRepository(ProfileDbContext dbContext) : base(dbContext)
     {
-        return await _dbContext.Educations.AsNoTracking().ToListAsync(cancellationToken);
-    }
-
-    public async Task<Education?> GetByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Educations.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
+        _dbContext = dbContext;
     }
     
     public async Task<Education?> GetByNameAsync(string name, CancellationToken cancellationToken)
@@ -22,39 +19,14 @@ public class EducationRepository(ProfileDbContext _dbContext) : IEducationReposi
         return await _dbContext.Educations.AsNoTracking().FirstOrDefaultAsync(l => l.Name == name, cancellationToken);
     }
     
-    public async Task AddEducationToProfile(UserProfile profile, Education education, string description, CancellationToken cancellationToken)
+    public async Task AddEducationToProfile(UserProfile profile, UserEducation userEducation)
     {
-        var userProfile = await _dbContext.Profiles.Include(p => p.UserEducations).FirstOrDefaultAsync(p => p.Id == profile.Id, cancellationToken);
-        userProfile?.UserEducations.Add(new UserEducation()
-        {
-            EducationId = education.Id,
-            ProfileId = profile.Id,
-            Description = description,
-        });
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        profile.UserEducations.Add(userEducation);
     }
     
-    public async Task RemoveEducationFromProfile(string profileId, int  educationId, CancellationToken cancellationToken)
+    public async Task RemoveEducationFromProfile(UserProfile profile, UserEducation userEducation)
     {
-        var userProfile = await _dbContext.Profiles.Include(p => p.UserEducations).FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
-    
-        if (userProfile == null)
-        {
-            //
-        }
-    
-        var educationToRemove = userProfile.UserEducations.FirstOrDefault(i => i.EducationId == educationId);
-
-        if (educationToRemove == null)
-        {
-            //
-        }
-
-        userProfile.UserEducations.Remove(educationToRemove);
-
-        _dbContext.Update(userProfile);
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        profile.UserEducations.Remove(userEducation);
     }
     
     public async Task<List<UserEducation>> GetUsersEducation(UserProfile profile, CancellationToken cancellationToken)
@@ -63,5 +35,13 @@ public class EducationRepository(ProfileDbContext _dbContext) : IEducationReposi
             .FirstOrDefaultAsync(p => p == profile, cancellationToken);
 
         return userProfile!.UserEducations;
+    }
+    
+    public async Task<UserProfile?> GetUserWithEducation(string profileId, CancellationToken cancellationToken)
+    {
+        var userProfile = await _dbContext.Profiles.Include(p => p.UserEducations)
+            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
+
+        return userProfile;
     }
 }

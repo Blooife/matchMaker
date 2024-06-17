@@ -10,7 +10,6 @@ public class PreferenceRepository(ProfileDbContext _dbContext) : IPreferenceRepo
     public async Task<Preference> UpdatePreferenceAsync(Preference preference, CancellationToken cancellationToken)
     {
         _dbContext.Preferences.Update(preference);
-        await _dbContext.SaveChangesAsync(cancellationToken);
         
         return preference;
     }
@@ -24,6 +23,5 @@ public class PreferenceRepository(ProfileDbContext _dbContext) : IPreferenceRepo
     {
         preference.IsActive = !preference.IsActive;
         _dbContext.Preferences.Update(preference);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

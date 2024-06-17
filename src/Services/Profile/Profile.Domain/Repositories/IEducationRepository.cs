@@ -1,10 +1,15 @@
 using Profile.Domain.Models;
+using Profile.Domain.Repositories.BaseRepositories;
 
 namespace Profile.Domain.Repositories;
 
-public interface IEducationRepository
+public interface IEducationRepository : IGenericRepository<Education, int>
 {
-    Task<IEnumerable<Education>> GetAllAsync(CancellationToken cancellationToken);
-    Task<Education?> GetByIdAsync(int id, CancellationToken cancellationToken);
     Task<Education?> GetByNameAsync(string name, CancellationToken cancellationToken);
+
+    Task AddEducationToProfile(UserProfile profile, UserEducation userEducation);
+
+    Task RemoveEducationFromProfile(UserProfile profile, UserEducation userEducation);
+    Task<List<UserEducation>> GetUsersEducation(UserProfile profile, CancellationToken cancellationToken);
+    Task<UserProfile?> GetUserWithEducation(string profileId, CancellationToken cancellationToken);
 }

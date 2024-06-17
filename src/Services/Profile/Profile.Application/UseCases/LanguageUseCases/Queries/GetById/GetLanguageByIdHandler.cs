@@ -10,7 +10,7 @@ public class GetLanguageByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : 
 {
     public async Task<LanguageResponseDto> Handle(GetLanguageByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.LanguageRepository.GetByIdAsync(request.LanguageId, cancellationToken);
+        var result = await _unitOfWork.LanguageRepository.FirstOrDefaultAsync(request.LanguageId, cancellationToken);
         if (result == null)
         {
             //to do exception

@@ -9,7 +9,7 @@ public class GetAllProfilesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : I
 {
     public async Task<IEnumerable<ProfileResponseDto>> Handle(GetAllProfilesQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.ProfileRepository.GetAllProfilesAsync(cancellationToken);
+        var result = await _unitOfWork.ProfileRepository.GetAllAsync(cancellationToken);
         return _mapper.Map<IEnumerable<ProfileResponseDto>>(result);
     }
 }

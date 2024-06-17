@@ -1,13 +1,13 @@
 using Profile.Domain.Models;
+using Profile.Domain.Repositories.BaseRepositories;
 
 namespace Profile.Domain.Repositories;
 
-public interface ILanguageRepository
+public interface ILanguageRepository : IGenericRepository<Language, int>
 {
-    Task<IEnumerable<Language>> GetAllAsync(CancellationToken cancellationToken);
-    Task<Language?> GetByIdAsync(int id, CancellationToken cancellationToken);
     Task<Language?> GetByNameAsync(string name, CancellationToken cancellationToken);
-    Task AddLanguageToProfile(UserProfile profile, Language language, CancellationToken cancellationToken);
-    Task RemoveLanguageFromProfile(string profileId, int languageId, CancellationToken cancellationToken);
+    Task AddLanguageToProfile(UserProfile profile, Language language);
+    Task RemoveLanguageFromProfile(UserProfile profile, Language language);
     Task<List<Language>> GetUsersLanguages(UserProfile profile, CancellationToken cancellationToken);
+    Task<UserProfile?> GetUserWithLanguages(string profileId, CancellationToken cancellationToken);
 }

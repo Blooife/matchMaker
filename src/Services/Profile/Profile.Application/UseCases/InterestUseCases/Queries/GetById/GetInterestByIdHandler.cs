@@ -10,7 +10,7 @@ public class GetInterestByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : 
 {
     public async Task<InterestResponseDto> Handle(GetInterestByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.InterestRepository.GetByIdAsync(request.InterestId, cancellationToken);
+        var result = await _unitOfWork.InterestRepository.FirstOrDefaultAsync(request.InterestId, cancellationToken);
         if (result == null)
         {
             //to do exception

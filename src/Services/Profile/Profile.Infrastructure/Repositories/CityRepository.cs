@@ -2,19 +2,16 @@ using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
+using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class CityRepository(ProfileDbContext _dbContext) : ICityRepository
+public class CityRepository : GenericRepository<City, int>, ICityRepository
 {
-    public async Task<IEnumerable<City>> GetAllAsync(CancellationToken cancellationToken)
+    private readonly ProfileDbContext _dbContext;
+    public CityRepository(ProfileDbContext dbContext) : base(dbContext)
     {
-        return await _dbContext.Cities.AsNoTracking().ToListAsync(cancellationToken);
-    }
-
-    public async Task<City?> GetByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Cities.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
+        _dbContext = dbContext;
     }
     
     public async Task<City?> GetByNameAsync(string name, CancellationToken cancellationToken)
@@ -26,13 +23,18 @@ public class CityRepository(ProfileDbContext _dbContext) : ICityRepository
     {
         profile.CityId = city.Id;
         _dbContext.Entry(profile).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
     
     public async Task RemoveCityFromProfile(UserProfile profile, CancellationToken cancellationToken)
     {
         profile.CityId = null;
         _dbContext.Entry(profile).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<City?> GetCityWithCountryById(int cityId, CancellationToken cancellationToken)
+    {
+        var city = await _dbContext.Cities.Include(c => c.Country)
+            .FirstOrDefaultAsync(c => c.Id == cityId, cancellationToken);
+        return city;
     }
 }

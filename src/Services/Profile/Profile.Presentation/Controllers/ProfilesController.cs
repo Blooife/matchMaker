@@ -1,11 +1,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Profile.Request;
-using Profile.Application.UseCases.PreferenceUseCases.Queries.GetById;
 using Profile.Application.UseCases.ProfileUseCases.Commands.Create;
 using Profile.Application.UseCases.ProfileUseCases.Commands.Delete;
 using Profile.Application.UseCases.ProfileUseCases.Commands.Update;
 using Profile.Application.UseCases.ProfileUseCases.Queries.GetAll;
+using Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
 
 namespace Profile.Presentation.Controllers;
 
@@ -30,7 +30,7 @@ public class ProfilesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProfileById([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var profile = await _mediator.Send(new GetPreferenceByIdQuery(id), cancellationToken);
+        var profile = await _mediator.Send(new GetProfileByIdQuery(id), cancellationToken);
         return Ok(profile);
     }
     

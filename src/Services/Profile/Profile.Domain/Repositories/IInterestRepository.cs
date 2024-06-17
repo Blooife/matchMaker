@@ -1,13 +1,13 @@
 using Profile.Domain.Models;
+using Profile.Domain.Repositories.BaseRepositories;
 
 namespace Profile.Domain.Repositories;
 
-public interface IInterestRepository
+public interface IInterestRepository : IGenericRepository<Interest, int>
 {
-    Task<IEnumerable<Interest>> GetAllAsync(CancellationToken cancellationToken);
-    Task<Interest?> GetByIdAsync(int id, CancellationToken cancellationToken);
     Task<Interest?> GetByNameAsync(string name, CancellationToken cancellationToken);
-    Task AddInterestToProfile(UserProfile profile, Interest interest, CancellationToken cancellationToken);
-    Task RemoveInterestFromProfile(string profileId, int interestId, CancellationToken cancellationToken);
-    Task<List<Interest>> GetUsersInterests(UserProfile profile, CancellationToken cancellationToken);
+    Task AddInterestToProfile(UserProfile profile, Interest interest);
+    Task RemoveInterestFromProfile(UserProfile profile, Interest interest);
+    Task<List<Interest>> GetUsersInterests(string profileId, CancellationToken cancellationToken);
+    Task<UserProfile?> GetUserWithInterests(string profileId, CancellationToken cancellationToken);
 }

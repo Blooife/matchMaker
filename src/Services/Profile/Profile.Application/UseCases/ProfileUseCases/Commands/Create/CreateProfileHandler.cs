@@ -12,6 +12,8 @@ public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
     {
         var profile = _mapper.Map<UserProfile>(request.CreateProfileDto);
         var result = await _unitOfWork.ProfileRepository.CreateProfileAsync(profile, cancellationToken);
+        await _unitOfWork.SaveAsync(cancellationToken);
+        
         return _mapper.Map<ProfileResponseDto>(result);
     }
 }

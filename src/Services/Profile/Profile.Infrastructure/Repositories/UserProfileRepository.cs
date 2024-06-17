@@ -2,20 +2,21 @@ using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
+using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class UserProfileRepository(ProfileDbContext _dbContext) : IUserProfileRepository
+public class UserProfileRepository : GenericRepository<UserProfile, string>, IUserProfileRepository
 {
-    public async Task<IEnumerable<UserProfile>> GetAllProfilesAsync(CancellationToken cancellationToken)
+    private readonly ProfileDbContext _dbContext;
+    public UserProfileRepository(ProfileDbContext dbContext) : base(dbContext)
     {
-        return await _dbContext.Profiles.AsNoTracking().ToListAsync(cancellationToken);
+        _dbContext = dbContext;
     }
 
     public async Task<UserProfile> UpdateProfileAsync(UserProfile profile, CancellationToken cancellationToken)
     {
         _dbContext.Update(profile);
-        await _dbContext.SaveChangesAsync(cancellationToken);
         
         return profile;
     }
@@ -23,24 +24,17 @@ public class UserProfileRepository(ProfileDbContext _dbContext) : IUserProfileRe
     public async Task DeleteProfileAsync(UserProfile profile, CancellationToken cancellationToken)
     {
         _dbContext.Profiles.Remove(profile);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    public async Task<UserProfile?> GetProfileByIdAsync(string profileId, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Profiles.AsNoTracking().FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
     }
 
     public async Task<UserProfile> CreateProfileAsync(UserProfile profile, CancellationToken cancellationToken)
     {
         await _dbContext.Profiles.AddAsync(profile, cancellationToken);
         
-        var pref = new Preference();
+        Preference pref = new Preference();
         pref.ProfileId = profile.Id;
         
         await _dbContext.Preferences.AddAsync(pref, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
         
         return profile;
-    }
+    }   
 }
