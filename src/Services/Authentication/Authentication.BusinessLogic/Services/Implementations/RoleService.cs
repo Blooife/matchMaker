@@ -9,7 +9,8 @@ public class RoleService(IRoleRepository _roleRepository, IMapper _mapper) : IRo
 {
     public async Task<IEnumerable<RoleResponseDto>> GetAllRolesAsync(CancellationToken cancellationToken)
     {
-        var roles =  await _roleRepository.GetAllRolesAsync(cancellationToken);
+        var roles =  await _roleRepository.GetAllRolesAsync(cancellationToken); 
+        
         return _mapper.Map<IEnumerable<RoleResponseDto>>(roles);
     }
 }

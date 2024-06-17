@@ -32,7 +32,7 @@ public class AuthService(IUserRepository _userRepository, IRoleRepository _roleR
     {
         var user = await _userRepository.GetByEmailAsync(loginRequestDto.Email, cancellationToken);
             
-        if (user == null)
+        if (user is null)
         {
             throw new LoginException(ExceptionMessages.LoginFailed);
         }
@@ -67,7 +67,7 @@ public class AuthService(IUserRepository _userRepository, IRoleRepository _roleR
     {
         var user = await _userRepository.GetByRefreshTokenAsync(refreshToken, cancellationToken);
             
-        if (user == null)
+        if (user is null)
         {
             throw new LoginException(ExceptionMessages.LoginFailed);
         }
@@ -100,7 +100,7 @@ public class AuthService(IUserRepository _userRepository, IRoleRepository _roleR
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
         
-        if (user == null)
+        if (user is null)
         {
             throw new NotFoundException(userId);
         }
@@ -126,7 +126,7 @@ public class AuthService(IUserRepository _userRepository, IRoleRepository _roleR
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
         
-        if (user == null)
+        if (user is null)
         {
             throw new NotFoundException(userId);
         }

@@ -8,13 +8,13 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.Ignore(e => e.PhoneNumber);
-        builder.Ignore(e => e.PhoneNumberConfirmed);
-        builder.Ignore(e => e.TwoFactorEnabled);
-        builder.Ignore(e => e.LockoutEnd);
-        builder.Ignore(e => e.LockoutEnabled);
-        builder.Ignore(e => e.PhoneNumber);
-        builder.Property(e => e.Email).IsRequired();
-        builder.Property(e => e.PasswordHash).IsRequired();
+        builder.Ignore(user => user.PhoneNumber);
+        builder.Ignore(user => user.PhoneNumberConfirmed);
+        builder.Ignore(user => user.TwoFactorEnabled);
+        builder.Ignore(user => user.LockoutEnd);
+        builder.Ignore(user => user.LockoutEnabled);
+        builder.Ignore(user => user.PhoneNumber);
+        builder.Property(user => user.Email).IsRequired();
+        builder.Property(user => user.PasswordHash).IsRequired();
     }
 }

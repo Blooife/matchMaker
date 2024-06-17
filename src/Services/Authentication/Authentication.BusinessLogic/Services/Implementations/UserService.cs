@@ -18,7 +18,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
         
-        if (user == null)
+        if (user is null)
         {
             throw new NotFoundException(userId);
         }
@@ -79,7 +79,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
         
-        if (user == null)
+        if (user is null)
         {
             throw new NotFoundException(userId);
         }
