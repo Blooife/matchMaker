@@ -30,7 +30,7 @@ public class RemoveInterestFromProfileHandler(IUnitOfWork _unitOfWork) : IReques
 
         if (!isContains)
         {
-            throw new NotContainsException(ExceptionMessages.ProfileContainsInterest);
+            throw new NotContainsException(ExceptionMessages.ProfileNotContainsInterest);
         }
         
         await _unitOfWork.InterestRepository.RemoveInterestFromProfile(profileWithInterests, interest);

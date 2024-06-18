@@ -35,7 +35,7 @@ public class GoalsController : ControllerBase
         return Ok(goal);
     }
 
-    [HttpPost("add/to/goal")]
+    [HttpPost("add/to/profile")]
     public async Task<IActionResult> AddGoalToProfile([FromBody] AddGoalToProfileDto dto, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new AddGoalToProfileCommand(dto), cancellationToken);
@@ -43,7 +43,7 @@ public class GoalsController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("remove/from/goal")]
+    [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveGoalFromProfile([FromBody] RemoveGoalFromProfileDto dto, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new RemoveGoalFromProfileCommand(dto), cancellationToken);

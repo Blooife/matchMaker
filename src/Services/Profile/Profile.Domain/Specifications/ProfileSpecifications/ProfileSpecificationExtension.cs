@@ -20,7 +20,7 @@ public static class ProfileSpecificationExtension
     
     public static bool ContainsLanguage(this UserProfile profile, int languageId)
     {
-        var spec = new ContainsInterestSpecification(languageId);
+        var spec = new ContainsLanguageSpecification(languageId);
         bool result = spec.IsSatisfied(profile);
         return result;
     }

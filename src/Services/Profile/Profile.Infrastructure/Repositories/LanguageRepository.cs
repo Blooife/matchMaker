@@ -29,10 +29,10 @@ public class LanguageRepository : GenericRepository<Language, int>, ILanguageRep
         profile.Languages.Remove(language);
     }
     
-    public async Task<List<Language>> GetUsersLanguages(UserProfile profile, CancellationToken cancellationToken)
+    public async Task<List<Language>> GetUsersLanguages(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Languages).AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == profile.Id, cancellationToken);
+            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
 
         return userProfile!.Languages;
     }

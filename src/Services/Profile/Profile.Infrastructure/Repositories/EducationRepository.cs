@@ -36,7 +36,7 @@ public class EducationRepository : GenericRepository<Education, int>, IEducation
     
     public async Task<List<UserEducation>> GetUsersEducation(UserProfile profile, CancellationToken cancellationToken)
     {
-        var userProfile = await _dbContext.Profiles.Include(p => p.UserEducations).AsNoTracking()
+        var userProfile = await _dbContext.Profiles.Include(p => p.UserEducations).ThenInclude(ue=>ue.Education).AsNoTracking()
             .FirstOrDefaultAsync(p => p == profile, cancellationToken);
 
         return userProfile!.UserEducations;

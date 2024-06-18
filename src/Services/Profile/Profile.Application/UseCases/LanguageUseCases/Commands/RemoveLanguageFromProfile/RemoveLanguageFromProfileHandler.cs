@@ -11,28 +11,28 @@ public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork) : IReques
 {
     public async Task<GeneralResponseDto> Handle(RemoveLanguageFromProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithInterests = await _unitOfWork.InterestRepository.GetUserWithInterests(request.Dto.ProfileId, cancellationToken);
+        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetUserWithLanguages(request.Dto.ProfileId, cancellationToken);
         
-        if (profileWithInterests is null)
+        if (profileWithLanguages is null)
         {
             throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
-        var language = await _unitOfWork.InterestRepository.GetByIdAsync(request.Dto.LanguageId, cancellationToken);
+        var language = await _unitOfWork.LanguageRepository.GetByIdAsync(request.Dto.LanguageId, cancellationToken);
         
         if (language is null)
         {
             throw new NotFoundException("Language", request.Dto.LanguageId);
         }
 
-        var isContains = profileWithInterests.ContainsLanguage(request.Dto.LanguageId);
+        var isContains = profileWithLanguages.ContainsLanguage(request.Dto.LanguageId);
 
         if (!isContains)
         {
-            throw new NotContainsException(ExceptionMessages.ProfileContainsLanguage);
+            throw new NotContainsException(ExceptionMessages.ProfileNotContainsLanguage);
         }
         
-        await _unitOfWork.InterestRepository.RemoveInterestFromProfile(profileWithInterests, language);
+        await _unitOfWork.LanguageRepository.RemoveLanguageFromProfile(profileWithLanguages, language);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         return new GeneralResponseDto();

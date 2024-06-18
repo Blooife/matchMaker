@@ -1,3 +1,4 @@
+using Profile.Application.DTOs.Education.Request;
 using Profile.Application.DTOs.Education.Response;
 using Profile.Domain.Models;
 
@@ -7,6 +8,7 @@ public class EducationMapping : AutoMapper.Profile
 {
     public EducationMapping()
     {
+        CreateMap<AddEducationToProfileDto, UserEducation>();
         CreateMap<Education, EducationResponseDto>();
         
         CreateMap<UserEducation, UserEducationResponseDto>()

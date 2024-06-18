@@ -50,10 +50,10 @@ namespace Profile.Presentation.MiddlewareHandlers
                     statusCode = HttpStatusCode.NotFound;
                     break;
                 case AlreadyContainsException alreadyContainsException:
-                    statusCode = HttpStatusCode.NotFound;
+                    statusCode = HttpStatusCode.Conflict;
                     break;
                 case NotContainsException notContainsException:
-                    statusCode = HttpStatusCode.Conflict;
+                    statusCode = HttpStatusCode.NotFound;
                     break;
                 case DbException dbException:
                     statusCode = HttpStatusCode.BadRequest;

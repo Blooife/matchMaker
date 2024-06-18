@@ -17,8 +17,8 @@ public class GetUsersLanguagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) 
             throw new NotFoundException("Profile", request.ProfileId);
         }
         
-        var interests = await _unitOfWork.LanguageRepository.GetUsersLanguages(profile, cancellationToken);
+        var languages = await _unitOfWork.LanguageRepository.GetUsersLanguages(request.ProfileId, cancellationToken);
         
-        return _mapper.Map<IEnumerable<LanguageResponseDto>>(interests);
+        return _mapper.Map<IEnumerable<LanguageResponseDto>>(languages);
     }
 }
