@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Language.Request;
 using Profile.Application.UseCases.LanguageUseCases.Commands.AddLanguageToProfile;
@@ -11,6 +12,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class LanguagesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -23,7 +25,9 @@ public class LanguagesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllLanguages(CancellationToken cancellationToken)
     {
-        var languages = await _mediator.Send(new GetAllLanguagesQuery(), cancellationToken);
+        var query = new GetAllLanguagesQuery();
+
+        var languages = await _mediator.Send(query, cancellationToken);
         
         return Ok(languages);
     }
@@ -31,7 +35,9 @@ public class LanguagesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetLanguageById([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var language = await _mediator.Send(new GetLanguageByIdQuery(id), cancellationToken);
+        var query = new GetLanguageByIdQuery(id);
+
+        var language = await _mediator.Send(query, cancellationToken);
         
         return Ok(language);
     }
@@ -39,7 +45,9 @@ public class LanguagesController : ControllerBase
     [HttpGet("user/{id}")]
     public async Task<IActionResult> GetUserLanguages(string id, CancellationToken cancellationToken)
     {
-        var languages = await _mediator.Send(new GetUsersLanguagesQuery(id), cancellationToken);
+        var query = new GetUsersLanguagesQuery(id);
+
+        var languages = await _mediator.Send(query, cancellationToken);
         
         return Ok(languages);
     }
@@ -47,7 +55,9 @@ public class LanguagesController : ControllerBase
     [HttpPost("add/to/profile")]
     public async Task<IActionResult> AddLanguageToProfile([FromBody] AddLanguageToProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new AddLanguageToProfileCommand(dto), cancellationToken);
+        var command = new AddLanguageToProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }
@@ -55,7 +65,9 @@ public class LanguagesController : ControllerBase
     [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveLanguageFromProfile([FromBody] RemoveLanguageFromProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new RemoveLanguageFromProfileCommand(dto), cancellationToken);
+        var command = new RemoveLanguageFromProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }

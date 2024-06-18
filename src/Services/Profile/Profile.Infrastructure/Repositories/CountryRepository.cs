@@ -22,7 +22,9 @@ public class CountryRepository : GenericRepository<Country, int>, ICountryReposi
     public async Task<List<City>> GetAllCitiesFromCountryAsync(int countryId, CancellationToken cancellationToken)
     {
         var countryWithCities = await 
-            _dbContext.Countries.Include(c => c.Cities).AsNoTracking().FirstOrDefaultAsync(c=>c.Id == countryId, cancellationToken);
+            _dbContext.Countries.Include(c => c.Cities).AsNoTracking()
+                .FirstOrDefaultAsync(c=>c.Id == countryId, cancellationToken);
+        
         return countryWithCities!.Cities;
     }
 }

@@ -21,15 +21,15 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
         var context = new ValidationContext<TRequest>(request);
 
         var validationResults = _validators
-            .Select(x => x.Validate(context))
-            .SelectMany(x => x.Errors)
-            .Where(x => x != null)
+            .Select(val => val.Validate(context))
+            .SelectMany(valResult => valResult.Errors)
+            .Where(valFailure => valFailure is not null)
             .ToList();
 
         if (validationResults.Any())
         {
             var errors = validationResults
-                .Select(x => new ValidationError(x.PropertyName, x.ErrorMessage))
+                .Select(valFailure => new ValidationError(valFailure.PropertyName, valFailure.ErrorMessage))
                 .Distinct()
                 .ToList();
 

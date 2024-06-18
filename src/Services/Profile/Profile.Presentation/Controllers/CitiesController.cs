@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.City.Request;
 using Profile.Application.UseCases.CityUseCases.Commands.AddCityToProfile;
@@ -11,6 +12,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CitiesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -23,7 +25,8 @@ public class CitiesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllCities(CancellationToken cancellationToken)
     {
-        var cities = await _mediator.Send(new GetAllCitiesQuery(), cancellationToken);
+        var query = new GetAllCitiesQuery();
+        var cities = await _mediator.Send(query, cancellationToken);
         
         return Ok(cities);
     }
@@ -31,7 +34,9 @@ public class CitiesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCityById([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var city = await _mediator.Send(new GetCityByIdQuery(id), cancellationToken);
+        var query = new GetCityByIdQuery(id);
+        
+        var city = await _mediator.Send(query, cancellationToken);
         
         return Ok(city);
     }
@@ -49,7 +54,9 @@ public class CitiesController : ControllerBase
     [HttpPost("add/to/profile")]
     public async Task<IActionResult> AddCityToProfile([FromBody] AddCityToProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new AddCityToProfileCommand(dto), cancellationToken);
+        var command = new AddCityToProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }
@@ -57,7 +64,9 @@ public class CitiesController : ControllerBase
     [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveCityFromProfile([FromBody] RemoveCityFromProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new RemoveCityFromProfileCommand(dto), cancellationToken);
+        var command = new RemoveCityFromProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }

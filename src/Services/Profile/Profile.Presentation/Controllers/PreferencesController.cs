@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Preference.Request;
 using Profile.Application.UseCases.PreferenceUseCases.Commands.ChangeIsActive;
@@ -10,6 +11,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class PreferencesController(IMediator _mediator) : ControllerBase
 {
     [HttpGet("{profileId}")]

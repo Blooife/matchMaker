@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Profile.Request;
 using Profile.Application.UseCases.ProfileUseCases.Commands.Create;
@@ -11,6 +12,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProfilesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -23,35 +25,50 @@ public class ProfilesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllProfiles(CancellationToken cancellationToken)
     {
-        var profiles = await _mediator.Send(new GetAllProfilesQuery(), cancellationToken);
+        var query = new GetAllProfilesQuery();
+
+        var profiles = await _mediator.Send(query, cancellationToken);
+        
         return Ok(profiles);
     }
     
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProfileById([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var profile = await _mediator.Send(new GetProfileByIdQuery(id), cancellationToken);
+        var query = new GetProfileByIdQuery(id);
+
+        var profile = await _mediator.Send(query, cancellationToken);
+        
         return Ok(profile);
     }
     
     [HttpPost]
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileDto dto, CancellationToken cancellationToken)
     {
-        var profile = await _mediator.Send(new CreateProfileCommand(dto), cancellationToken);
+        var command = new CreateProfileCommand(dto);
+        
+        var profile = await _mediator.Send(command, cancellationToken);
+        
         return Ok(profile);
     }
     
     [HttpPut]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto dto, CancellationToken cancellationToken)
     {
-        var profile = await _mediator.Send(new UpdateProfileCommand(dto), cancellationToken);
+        var command = new UpdateProfileCommand(dto);
+        
+        var profile = await _mediator.Send(command, cancellationToken);
+        
         return Ok(profile);
     }
     
     [HttpDelete("{id}")]
     public async Task<IActionResult> UpdateProfile([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var profile = await _mediator.Send(new DeleteProfileCommand(id), cancellationToken);
+        var command = new DeleteProfileCommand(id);
+        
+        var profile = await _mediator.Send(command, cancellationToken);
+        
         return Ok(profile);
     }
 }

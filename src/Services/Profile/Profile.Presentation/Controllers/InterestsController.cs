@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Interest.Request;
 using Profile.Application.UseCases.InterestUseCases.Commands.AddInterestToProfile;
@@ -11,6 +12,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class InterestsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -23,7 +25,9 @@ public class InterestsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllInterests(CancellationToken cancellationToken)
     {
-        var interests = await _mediator.Send(new GetAllInterestsQuery(), cancellationToken);
+        var query = new GetAllInterestsQuery();
+
+        var interests = await _mediator.Send(query, cancellationToken);
         
         return Ok(interests);
     }
@@ -31,7 +35,9 @@ public class InterestsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetInterestById([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var interest = await _mediator.Send(new GetInterestByIdQuery(id), cancellationToken);
+        var query = new GetInterestByIdQuery(id);
+
+        var interest = await _mediator.Send(query, cancellationToken);
         
         return Ok(interest);
     }
@@ -39,7 +45,9 @@ public class InterestsController : ControllerBase
     [HttpGet("user/{id}")]
     public async Task<IActionResult> GetUserInterests(string id, CancellationToken cancellationToken)
     {
-        var interests = await _mediator.Send(new GetUsersInterestsQuery(id), cancellationToken);
+        var query = new GetUsersInterestsQuery(id);
+
+        var interests = await _mediator.Send(query, cancellationToken);
         
         return Ok(interests);
     }
@@ -47,7 +55,9 @@ public class InterestsController : ControllerBase
     [HttpPost("add/to/profile")]
     public async Task<IActionResult> AddInterestToProfile([FromBody] AddInterestToProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new AddInterestToProfileCommand(dto), cancellationToken);
+        var command = new AddInterestToProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }
@@ -55,7 +65,9 @@ public class InterestsController : ControllerBase
     [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveInterestFromProfile([FromBody] RemoveInterestFromProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new RemoveInterestFromProfileCommand(dto), cancellationToken);
+        var command = new RemoveInterestFromProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }

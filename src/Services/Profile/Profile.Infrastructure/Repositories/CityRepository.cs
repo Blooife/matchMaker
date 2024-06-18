@@ -35,6 +35,7 @@ public class CityRepository : GenericRepository<City, int>, ICityRepository
     {
         var city = await _dbContext.Cities.Include(c => c.Country)
             .FirstOrDefaultAsync(c => c.Id == cityId, cancellationToken);
+        
         return city;
     }
 }

@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Education.Request;
 using Profile.Application.UseCases.EducationUseCases.Commands.AddEducationToProfile;
@@ -12,6 +13,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class EducationsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -24,7 +26,9 @@ public class EducationsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllEducations(CancellationToken cancellationToken)
     {
-        var education = await _mediator.Send(new GetAllEducationsQuery(), cancellationToken);
+        var query = new GetAllEducationsQuery();
+            
+        var education = await _mediator.Send(query, cancellationToken);
         
         return Ok(education);
     }
@@ -32,7 +36,9 @@ public class EducationsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEducationById([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var education = await _mediator.Send(new GetEducationByIdQuery(id), cancellationToken);
+        var query = new GetEducationByIdQuery(id);
+            
+        var education = await _mediator.Send(query, cancellationToken);
         
         return Ok(education);
     }
@@ -40,7 +46,9 @@ public class EducationsController : ControllerBase
     [HttpGet("user/{id}")]
     public async Task<IActionResult> GetUserEducations(string id, CancellationToken cancellationToken)
     {
-        var education = await _mediator.Send(new GetUsersEducationsQuery(id), cancellationToken);
+        var query = new GetUsersEducationsQuery(id);
+
+        var education = await _mediator.Send(query, cancellationToken);
         
         return Ok(education);
     }
@@ -58,7 +66,9 @@ public class EducationsController : ControllerBase
     [HttpPost("add/to/profile")]
     public async Task<IActionResult> AddEducationToProfile([FromBody] AddEducationToProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new AddEducationToProfileCommand(dto), cancellationToken);
+        var command = new AddEducationToProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }
@@ -66,7 +76,9 @@ public class EducationsController : ControllerBase
     [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveEducationFromProfile([FromBody] RemoveEducationFromProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new RemoveEducationFromProfileCommand(dto), cancellationToken);
+        var command = new RemoveEducationFromProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }

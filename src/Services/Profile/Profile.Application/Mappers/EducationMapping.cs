@@ -9,6 +9,7 @@ public class EducationMapping : AutoMapper.Profile
     public EducationMapping()
     {
         CreateMap<AddEducationToProfileDto, UserEducation>();
+        
         CreateMap<Education, EducationResponseDto>();
         
         CreateMap<UserEducation, UserEducationResponseDto>()

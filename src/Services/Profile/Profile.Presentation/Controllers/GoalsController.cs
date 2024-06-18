@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Goal.Request;
 using Profile.Application.UseCases.GoalUseCases.Commands.AddGoalToProfile;
@@ -10,6 +11,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class GoalsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -22,7 +24,9 @@ public class GoalsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllGoals(CancellationToken cancellationToken)
     {
-        var goals = await _mediator.Send(new GetAllGoalsQuery(), cancellationToken);
+        var query = new GetAllGoalsQuery();
+
+        var goals = await _mediator.Send(query, cancellationToken);
         
         return Ok(goals);
     }
@@ -30,7 +34,9 @@ public class GoalsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetGoalById([FromRoute] int id, CancellationToken cancellationToken)
     {
-        var goal = await _mediator.Send(new GetGoalByIdQuery(id), cancellationToken);
+        var query = new GetGoalByIdQuery(id);
+
+        var goal = await _mediator.Send(query, cancellationToken);
         
         return Ok(goal);
     }
@@ -38,7 +44,9 @@ public class GoalsController : ControllerBase
     [HttpPost("add/to/profile")]
     public async Task<IActionResult> AddGoalToProfile([FromBody] AddGoalToProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new AddGoalToProfileCommand(dto), cancellationToken);
+        var command = new AddGoalToProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }
@@ -46,7 +54,9 @@ public class GoalsController : ControllerBase
     [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveGoalFromProfile([FromBody] RemoveGoalFromProfileDto dto, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new RemoveGoalFromProfileCommand(dto), cancellationToken);
+        var command = new RemoveGoalFromProfileCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
         
         return Ok(result);
     }
