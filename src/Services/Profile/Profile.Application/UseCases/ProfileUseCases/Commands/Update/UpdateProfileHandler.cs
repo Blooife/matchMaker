@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Profile.Response;
+using Profile.Application.Exceptions;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 
@@ -15,7 +16,7 @@ public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         
         if (findRes == null)
         {
-            //to do exc
+            throw new NotFoundException("Profile", request.UpdateProfileDto.Id);
         }
         
         var profile = _mapper.Map<UserProfile>(request.UpdateProfileDto);

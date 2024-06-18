@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
+using Profile.Infrastructure.Seed;
 
 namespace Profile.Infrastructure.Contexts;
 
@@ -19,6 +20,7 @@ public class ProfileDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<UserProfile>()
             .HasMany(userProfile => userProfile.UserEducations)
             .WithOne(userEducation => userEducation.Profile)
@@ -33,7 +35,8 @@ public class ProfileDbContext : DbContext
             .HasKey(userEducation => new { userEducation.ProfileId, userEducation.EducationId });
         
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyAllSeeds(Assembly.GetExecutingAssembly());
+        
         
     }
 }

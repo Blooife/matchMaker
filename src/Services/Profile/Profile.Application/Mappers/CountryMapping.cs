@@ -8,5 +8,6 @@ public class CountryMapping : AutoMapper.Profile
     public CountryMapping()
     {
         CreateMap<Country, CountryResponseDto>();
+        
     }
 }

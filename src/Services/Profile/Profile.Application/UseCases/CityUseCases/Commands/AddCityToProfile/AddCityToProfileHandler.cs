@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Profile.Application.Exceptions;
 using Profile.Domain.Repositories;
 using Profile.Domain.Specifications.ProfileSpecifications;
 using Shared.Models;
@@ -14,14 +15,14 @@ public class AddCityToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<
         
         if (profile is null)
         {
-            throw new Exception();
+            throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
         var city = await _unitOfWork.CityRepository.GetByIdAsync(request.Dto.CityId, cancellationToken);
         
         if (city is null)
         {
-            throw new Exception();
+            throw new NotFoundException("City", request.Dto.CityId);
         }
         
         await _unitOfWork.CityRepository.AddCityToProfile(profile, city, cancellationToken);

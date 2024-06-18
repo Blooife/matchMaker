@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Profile.Application.Exceptions;
 using Profile.Domain.Repositories;
 using Profile.Domain.Specifications.ProfileSpecifications;
 using Shared.Models;
@@ -14,7 +15,7 @@ public class RemoveCityFromProfileHandler(IUnitOfWork _unitOfWork) : IRequestHan
         
         if (profile is null)
         {
-            throw new Exception();
+            throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
         await _unitOfWork.CityRepository.RemoveCityFromProfile(profile, cancellationToken);

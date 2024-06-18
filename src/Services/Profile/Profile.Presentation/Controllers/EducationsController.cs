@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Education.Request;
 using Profile.Application.UseCases.EducationUseCases.Commands.AddEducationToProfile;
 using Profile.Application.UseCases.EducationUseCases.Commands.RemoveEducationFromProfile;
+using Profile.Application.UseCases.EducationUseCases.Commands.Update;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetAll;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetById;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetUsersEducation;
@@ -43,6 +44,16 @@ public class EducationsController : ControllerBase
         
         return Ok(education);
     }
+    
+    [HttpPut]
+    public async Task<IActionResult> UpdateUserEducation([FromBody] UpdateUserEducationDto dto, CancellationToken cancellationToken)
+    {
+        var command = new UpdateUserEducationCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
+        
+        return Ok(result);
+    }
 
     [HttpPost("add/to/profile")]
     public async Task<IActionResult> AddEducationToProfile([FromBody] AddEducationToProfileDto dto, CancellationToken cancellationToken)
@@ -52,7 +63,7 @@ public class EducationsController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("remove/from/profile")]
+    [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveEducationFromProfile([FromBody] RemoveEducationFromProfileDto dto, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new RemoveEducationFromProfileCommand(dto), cancellationToken);

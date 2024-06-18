@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Profile.Application.Exceptions;
 using Shared.Models;
+using ValidationException = Profile.Application.Exceptions.ValidationException;
 
 namespace Profile.Presentation.MiddlewareHandlers
 {
@@ -47,6 +48,12 @@ namespace Profile.Presentation.MiddlewareHandlers
                     break;
                 case NotFoundException notFoundException:
                     statusCode = HttpStatusCode.NotFound;
+                    break;
+                case AlreadyContainsException alreadyContainsException:
+                    statusCode = HttpStatusCode.NotFound;
+                    break;
+                case NotContainsException notContainsException:
+                    statusCode = HttpStatusCode.Conflict;
                     break;
                 case DbException dbException:
                     statusCode = HttpStatusCode.BadRequest;

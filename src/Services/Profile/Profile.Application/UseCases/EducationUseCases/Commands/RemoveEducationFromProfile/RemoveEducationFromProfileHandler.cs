@@ -1,5 +1,7 @@
 using AutoMapper;
 using MediatR;
+using Profile.Application.Exceptions;
+using Profile.Application.Exceptions.Messages;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Domain.Specifications.ProfileSpecifications;
@@ -15,21 +17,21 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork) : IReque
         
         if (profileWithEducation is null)
         {
-            throw new Exception();
+            throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
         var education = await _unitOfWork.EducationRepository.GetByIdAsync(request.Dto.EducationId, cancellationToken);
         
         if (education is null)
         {
-            throw new Exception();
+            throw new NotFoundException("Education", request.Dto.EducationId);
         }
         
         var isContains = profileWithEducation.ContainsEducation(request.Dto.EducationId);
 
-        if (isContains)
+        if (!isContains)
         {
-            throw new Exception();
+            throw new NotContainsException(ExceptionMessages.ProfileNotContainsEducation);
         }
 
         UserEducation userEducation = profileWithEducation.UserEducations.First(userEducation=>userEducation.EducationId == request.Dto.EducationId);

@@ -9,8 +9,8 @@ public class GetAllCountriesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : 
 {
     public async Task<IEnumerable<CountryResponseDto>> Handle(GetAllCountriesQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.CountryRepository.GetAllAsync(cancellationToken);
+        var countries = await _unitOfWork.CountryRepository.GetAllAsync(cancellationToken);
         
-        return _mapper.Map<IEnumerable<CountryResponseDto>>(result);
+        return _mapper.Map<IEnumerable<CountryResponseDto>>(countries);
     }
 }

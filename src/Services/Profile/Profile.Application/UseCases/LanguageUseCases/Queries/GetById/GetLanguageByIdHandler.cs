@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Language.Response;
+using Profile.Application.Exceptions;
 using Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
 using Profile.Domain.Repositories;
 
@@ -10,11 +11,13 @@ public class GetLanguageByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : 
 {
     public async Task<LanguageResponseDto> Handle(GetLanguageByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.LanguageRepository.FirstOrDefaultAsync(request.LanguageId, cancellationToken);
-        if (result == null)
+        var language = await _unitOfWork.LanguageRepository.FirstOrDefaultAsync(request.LanguageId, cancellationToken);
+        
+        if (language == null)
         {
-            //to do exception
+            throw new NotFoundException("Language", request.LanguageId);
         }
-        return _mapper.Map<LanguageResponseDto>(result);
+        
+        return _mapper.Map<LanguageResponseDto>(language);
     }
 }

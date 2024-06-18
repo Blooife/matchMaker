@@ -10,7 +10,8 @@ public class GetAllInterestsHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : 
 {
     public async Task<IEnumerable<InterestResponseDto>> Handle(GetAllInterestsQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.InterestRepository.GetAllAsync(cancellationToken);
-        return _mapper.Map<IEnumerable<InterestResponseDto>>(result);
+        var interests = await _unitOfWork.InterestRepository.GetAllAsync(cancellationToken);
+        
+        return _mapper.Map<IEnumerable<InterestResponseDto>>(interests);
     }
 }

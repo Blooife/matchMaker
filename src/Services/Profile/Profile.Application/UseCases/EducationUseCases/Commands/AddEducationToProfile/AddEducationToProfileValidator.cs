@@ -8,5 +8,6 @@ public class AddEducationToProfileValidator : AbstractValidator<AddEducationToPr
     {
         RuleFor(command => command.Dto.ProfileId).NotEmpty().WithMessage("Profile id cant be empty");
         RuleFor(command => command.Dto.EducationId).NotEmpty().WithMessage("Education id cant be empty");
+        RuleFor(command => command.Dto.Description).MinimumLength(2).MaximumLength(100).WithMessage("Description mut be between 2 and 100 characters");
     }
 }

@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.City.Response;
+using Profile.Application.Exceptions;
 using Profile.Domain.Repositories;
 
 namespace Profile.Application.UseCases.CityUseCases.Queries.GetById;
@@ -9,12 +10,13 @@ public class GetCityByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IReq
 {
     public async Task<CityResponseDto> Handle(GetCityByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.CityRepository.FirstOrDefaultAsync(request.CityId, cancellationToken);
-        if (result == null)
+        var city = await _unitOfWork.CityRepository.FirstOrDefaultAsync(request.CityId, cancellationToken);
+        
+        if (city is null)
         {
-            //to do exception
+            throw new NotFoundException("City", request.CityId);
         }
         
-        return _mapper.Map<CityResponseDto>(result);
+        return _mapper.Map<CityResponseDto>(city);
     }
 }

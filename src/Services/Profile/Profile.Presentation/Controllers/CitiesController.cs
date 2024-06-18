@@ -54,7 +54,7 @@ public class CitiesController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("remove/from/profile")]
+    [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveCityFromProfile([FromBody] RemoveCityFromProfileDto dto, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new RemoveCityFromProfileCommand(dto), cancellationToken);

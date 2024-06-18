@@ -29,6 +29,11 @@ public class EducationRepository : GenericRepository<Education, int>, IEducation
         profile.UserEducations.Remove(userEducation);
     }
     
+    public async Task UpdateUsersEducation(UserEducation userEducation, string description)
+    {
+        userEducation.Description = description;
+    }
+    
     public async Task<List<UserEducation>> GetUsersEducation(UserProfile profile, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.UserEducations).AsNoTracking()

@@ -1,4 +1,5 @@
 using MediatR;
+using Profile.Application.Exceptions;
 using Profile.Domain.Repositories;
 using Shared.Models;
 
@@ -8,15 +9,15 @@ public class ChangeIsActiveHandler(IUnitOfWork _unitOfWork) : IRequestHandler<Ch
 {
     public async Task<GeneralResponseDto> Handle(ChangeIsActiveCommand request, CancellationToken cancellationToken)
     {
-        var findRes =
+        var preference =
             await _unitOfWork.PreferenceRepository.GetPreferenceByIdAsync(request.ProfileId, cancellationToken);
         
-        if (findRes == null)
+        if (preference is null)
         {
-            //to do exc
+            throw new NotFoundException("Preference", request.ProfileId);
         }
         
-        await _unitOfWork.PreferenceRepository.ChangeIsActive(findRes, cancellationToken);
+        await _unitOfWork.PreferenceRepository.ChangeIsActive(preference, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         return new GeneralResponseDto();

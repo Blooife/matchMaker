@@ -52,7 +52,7 @@ public class InterestsController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("remove/from/profile")]
+    [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveInterestFromProfile([FromBody] RemoveInterestFromProfileDto dto, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new RemoveInterestFromProfileCommand(dto), cancellationToken);

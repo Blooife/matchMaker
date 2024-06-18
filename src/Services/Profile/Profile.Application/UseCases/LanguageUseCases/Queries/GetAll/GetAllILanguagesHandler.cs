@@ -11,7 +11,8 @@ public class GetAllILanguagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) :
 {
     public async Task<IEnumerable<LanguageResponseDto>> Handle(GetAllLanguagesQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.LanguageRepository.GetAllAsync(cancellationToken);
-        return _mapper.Map<IEnumerable<LanguageResponseDto>>(result);
+        var languages = await _unitOfWork.LanguageRepository.GetAllAsync(cancellationToken);
+        
+        return _mapper.Map<IEnumerable<LanguageResponseDto>>(languages);
     }
 }

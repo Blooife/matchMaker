@@ -43,7 +43,7 @@ public class GoalsController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("remove/from/goal")]
+    [HttpDelete("remove/from/goal")]
     public async Task<IActionResult> RemoveGoalFromProfile([FromBody] RemoveGoalFromProfileDto dto, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new RemoveGoalFromProfileCommand(dto), cancellationToken);

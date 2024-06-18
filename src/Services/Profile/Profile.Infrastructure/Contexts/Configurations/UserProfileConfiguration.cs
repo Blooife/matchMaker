@@ -10,6 +10,8 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
     {
         builder.HasKey(userProfile => userProfile.Id);
         builder.Property(userProfile => userProfile.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.HasIndex(userProfile => userProfile.UserId).IsUnique();
+        
         builder.HasOne(userProfile => userProfile.Preference)
             .WithOne(preference => preference.Profile)
             .HasForeignKey<Preference>(preference => preference.ProfileId);

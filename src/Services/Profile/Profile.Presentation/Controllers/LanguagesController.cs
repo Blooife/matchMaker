@@ -52,7 +52,7 @@ public class LanguagesController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("remove/from/profile")]
+    [HttpDelete("remove/from/profile")]
     public async Task<IActionResult> RemoveLanguageFromProfile([FromBody] RemoveLanguageFromProfileDto dto, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new RemoveLanguageFromProfileCommand(dto), cancellationToken);

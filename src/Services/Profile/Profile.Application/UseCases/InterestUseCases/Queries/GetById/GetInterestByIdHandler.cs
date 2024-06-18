@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Interest.Response;
+using Profile.Application.Exceptions;
 using Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
 using Profile.Domain.Repositories;
 
@@ -10,11 +11,13 @@ public class GetInterestByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : 
 {
     public async Task<InterestResponseDto> Handle(GetInterestByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.InterestRepository.FirstOrDefaultAsync(request.InterestId, cancellationToken);
-        if (result == null)
+        var interest = await _unitOfWork.InterestRepository.FirstOrDefaultAsync(request.InterestId, cancellationToken);
+        
+        if (interest == null)
         {
-            //to do exception
+            throw new NotFoundException("Interest", request.InterestId);
         }
-        return _mapper.Map<InterestResponseDto>(result);
+        
+        return _mapper.Map<InterestResponseDto>(interest);
     }
 }

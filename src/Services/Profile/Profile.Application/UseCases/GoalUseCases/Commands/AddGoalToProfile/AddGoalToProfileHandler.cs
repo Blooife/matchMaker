@@ -1,4 +1,5 @@
 using MediatR;
+using Profile.Application.Exceptions;
 using Profile.Domain.Repositories;
 using Shared.Models;
 
@@ -12,14 +13,14 @@ public class AddGoalToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<
         
         if (profile is null)
         {
-            throw new Exception();
+            throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
         var goal = await _unitOfWork.GoalRepository.GetByIdAsync(request.Dto.GoalId, cancellationToken);
         
         if (goal is null)
         {
-            throw new Exception();
+            throw new NotFoundException("Goal", request.Dto.GoalId);
         }
         
         await _unitOfWork.GoalRepository.AddGoalToProfile(profile, goal, cancellationToken);

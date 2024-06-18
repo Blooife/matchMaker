@@ -9,8 +9,8 @@ public class GetAllCitysHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IReq
 {
     public async Task<IEnumerable<CityResponseDto>> Handle(GetAllCitiesQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.CityRepository.GetAllAsync(cancellationToken);
+        var cities = await _unitOfWork.CityRepository.GetAllAsync(cancellationToken);
         
-        return _mapper.Map<IEnumerable<CityResponseDto>>(result);
+        return _mapper.Map<IEnumerable<CityResponseDto>>(cities);
     }
 }

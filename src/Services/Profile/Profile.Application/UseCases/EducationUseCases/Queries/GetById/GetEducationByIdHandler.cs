@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Education.Response;
+using Profile.Application.Exceptions;
 using Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
 using Profile.Domain.Repositories;
 
@@ -10,11 +11,13 @@ public class GetEducationByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) :
 {
     public async Task<EducationResponseDto> Handle(GetEducationByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.EducationRepository.FirstOrDefaultAsync(request.EducationId, cancellationToken);
-        if (result == null)
+        var education = await _unitOfWork.EducationRepository.FirstOrDefaultAsync(request.EducationId, cancellationToken);
+        
+        if (education == null)
         {
-            //to do exception
+            throw new NotFoundException("Education", request.EducationId);
         }
-        return _mapper.Map<EducationResponseDto>(result);
+        
+        return _mapper.Map<EducationResponseDto>(education);
     }
 }

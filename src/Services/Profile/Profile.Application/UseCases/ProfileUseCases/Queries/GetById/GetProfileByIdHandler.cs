@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Profile.Response;
+using Profile.Application.Exceptions;
 using Profile.Domain.Repositories;
 
 namespace Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
@@ -9,12 +10,13 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : I
 {
     public async Task<ProfileResponseDto> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.ProfileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
-        if (result == null)
+        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
+        
+        if (profile is null)
         {
-            //to do exception
+            throw new NotFoundException("Profile", request.ProfileId);
         }
         
-        return _mapper.Map<ProfileResponseDto>(result);
+        return _mapper.Map<ProfileResponseDto>(profile);
     }
 }

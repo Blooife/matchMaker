@@ -1,4 +1,5 @@
 using MediatR;
+using Profile.Application.Exceptions;
 using Profile.Domain.Repositories;
 using Shared.Models;
 
@@ -12,7 +13,7 @@ public class RemoveGoalFromProfileHandler(IUnitOfWork _unitOfWork) : IRequestHan
         
         if (profile is null)
         {
-            throw new Exception();
+            throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
         await _unitOfWork.GoalRepository.RemoveGoalFromProfile(profile, cancellationToken);
