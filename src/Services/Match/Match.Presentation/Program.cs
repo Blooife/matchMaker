@@ -1,9 +1,22 @@
+using Match.Infrastructure.Context;
+using Match.Infrastructure.Extensions;
+using MongoDB.Driver;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var connectionString = builder.Configuration["MatchDatabase:ConnectionString"]!;
+
+builder.Services.Configure<MatchDbSettings>(builder.Configuration.GetSection("MatchDatabase"));
+builder.Services.ConfigureDbContext(builder.Configuration);
+
+builder.Services.AddSingleton<IMongoClient>(_ => new MongoClient(connectionString));
+
+builder.Services.AddScoped<IMongoDbContext, MatchDbContext>();
 
 var app = builder.Build();
 
