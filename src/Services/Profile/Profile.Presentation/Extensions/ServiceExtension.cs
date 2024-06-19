@@ -18,7 +18,7 @@ public static class ServiceExtension
         services.ConfigureSwagger();
     }
     
-    public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration config)
+    private static void ConfigureAuthentication(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));
         
@@ -52,7 +52,7 @@ public static class ServiceExtension
         services.AddAuthentication();
     }
 
-    public static void ConfigureSwagger(this IServiceCollection services)
+    private static void ConfigureSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(option =>
         {

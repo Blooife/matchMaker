@@ -16,13 +16,13 @@ public static class ServiceExtensions
         services.ConfigureRepositories();
     }
     
-    public static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)
+    private static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)
     {
         var connectionString = config.GetConnectionString("DefaultConnection");
         services.AddDbContext<ProfileDbContext>(options => options.UseNpgsql(connectionString));
     }
     
-    public static void ConfigureRepositories(this IServiceCollection services)
+    private static void ConfigureRepositories(this IServiceCollection services)
     {
         services.AddScoped<IUserProfileRepository, UserProfileRepository>();
         services.AddScoped<IGoalRepository, GoalRepository>();
