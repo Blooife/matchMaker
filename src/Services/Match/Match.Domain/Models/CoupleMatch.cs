@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Match.Domain.Models;
 
-public class Match
+public class CoupleMatch
 {
     [BsonId]
     public int Id { get; set; }

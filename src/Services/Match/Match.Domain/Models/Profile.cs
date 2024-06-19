@@ -6,6 +6,6 @@ namespace Match.Domain.Models;
 public class Profile
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
+    //[BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
 }

@@ -10,4 +10,12 @@
         <ProjectReference Include="..\Match.Domain\Match.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DTOs\" />
+      <Folder Include="UseCases\ChatUseCases\" />
+      <Folder Include="UseCases\LikeUseCases\" />
+      <Folder Include="UseCases\MatchUseCases\" />
+      <Folder Include="UseCases\ProfileUseCases\" />
+    </ItemGroup>
+
 </Project>

@@ -8,36 +8,49 @@ public class GenericRepository<T>(IMongoCollection<T> _collection) : IGenericRep
 {
     public void Create(T entity)
     {
-        
+        _collection.InsertOne(entity);
     }
 
     public async Task CreateAsync(T entity, CancellationToken cancellationToken)
     {
-        
+        await _collection.InsertOneAsync(entity, null, cancellationToken);
     }
 
     public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
     {
-        
+        var filter = Builders<T>.Filter.Eq("Id", GetIdValue(entity));
+        await _collection.ReplaceOneAsync(filter, entity, cancellationToken: cancellationToken);
     }
 
     public async Task DeleteAsync(T entity, CancellationToken cancellationToken)
     {
-        
+        var filter = Builders<T>.Filter.Eq("Id", GetIdValue(entity));
+        await _collection.DeleteOneAsync(filter, cancellationToken);
     }
 
     public async Task<List<T>> GetAsync(Expression<Func<T, bool>> condition, CancellationToken cancellationToken)
     {
-        //throw new NotImplementedException();
+        return await _collection.Find(condition).ToListAsync(cancellationToken);
     }
 
     public async Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
-        //throw new NotImplementedException();
+        var filter = Builders<T>.Filter.Eq("Id", id);
+        return await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken)
     {
-        //throw new NotImplementedException();    
+        return await _collection.Find(Builders<T>.Filter.Empty).ToListAsync(cancellationToken);
+    }
+
+    private static object GetIdValue(T entity)
+    {
+        var propertyInfo = typeof(T).GetProperty("Id");
+        if (propertyInfo == null)
+        {
+            throw new ArgumentException("Entity does not have an Id property");
+        }
+        return propertyInfo.GetValue(entity)!;
     }
 }
