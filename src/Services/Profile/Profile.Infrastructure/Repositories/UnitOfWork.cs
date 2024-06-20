@@ -14,6 +14,7 @@ public class UnitOfWork : IUnitOfWork
     private ICityRepository _cityRepository;
     private IInterestRepository _interestRepository;
     private IEducationRepository _educationRepository;
+    private IImageRepository _imageRepository;
     
     public UnitOfWork(ProfileDbContext context)
     {
@@ -28,6 +29,7 @@ public class UnitOfWork : IUnitOfWork
     public ICityRepository CityRepository => _cityRepository ??= new CityRepository(_dbContext);
     public IInterestRepository InterestRepository => _interestRepository ??= new InterestRepository(_dbContext);
     public IEducationRepository EducationRepository => _educationRepository ??= new EducationRepository(_dbContext);
+    public IImageRepository ImageRepository => _imageRepository ??= new ImageRepository(_dbContext);
     
     private bool _disposed = false;
     protected virtual void Dispose(bool disposing)

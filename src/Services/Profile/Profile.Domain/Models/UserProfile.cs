@@ -26,5 +26,6 @@ public class UserProfile
     public List<Language> Languages { get; set; } = new List<Language>();
     public List<Interest> Interests { get; set; } = new List<Interest>();
     public List<UserEducation> UserEducations { get; set; } = new List<UserEducation>();
+    public List<Image> Images { get; set; } = new List<Image>();
 
 }

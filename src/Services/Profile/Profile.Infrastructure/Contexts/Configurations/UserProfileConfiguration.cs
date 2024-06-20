@@ -17,5 +17,6 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
             .HasForeignKey<Preference>(preference => preference.ProfileId);
 
         builder.HasMany(p => p.Interests).WithMany(interest => interest.Profiles);
+        builder.HasMany(p => p.Images).WithOne(i => i.Profile).HasForeignKey(i => i.ProfileId);
     }
 }

@@ -18,6 +18,7 @@
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
       <Folder Include="DTOs\Country\Request\" />
       <Folder Include="UseCases\CountryUseCases\Commands\" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     </ItemGroup>
 
     <ItemGroup>

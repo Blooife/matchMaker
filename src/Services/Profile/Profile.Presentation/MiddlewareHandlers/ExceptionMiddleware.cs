@@ -60,6 +60,9 @@ namespace Profile.Presentation.MiddlewareHandlers
                 case DbUpdateException dbUpdateException:
                     statusCode = HttpStatusCode.BadRequest;
                     break;
+                case FileNotFoundException fileNotFoundException:
+                    statusCode = HttpStatusCode.NotFound;
+                    break;
                 default:
                     statusCode = HttpStatusCode.InternalServerError;
                     break;
