@@ -11,11 +11,24 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\" />
-      <Folder Include="UseCases\ChatUseCases\" />
-      <Folder Include="UseCases\LikeUseCases\" />
-      <Folder Include="UseCases\MatchUseCases\" />
-      <Folder Include="UseCases\ProfileUseCases\" />
+      <Folder Include="DTOs\Chat\Request\" />
+      <Folder Include="DTOs\Chat\Response\" />
+      <Folder Include="DTOs\Like\Request\" />
+      <Folder Include="DTOs\Like\Response\" />
+      <Folder Include="DTOs\Match\Request\" />
+      <Folder Include="DTOs\Match\Response\" />
+      <Folder Include="DTOs\Message\Request\" />
+      <Folder Include="DTOs\Message\Response\" />
+      <Folder Include="UseCases\LikeUseCases\Queries\" />
+      <Folder Include="UseCases\MatchUseCases\Commands\Create\" />
+      <Folder Include="UseCases\MatchUseCases\Commands\Delete\" />
+      <Folder Include="UseCases\MatchUseCases\Queries\GetByProfileId\" />
+      <Folder Include="UseCases\MessageUseCases\Queries\GetByChatId\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="12.3.0" />
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     </ItemGroup>
 
 </Project>
