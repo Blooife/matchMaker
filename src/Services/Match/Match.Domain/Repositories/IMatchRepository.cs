@@ -5,5 +5,5 @@ namespace Match.Domain.Repositories;
 
 public interface IMatchRepository : IGenericRepository<CoupleMatch>
 {
-    
+    Task<IEnumerable<CoupleMatch>> GetMatchesByProfileIdAsync(string profileId, CancellationToken cancellationToken);
 }

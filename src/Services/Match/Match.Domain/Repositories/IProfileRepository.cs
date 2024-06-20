@@ -5,5 +5,6 @@ namespace Match.Domain.Repositories;
 
 public interface IProfileRepository : IGenericRepository<Profile>
 {
-    
+    Task<IEnumerable<Profile>> GetRecommendationsAsync(List<string> excludedProfileIds, Profile userProfile,
+        bool locationAccessGranted, CancellationToken cancellationToken);
 }

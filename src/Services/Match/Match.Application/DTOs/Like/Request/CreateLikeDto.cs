@@ -1,11 +1,7 @@
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+namespace Match.Application.DTOs.Like.Request;
 
-namespace Match.Domain.Models;
-
-public class Like
+public class CreateLikeDto
 {
-    [BsonId]
     public int Id { get; set; }
     public string ProfileId { get; set; }
     public string TargetProfileId { get; set; }
