@@ -7,6 +7,6 @@ public class UpdateProfileHandler : IRequestHandler<UpdateProfileCommand, Profil
 {
     public async Task<ProfileResponseDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }

@@ -7,6 +7,6 @@ public class CreateProfileHandler : IRequestHandler<CreateProfileCommand, Profil
 {
     public async Task<ProfileResponseDto> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }
