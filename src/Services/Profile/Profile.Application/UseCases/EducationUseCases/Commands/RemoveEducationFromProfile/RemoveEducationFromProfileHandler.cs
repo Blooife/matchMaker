@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;

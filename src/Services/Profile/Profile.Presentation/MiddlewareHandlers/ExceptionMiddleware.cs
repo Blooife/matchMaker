@@ -1,6 +1,5 @@
 ﻿using System.Data.Common;
 using System.Net;
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Profile.Application.Exceptions;

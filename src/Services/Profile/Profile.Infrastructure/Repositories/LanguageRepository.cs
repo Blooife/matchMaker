@@ -14,11 +14,6 @@ public class LanguageRepository : GenericRepository<Language, int>, ILanguageRep
         _dbContext = dbContext;
     }
     
-    public async Task<Language?> GetByNameAsync(string name, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Languages.AsNoTracking().FirstOrDefaultAsync(l => l.Name == name, cancellationToken);
-    }
-    
     public async Task AddLanguageToProfile(UserProfile profile, Language language)
     {
         profile.Languages.Add(language);

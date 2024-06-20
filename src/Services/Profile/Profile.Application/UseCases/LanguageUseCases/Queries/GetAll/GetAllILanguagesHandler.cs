@@ -1,8 +1,6 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Language.Response;
-using Profile.Application.UseCases.InterestUseCases.Queries.GetAll;
-using Profile.Application.UseCases.ProfileUseCases.Queries.GetAll;
 using Profile.Domain.Repositories;
 
 namespace Profile.Application.UseCases.LanguageUseCases.Queries.GetAll;

@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Profile.Domain.Models;
 
 namespace Profile.Domain.Specifications.ProfileSpecifications;

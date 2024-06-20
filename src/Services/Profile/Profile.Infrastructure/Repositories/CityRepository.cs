@@ -14,11 +14,6 @@ public class CityRepository : GenericRepository<City, int>, ICityRepository
         _dbContext = dbContext;
     }
     
-    public async Task<City?> GetByNameAsync(string name, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Cities.AsNoTracking().FirstOrDefaultAsync(l => l.Name == name, cancellationToken);
-    }
-    
     public async Task AddCityToProfile(UserProfile profile, City city, CancellationToken cancellationToken)
     {
         profile.CityId = city.Id;

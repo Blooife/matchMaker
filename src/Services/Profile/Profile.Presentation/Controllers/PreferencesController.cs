@@ -5,7 +5,6 @@ using Profile.Application.DTOs.Preference.Request;
 using Profile.Application.UseCases.PreferenceUseCases.Commands.ChangeIsActive;
 using Profile.Application.UseCases.PreferenceUseCases.Commands.Update;
 using Profile.Application.UseCases.PreferenceUseCases.Queries.GetById;
-using Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
 
 namespace Profile.Presentation.Controllers;
 

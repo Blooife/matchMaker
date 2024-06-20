@@ -1,5 +1,4 @@
 using FluentValidation;
-using Profile.Application.DTOs.City.Request;
 
 namespace Profile.Application.UseCases.CityUseCases.Commands.RemoveCityFromProfile;
 

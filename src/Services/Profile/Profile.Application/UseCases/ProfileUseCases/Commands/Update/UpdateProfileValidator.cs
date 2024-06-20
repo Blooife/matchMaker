@@ -1,5 +1,4 @@
 using FluentValidation;
-using Profile.Application.UseCases.PreferenceUseCases.Commands.Update;
 
 namespace Profile.Application.UseCases.ProfileUseCases.Commands.Update;
 

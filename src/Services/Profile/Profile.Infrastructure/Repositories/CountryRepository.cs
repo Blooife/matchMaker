@@ -13,11 +13,6 @@ public class CountryRepository : GenericRepository<Country, int>, ICountryReposi
     {
         _dbContext = dbContext;
     }
-    
-    public async Task<Country?> GetByNameAsync(string name, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Countries.AsNoTracking().FirstOrDefaultAsync(l => l.Name == name, cancellationToken);
-    }
 
     public async Task<List<City>> GetAllCitiesFromCountryAsync(int countryId, CancellationToken cancellationToken)
     {

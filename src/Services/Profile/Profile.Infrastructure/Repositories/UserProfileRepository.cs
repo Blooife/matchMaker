@@ -33,7 +33,7 @@ public class UserProfileRepository : GenericRepository<UserProfile, string>, IUs
     public async Task<UserProfile> CreateProfileAsync(UserProfile profile, CancellationToken cancellationToken)
     {
         await _dbContext.Profiles.AddAsync(profile, cancellationToken);
-        
+        //ask about 1 to 1 relation
         Preference pref = new Preference();
         pref.ProfileId = profile.Id;
         

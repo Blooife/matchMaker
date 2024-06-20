@@ -1,8 +1,6 @@
-using AutoMapper;
 using MediatR;
 using Profile.Application.Exceptions;
 using Profile.Domain.Repositories;
-using Profile.Domain.Specifications.ProfileSpecifications;
 using Shared.Models;
 
 namespace Profile.Application.UseCases.CityUseCases.Commands.RemoveCityFromProfile;

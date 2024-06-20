@@ -14,11 +14,6 @@ public class GoalRepository : GenericRepository<Goal, int>, IGoalRepository
         _dbContext = dbContext;
     }
     
-    public async Task<Goal?> GetByNameAsync(string name, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Goals.AsNoTracking().FirstOrDefaultAsync(l => l.Name == name, cancellationToken);
-    }
-    
     public async Task AddGoalToProfile(UserProfile profile, Goal goal, CancellationToken cancellationToken)
     {
         profile.GoalId = goal.Id;

@@ -14,11 +14,6 @@ public class InterestRepository : GenericRepository<Interest, int>, IInterestRep
         _dbContext = dbContext;
     }
     
-    public async Task<Interest?> GetByNameAsync(string name, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Interests.AsNoTracking().FirstOrDefaultAsync(l => l.Name == name, cancellationToken);
-    }
-    
     public async Task AddInterestToProfile(UserProfile profile, Interest interest)
     {
         profile.Interests.Add(interest);

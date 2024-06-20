@@ -14,11 +14,6 @@ public class EducationRepository : GenericRepository<Education, int>, IEducation
         _dbContext = dbContext;
     }
     
-    public async Task<Education?> GetByNameAsync(string name, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Educations.AsNoTracking().FirstOrDefaultAsync(l => l.Name == name, cancellationToken);
-    }
-    
     public async Task AddEducationToProfile(UserProfile profile, UserEducation userEducation)
     {
         profile.UserEducations.Add(userEducation);

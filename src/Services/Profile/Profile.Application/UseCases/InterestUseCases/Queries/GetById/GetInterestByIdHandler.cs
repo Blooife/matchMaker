@@ -2,7 +2,6 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Interest.Response;
 using Profile.Application.Exceptions;
-using Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
 using Profile.Domain.Repositories;
 
 namespace Profile.Application.UseCases.InterestUseCases.Queries.GetById;
