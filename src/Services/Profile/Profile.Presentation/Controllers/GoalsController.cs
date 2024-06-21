@@ -41,7 +41,7 @@ public class GoalsController : ControllerBase
         return Ok(goal);
     }
 
-    [HttpPost("add/to/profile")]
+    [HttpPost("to/profile")]
     public async Task<IActionResult> AddGoalToProfile([FromBody] AddGoalToProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new AddGoalToProfileCommand(dto);
@@ -51,7 +51,7 @@ public class GoalsController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("remove/from/profile")]
+    [HttpDelete("from/profile")]
     public async Task<IActionResult> RemoveGoalFromProfile([FromBody] RemoveGoalFromProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new RemoveGoalFromProfileCommand(dto);

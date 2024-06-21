@@ -14,7 +14,7 @@ public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         var findRes =
             await _unitOfWork.ProfileRepository.FirstOrDefaultAsync(request.UpdateProfileDto.Id, cancellationToken);
         
-        if (findRes == null)
+        if (findRes is null)
         {
             throw new NotFoundException("Profile", request.UpdateProfileDto.Id);
         }

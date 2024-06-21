@@ -51,7 +51,7 @@ public class CitiesController : ControllerBase
         return Ok(city);
     }
 
-    [HttpPost("add/to/profile")]
+    [HttpPost("to/profile")]
     public async Task<IActionResult> AddCityToProfile([FromBody] AddCityToProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new AddCityToProfileCommand(dto);
@@ -61,7 +61,7 @@ public class CitiesController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("remove/from/profile")]
+    [HttpDelete("from/profile")]
     public async Task<IActionResult> RemoveCityFromProfile([FromBody] RemoveCityFromProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new RemoveCityFromProfileCommand(dto);

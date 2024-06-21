@@ -52,7 +52,7 @@ public class LanguagesController : ControllerBase
         return Ok(languages);
     }
 
-    [HttpPost("add/to/profile")]
+    [HttpPost("to/profile")]
     public async Task<IActionResult> AddLanguageToProfile([FromBody] AddLanguageToProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new AddLanguageToProfileCommand(dto);
@@ -62,7 +62,7 @@ public class LanguagesController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("remove/from/profile")]
+    [HttpDelete("from/profile")]
     public async Task<IActionResult> RemoveLanguageFromProfile([FromBody] RemoveLanguageFromProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new RemoveLanguageFromProfileCommand(dto);

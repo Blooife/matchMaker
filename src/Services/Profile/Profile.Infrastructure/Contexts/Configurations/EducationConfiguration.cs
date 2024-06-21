@@ -8,7 +8,6 @@ public class EducationConfiguration : IEntityTypeConfiguration<Education>
 {
     public void Configure(EntityTypeBuilder<Education> builder)
     {
-        builder.HasKey(education => education.Id);
         builder.HasIndex(education => education.Name).IsUnique();
     }
 }

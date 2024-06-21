@@ -13,7 +13,6 @@ public class ProfileDbContext : DbContext
     public DbSet<Interest> Interests { get; set; }
     public DbSet<Goal> Goals { get; set; }
     public DbSet<Language> Languages { get; set; }
-    public DbSet<Preference> Preferences { get; set; }
     public DbSet<Education> Educations { get; set; }
     public DbSet<Country> Countries { get; set; }
     public DbSet<City> Cities { get; set; }

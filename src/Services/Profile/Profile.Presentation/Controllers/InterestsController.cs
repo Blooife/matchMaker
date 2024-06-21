@@ -52,7 +52,7 @@ public class InterestsController : ControllerBase
         return Ok(interests);
     }
 
-    [HttpPost("add/to/profile")]
+    [HttpPost("to/profile")]
     public async Task<IActionResult> AddInterestToProfile([FromBody] AddInterestToProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new AddInterestToProfileCommand(dto);
@@ -62,7 +62,7 @@ public class InterestsController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("remove/from/profile")]
+    [HttpDelete("from/profile")]
     public async Task<IActionResult> RemoveInterestFromProfile([FromBody] RemoveInterestFromProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new RemoveInterestFromProfileCommand(dto);

@@ -29,7 +29,7 @@ public class ImagesController : ControllerBase
         return Ok(images);
     }
 
-    [HttpPost("add/to/profile")]
+    [HttpPost("to/profile")]
     public async Task<IActionResult> AddImageToProfile(AddImageDto dto, CancellationToken cancellationToken)
     {
         var command = new AddImageCommand(dto);
@@ -39,7 +39,7 @@ public class ImagesController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("remove/from/profile")]
+    [HttpDelete("from/profile")]
     public async Task<IActionResult> RemoveImageFromProfile([FromBody] RemoveImageDto dto, CancellationToken cancellationToken)
     {
         var command = new RemoveImageCommand(dto);

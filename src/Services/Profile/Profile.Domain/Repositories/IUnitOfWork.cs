@@ -5,7 +5,6 @@ public interface IUnitOfWork : IDisposable
     IUserProfileRepository ProfileRepository { get; }
     ILanguageRepository LanguageRepository { get; }
     IGoalRepository GoalRepository { get; }
-    IPreferenceRepository PreferenceRepository { get; }
     ICountryRepository CountryRepository { get; }
     ICityRepository CityRepository { get; }
     IInterestRepository InterestRepository { get; }

@@ -22,7 +22,7 @@ public class GenericRepository<T, TKey>(ProfileDbContext _dbContext) : IGenericR
         return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => EF.Property<TKey>(e, "Id").Equals(id), cancellationToken);
     }
     
-    public async Task<bool> Exists(TKey id, CancellationToken cancellationToken)
+    public async Task<bool> Exists(TKey id, CancellationToken cancellationToken) //isExist
     {
         var entity = await GetByIdAsync(id, cancellationToken);
         return entity != null;

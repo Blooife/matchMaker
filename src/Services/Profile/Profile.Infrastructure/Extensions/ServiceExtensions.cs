@@ -26,7 +26,6 @@ public static class ServiceExtensions
         services.AddScoped<IUserProfileRepository, UserProfileRepository>();
         services.AddScoped<IGoalRepository, GoalRepository>();
         services.AddScoped<IInterestRepository, InterestRepository>();
-        services.AddScoped<IPreferenceRepository, PreferenceRepository>();
         services.AddScoped<ILanguageRepository, LanguageRepository>();
         services.AddScoped<IEducationRepository, EducationRepository>();
         services.AddScoped<ICountryRepository, CountryRepository>();

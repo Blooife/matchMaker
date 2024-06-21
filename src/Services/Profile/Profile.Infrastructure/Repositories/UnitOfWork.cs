@@ -9,7 +9,6 @@ public class UnitOfWork : IUnitOfWork
     private IUserProfileRepository _userProfileRepository;
     private ILanguageRepository _languageRepository;
     private IGoalRepository _goalRepository;
-    private IPreferenceRepository _preferenceRepository;
     private ICountryRepository _countryRepository;
     private ICityRepository _cityRepository;
     private IInterestRepository _interestRepository;
@@ -24,7 +23,6 @@ public class UnitOfWork : IUnitOfWork
     public IUserProfileRepository ProfileRepository => _userProfileRepository ??= new UserProfileRepository(_dbContext);
     public ILanguageRepository LanguageRepository => _languageRepository ??= new LanguageRepository(_dbContext);
     public IGoalRepository GoalRepository => _goalRepository ??= new GoalRepository(_dbContext);
-    public IPreferenceRepository PreferenceRepository => _preferenceRepository ??= new PreferenceRepository(_dbContext);
     public ICountryRepository CountryRepository => _countryRepository ??= new CountryRepository(_dbContext);
     public ICityRepository CityRepository => _cityRepository ??= new CityRepository(_dbContext);
     public IInterestRepository InterestRepository => _interestRepository ??= new InterestRepository(_dbContext);
