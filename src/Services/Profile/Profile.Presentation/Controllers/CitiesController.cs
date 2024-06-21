@@ -1,9 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Profile.Application.DTOs.City.Request;
-using Profile.Application.UseCases.CityUseCases.Commands.AddCityToProfile;
-using Profile.Application.UseCases.CityUseCases.Commands.RemoveCityFromProfile;
 using Profile.Application.UseCases.CityUseCases.Queries.GetAll;
 using Profile.Application.UseCases.CityUseCases.Queries.GetById;
 using Profile.Application.UseCases.CityUseCases.Queries.GetCityWithCountryById;
@@ -49,25 +46,5 @@ public class CitiesController : ControllerBase
         var city = await _mediator.Send(query, cancellationToken);
         
         return Ok(city);
-    }
-
-    [HttpPost("to/profile")]
-    public async Task<IActionResult> AddCityToProfile([FromBody] AddCityToProfileDto dto, CancellationToken cancellationToken)
-    {
-        var command = new AddCityToProfileCommand(dto);
-        
-        var result = await _mediator.Send(command, cancellationToken);
-        
-        return Ok(result);
-    }
-    
-    [HttpDelete("from/profile")]
-    public async Task<IActionResult> RemoveCityFromProfile([FromBody] RemoveCityFromProfileDto dto, CancellationToken cancellationToken)
-    {
-        var command = new RemoveCityFromProfileCommand(dto);
-        
-        var result = await _mediator.Send(command, cancellationToken);
-        
-        return Ok(result);
     }
 }

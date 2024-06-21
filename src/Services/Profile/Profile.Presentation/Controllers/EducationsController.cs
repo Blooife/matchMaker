@@ -7,7 +7,7 @@ using Profile.Application.UseCases.EducationUseCases.Commands.RemoveEducationFro
 using Profile.Application.UseCases.EducationUseCases.Commands.Update;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetAll;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetById;
-using Profile.Application.UseCases.EducationUseCases.Queries.GetUsersEducation;
+using Profile.Application.UseCases.EducationUseCases.Queries.GetProfilesEducation;
 
 namespace Profile.Presentation.Controllers;
 
@@ -44,9 +44,9 @@ public class EducationsController : ControllerBase
     }
     
     [HttpGet("user/{id}")]
-    public async Task<IActionResult> GetUserEducations(string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetProfileEducations(string id, CancellationToken cancellationToken)
     {
-        var query = new GetUsersEducationsQuery(id);
+        var query = new GetProfilesEducationsQuery(id);
 
         var education = await _mediator.Send(query, cancellationToken);
         
@@ -54,9 +54,9 @@ public class EducationsController : ControllerBase
     }
     
     [HttpPut]
-    public async Task<IActionResult> UpdateUserEducation([FromBody] UpdateUserEducationDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateProfileEducation([FromBody] UpdateProfileEducationDto dto, CancellationToken cancellationToken)
     {
-        var command = new UpdateUserEducationCommand(dto);
+        var command = new UpdateProfileEducationCommand(dto);
         
         var result = await _mediator.Send(command, cancellationToken);
         

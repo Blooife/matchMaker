@@ -24,7 +24,7 @@ public class LanguageRepository : GenericRepository<Language, int>, ILanguageRep
         profile.Languages.Remove(language);
     }
     
-    public async Task<List<Language>> GetUsersLanguages(string profileId, CancellationToken cancellationToken)
+    public async Task<List<Language>> GetProfilesLanguages(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Languages).AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
@@ -32,7 +32,7 @@ public class LanguageRepository : GenericRepository<Language, int>, ILanguageRep
         return userProfile!.Languages;
     }
     
-    public async Task<UserProfile?> GetUserWithLanguages(string profileId, CancellationToken cancellationToken)
+    public async Task<UserProfile?> GetProfileWithLanguages(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Languages)
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);

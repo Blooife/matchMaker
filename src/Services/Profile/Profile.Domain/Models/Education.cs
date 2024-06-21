@@ -4,5 +4,5 @@ public class Education
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public List<UserEducation> UserEducations { get; set; } = new List<UserEducation>();
+    public List<ProfileEducation> ProfileEducations { get; set; } = new List<ProfileEducation>();
 }

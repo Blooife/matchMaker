@@ -6,7 +6,7 @@ using Profile.Application.UseCases.LanguageUseCases.Commands.AddLanguageToProfil
 using Profile.Application.UseCases.LanguageUseCases.Commands.RemoveLanguageFromProfile;
 using Profile.Application.UseCases.LanguageUseCases.Queries.GetAll;
 using Profile.Application.UseCases.LanguageUseCases.Queries.GetById;
-using Profile.Application.UseCases.LanguageUseCases.Queries.GetUsersLanguages;
+using Profile.Application.UseCases.LanguageUseCases.Queries.GetProfilesLanguages;
 
 namespace Profile.Presentation.Controllers;
 
@@ -43,9 +43,9 @@ public class LanguagesController : ControllerBase
     }
     
     [HttpGet("user/{id}")]
-    public async Task<IActionResult> GetUserLanguages(string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetProfileLanguages(string id, CancellationToken cancellationToken)
     {
-        var query = new GetUsersLanguagesQuery(id);
+        var query = new GetProfilesLanguagesQuery(id);
 
         var languages = await _mediator.Send(query, cancellationToken);
         

@@ -9,7 +9,7 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
     public void Configure(EntityTypeBuilder<UserProfile> builder)
     {
         builder.Property(userProfile => userProfile.Id).ValueGeneratedOnAdd();
-        builder.HasMany(p => p.Interests).WithMany(interest => interest.Profiles);
-        builder.HasMany(p => p.Images).WithOne(i => i.Profile).HasForeignKey(i => i.ProfileId);
+        builder.HasMany(userProfile => userProfile.Interests).WithMany(interest => interest.Profiles);
+        builder.HasMany(userProfile => userProfile.Images).WithOne(i => i.Profile).HasForeignKey(i => i.ProfileId);
     }
 }

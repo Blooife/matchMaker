@@ -11,14 +11,14 @@ public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork) : IReques
 {
     public async Task<GeneralResponseDto> Handle(RemoveLanguageFromProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetUserWithLanguages(request.Dto.ProfileId, cancellationToken);
+        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetProfileWithLanguages(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithLanguages is null)
         {
             throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
-        var language = await _unitOfWork.LanguageRepository.GetByIdAsync(request.Dto.LanguageId, cancellationToken);
+        var language = await _unitOfWork.LanguageRepository.FirstOrDefaultAsync(request.Dto.LanguageId, cancellationToken);
         
         if (language is null)
         {

@@ -17,21 +17,22 @@ public class ProfileDbContext : DbContext
     public DbSet<Country> Countries { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<Image> Images { get; set; }
+    public DbSet<User> Users { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<UserProfile>()
-            .HasMany(userProfile => userProfile.UserEducations)
+            .HasMany(userProfile => userProfile.ProfileEducations)
             .WithOne(userEducation => userEducation.Profile)
             .HasForeignKey(userEducation => userEducation.ProfileId);
 
         modelBuilder.Entity<Education>()
-            .HasMany(education => education.UserEducations)
+            .HasMany(education => education.ProfileEducations)
             .WithOne(userEducation => userEducation.Education)
             .HasForeignKey(userEducation => userEducation.EducationId);
 
-        modelBuilder.Entity<UserEducation>()
+        modelBuilder.Entity<ProfileEducation>()
             .HasKey(userEducation => new { userEducation.ProfileId, userEducation.EducationId });
         
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

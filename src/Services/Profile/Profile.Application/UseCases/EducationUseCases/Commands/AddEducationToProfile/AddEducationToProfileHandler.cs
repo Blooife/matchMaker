@@ -13,14 +13,14 @@ public class AddEducationToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapp
 {
     public async Task<GeneralResponseDto> Handle(AddEducationToProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithEducation = await _unitOfWork.EducationRepository.GetUserWithEducation(request.Dto.ProfileId, cancellationToken);
+        var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducation(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithEducation is null)
         {
             throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
-        var education = await _unitOfWork.EducationRepository.GetByIdAsync(request.Dto.EducationId, cancellationToken);
+        var education = await _unitOfWork.EducationRepository.FirstOrDefaultAsync(request.Dto.EducationId, cancellationToken);
         
         if (education is null)
         {
@@ -34,7 +34,7 @@ public class AddEducationToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapp
             throw new AlreadyContainsException(ExceptionMessages.ProfileContainsEducation);
         }
 
-        UserEducation userEducation = _mapper.Map<UserEducation>(request.Dto);
+        ProfileEducation userEducation = _mapper.Map<ProfileEducation>(request.Dto);
         
         await _unitOfWork.EducationRepository.AddEducationToProfile(profileWithEducation, userEducation);
         await _unitOfWork.SaveAsync(cancellationToken);

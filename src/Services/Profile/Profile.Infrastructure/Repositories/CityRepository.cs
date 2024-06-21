@@ -13,18 +13,6 @@ public class CityRepository : GenericRepository<City, int>, ICityRepository
     {
         _dbContext = dbContext;
     }
-    
-    public async Task AddCityToProfile(UserProfile profile, City city, CancellationToken cancellationToken)
-    {
-        profile.CityId = city.Id;
-        _dbContext.Entry(profile).State = EntityState.Modified;
-    }
-    
-    public async Task RemoveCityFromProfile(UserProfile profile, CancellationToken cancellationToken)
-    {
-        profile.CityId = null;
-        _dbContext.Entry(profile).State = EntityState.Modified;
-    }
 
     public async Task<City?> GetCityWithCountryById(int cityId, CancellationToken cancellationToken)
     {

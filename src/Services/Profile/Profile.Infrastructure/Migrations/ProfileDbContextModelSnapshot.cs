@@ -546,32 +546,7 @@ namespace Profile.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Profile.Domain.Models.Preference", b =>
-                {
-                    b.Property<string>("ProfileId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("AgeFrom")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("AgeTo")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("MaxDistance")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ProfileId");
-
-                    b.ToTable("Preferences");
-                });
-
-            modelBuilder.Entity("Profile.Domain.Models.UserEducation", b =>
+            modelBuilder.Entity("Profile.Domain.Models.ProfileEducation", b =>
                 {
                     b.Property<string>("ProfileId")
                         .HasColumnType("text");
@@ -587,7 +562,21 @@ namespace Profile.Infrastructure.Migrations
 
                     b.HasIndex("EducationId");
 
-                    b.ToTable("UserEducation");
+                    b.ToTable("ProfileEducation");
+                });
+
+            modelBuilder.Entity("Profile.Domain.Models.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Profile.Domain.Models.UserProfile", b =>
@@ -596,13 +585,19 @@ namespace Profile.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
+                    b.Property<int>("AgeFrom")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AgeTo")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("BirthDate")
+                    b.Property<DateTime>("BirthDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("CityId")
+                    b.Property<int>("CityId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Gender")
@@ -611,18 +606,21 @@ namespace Profile.Infrastructure.Migrations
                     b.Property<int?>("GoalId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Height")
+                    b.Property<int?>("Height")
                         .HasColumnType("integer");
 
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastOnline")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("MaxDistance")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("PreferredGender")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("ShowAge")
                         .HasColumnType("boolean");
@@ -695,27 +693,16 @@ namespace Profile.Infrastructure.Migrations
                     b.Navigation("Profile");
                 });
 
-            modelBuilder.Entity("Profile.Domain.Models.Preference", b =>
-                {
-                    b.HasOne("Profile.Domain.Models.UserProfile", "Profile")
-                        .WithOne("Preference")
-                        .HasForeignKey("Profile.Domain.Models.Preference", "ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("Profile.Domain.Models.UserEducation", b =>
+            modelBuilder.Entity("Profile.Domain.Models.ProfileEducation", b =>
                 {
                     b.HasOne("Profile.Domain.Models.Education", "Education")
-                        .WithMany("UserEducations")
+                        .WithMany("ProfileEducations")
                         .HasForeignKey("EducationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Profile.Domain.Models.UserProfile", "Profile")
-                        .WithMany("UserEducations")
+                        .WithMany("ProfileEducations")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -729,15 +716,25 @@ namespace Profile.Infrastructure.Migrations
                 {
                     b.HasOne("Profile.Domain.Models.City", "City")
                         .WithMany("Profiles")
-                        .HasForeignKey("CityId");
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Profile.Domain.Models.Goal", "Goal")
                         .WithMany("Profiles")
                         .HasForeignKey("GoalId");
 
+                    b.HasOne("Profile.Domain.Models.User", "User")
+                        .WithOne("Profile")
+                        .HasForeignKey("Profile.Domain.Models.UserProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("City");
 
                     b.Navigation("Goal");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Profile.Domain.Models.City", b =>
@@ -752,7 +749,7 @@ namespace Profile.Infrastructure.Migrations
 
             modelBuilder.Entity("Profile.Domain.Models.Education", b =>
                 {
-                    b.Navigation("UserEducations");
+                    b.Navigation("ProfileEducations");
                 });
 
             modelBuilder.Entity("Profile.Domain.Models.Goal", b =>
@@ -760,14 +757,17 @@ namespace Profile.Infrastructure.Migrations
                     b.Navigation("Profiles");
                 });
 
+            modelBuilder.Entity("Profile.Domain.Models.User", b =>
+                {
+                    b.Navigation("Profile")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Profile.Domain.Models.UserProfile", b =>
                 {
                     b.Navigation("Images");
 
-                    b.Navigation("Preference")
-                        .IsRequired();
-
-                    b.Navigation("UserEducations");
+                    b.Navigation("ProfileEducations");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,11 +8,11 @@ public class EducationMapping : AutoMapper.Profile
 {
     public EducationMapping()
     {
-        CreateMap<AddEducationToProfileDto, UserEducation>();
+        CreateMap<AddEducationToProfileDto, ProfileEducation>();
         
         CreateMap<Education, EducationResponseDto>();
         
-        CreateMap<UserEducation, UserEducationResponseDto>()
+        CreateMap<ProfileEducation, ProfileEducationResponseDto>()
             .ForMember(dest=>dest.Description, opt => opt.MapFrom(src=>src.Description))
             .ForMember(dest=>dest.ProfileId, opt => opt.MapFrom(src=>src.ProfileId))
             .ForMember(dest=>dest.EducationId, opt => opt.MapFrom(src=>src.EducationId))

@@ -4,7 +4,7 @@ using Shared.Models;
 
 namespace Profile.Application.UseCases.EducationUseCases.Commands.Update;
 
-public sealed record UpdateUserEducationCommand(UpdateUserEducationDto Dto) : IRequest<GeneralResponseDto>
+public sealed record UpdateProfileEducationCommand(UpdateProfileEducationDto Dto) : IRequest<GeneralResponseDto>
 {
     
 }

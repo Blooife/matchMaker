@@ -10,5 +10,6 @@ public interface IUnitOfWork : IDisposable
     IInterestRepository InterestRepository { get; }
     IEducationRepository EducationRepository { get; }
     IImageRepository ImageRepository { get; }
+    IUserRepository UserRepository { get; }
     Task SaveAsync(CancellationToken cancellationToken);
 }

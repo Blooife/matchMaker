@@ -11,7 +11,7 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IReques
 {
     public async Task<ImageResponseDto> Handle(AddImageCommand request, CancellationToken cancellationToken)
     {
-        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(request.Dto.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.ProfileRepository.FirstOrDefaultAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profile is null)
         {

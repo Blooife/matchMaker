@@ -1,3 +1,5 @@
+using Profile.Domain.Models;
+
 namespace Profile.Domain.Models;
 
 public class Image

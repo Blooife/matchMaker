@@ -10,7 +10,7 @@ public class DeleteProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
 {
     public async Task<ProfileResponseDto> Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
     {
-        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.ProfileRepository.FirstOrDefaultAsync(request.ProfileId, cancellationToken);
         
         if (profile is null)
         {

@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Image.Request;
 using Profile.Application.UseCases.ImageUseCases.Commands.AddImage;
 using Profile.Application.UseCases.ImageUseCases.Commands.RemoveImage;
-using Profile.Application.UseCases.ImageUseCases.Queries.GetUsersImages;
+using Profile.Application.UseCases.ImageUseCases.Queries.GetProfilesImages;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ImagesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -20,9 +21,9 @@ public class ImagesController : ControllerBase
     }
     
     [HttpGet("user/{id}")]
-    public async Task<IActionResult> GetUserImages(string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetProfileImages(string id, CancellationToken cancellationToken)
     {
-        var query = new GetUsersImagesQuery(id);
+        var query = new GetProfilesImagesQuery(id);
 
         var images = await _mediator.Send(query, cancellationToken);
         

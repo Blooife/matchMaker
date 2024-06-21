@@ -12,14 +12,14 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork) : IReque
 {
     public async Task<GeneralResponseDto> Handle(RemoveEducationFromProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithEducation = await _unitOfWork.EducationRepository.GetUserWithEducation(request.Dto.ProfileId, cancellationToken);
+        var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducation(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithEducation is null)
         {
             throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
-        var education = await _unitOfWork.EducationRepository.GetByIdAsync(request.Dto.EducationId, cancellationToken);
+        var education = await _unitOfWork.EducationRepository.FirstOrDefaultAsync(request.Dto.EducationId, cancellationToken);
         
         if (education is null)
         {
@@ -33,7 +33,7 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork) : IReque
             throw new NotContainsException(ExceptionMessages.ProfileNotContainsEducation);
         }
 
-        UserEducation userEducation = profileWithEducation.UserEducations.First(userEducation=>userEducation.EducationId == request.Dto.EducationId);
+        ProfileEducation userEducation = profileWithEducation.ProfileEducations.First(userEducation=>userEducation.EducationId == request.Dto.EducationId);
         
         await _unitOfWork.EducationRepository.RemoveEducationFromProfile(profileWithEducation, userEducation);
         await _unitOfWork.SaveAsync(cancellationToken);

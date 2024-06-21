@@ -28,7 +28,7 @@ public class ImageRepository : GenericRepository<Image, int>, IImageRepository
         //profile.Images.Remove(image);
     }
 
-    public async Task<List<Image>> GetUsersImages(string profileId, CancellationToken cancellationToken)
+    public async Task<List<Image>> GetProfilesImages(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Images).AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
@@ -36,7 +36,7 @@ public class ImageRepository : GenericRepository<Image, int>, IImageRepository
         return userProfile!.Images;
     }
     
-    public async Task<UserProfile?> GetUserWithImages(string profileId, CancellationToken cancellationToken)
+    public async Task<UserProfile?> GetProfileWithImages(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Images)
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);

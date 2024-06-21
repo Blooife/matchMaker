@@ -9,7 +9,7 @@ public class RemoveGoalFromProfileHandler(IUnitOfWork _unitOfWork) : IRequestHan
 {
     public async Task<GeneralResponseDto> Handle(RemoveGoalFromProfileCommand request, CancellationToken cancellationToken)
     {
-        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(request.Dto.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.ProfileRepository.FirstOrDefaultAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profile is null)
         {

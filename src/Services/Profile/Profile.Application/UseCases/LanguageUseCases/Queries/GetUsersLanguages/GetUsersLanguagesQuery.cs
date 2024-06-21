@@ -1,6 +1,6 @@
 using MediatR;
 using Profile.Application.DTOs.Language.Response;
 
-namespace Profile.Application.UseCases.LanguageUseCases.Queries.GetUsersLanguages;
+namespace Profile.Application.UseCases.LanguageUseCases.Queries.GetProfilesLanguages;
 
-public sealed record GetUsersLanguagesQuery(string ProfileId) : IRequest<IEnumerable<LanguageResponseDto>>;
+public sealed record GetProfilesLanguagesQuery(string ProfileId) : IRequest<IEnumerable<LanguageResponseDto>>;

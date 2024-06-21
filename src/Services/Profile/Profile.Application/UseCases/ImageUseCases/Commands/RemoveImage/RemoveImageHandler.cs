@@ -11,7 +11,7 @@ public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IReq
 {
     public async Task<ImageResponseDto> Handle(RemoveImageCommand request, CancellationToken cancellationToken)
     {
-        var image = await _unitOfWork.ImageRepository.GetByIdAsync(request.Dto.ImageId, cancellationToken);
+        var image = await _unitOfWork.ImageRepository.FirstOrDefaultAsync(request.Dto.ImageId, cancellationToken);
         
         if (image is null)
         {

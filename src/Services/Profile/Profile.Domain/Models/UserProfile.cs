@@ -16,16 +16,17 @@ public class UserProfile
     public int AgeTo { get; set; }
     public int MaxDistance { get; set; }
     public Gender PreferredGender { get; set; } = Gender.Undefined;
-    
+    public string UserId { get; set; }
     public int? GoalId { get; set; }
-    public Goal? Goal { get; set; }
+    public int CityId { get; set; }
     
-    public int? CityId { get; set; }
     public City City { get; set; }
+    public User User { get; set; }
+    public Goal? Goal { get; set; }
 
     public List<Language> Languages { get; set; } = new List<Language>();
     public List<Interest> Interests { get; set; } = new List<Interest>();
-    public List<UserEducation> UserEducations { get; set; } = new List<UserEducation>();
+    public List<ProfileEducation> ProfileEducations { get; set; } = new List<ProfileEducation>();
     public List<Image> Images { get; set; } = new List<Image>();
 
 }

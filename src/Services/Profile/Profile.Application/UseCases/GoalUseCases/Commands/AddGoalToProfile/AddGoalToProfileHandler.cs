@@ -9,14 +9,14 @@ public class AddGoalToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<
 {
     public async Task<GeneralResponseDto> Handle(AddGoalToProfileCommand request, CancellationToken cancellationToken)
     {
-        var profile = await _unitOfWork.ProfileRepository.GetByIdAsync(request.Dto.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.ProfileRepository.FirstOrDefaultAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profile is null)
         {
             throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
-        var goal = await _unitOfWork.GoalRepository.GetByIdAsync(request.Dto.GoalId, cancellationToken);
+        var goal = await _unitOfWork.GoalRepository.FirstOrDefaultAsync(request.Dto.GoalId, cancellationToken);
         
         if (goal is null)
         {

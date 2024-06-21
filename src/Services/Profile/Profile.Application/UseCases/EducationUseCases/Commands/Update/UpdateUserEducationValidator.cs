@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace Profile.Application.UseCases.EducationUseCases.Commands.Update;
 
-public class UpdateUserEducationValidator : AbstractValidator<UpdateUserEducationCommand>
+public class UpdateProfileEducationValidator : AbstractValidator<UpdateProfileEducationCommand>
 {
-    public UpdateUserEducationValidator()
+    public UpdateProfileEducationValidator()
     {
         RuleFor(command => command.Dto.ProfileId).NotEmpty().WithMessage("Profile id cant be empty");
         RuleFor(command => command.Dto.EducationId).NotEmpty().WithMessage("Education id cant be empty");

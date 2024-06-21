@@ -24,7 +24,7 @@ public class InterestRepository : GenericRepository<Interest, int>, IInterestRep
         profile.Interests.Remove(interest);
     }
 
-    public async Task<List<Interest>> GetUsersInterests(string profileId, CancellationToken cancellationToken)
+    public async Task<List<Interest>> GetProfilesInterests(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Interests).AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
@@ -32,7 +32,7 @@ public class InterestRepository : GenericRepository<Interest, int>, IInterestRep
         return userProfile!.Interests;
     }
     
-    public async Task<UserProfile?> GetUserWithInterests(string profileId, CancellationToken cancellationToken)
+    public async Task<UserProfile?> GetProfileWithInterests(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Interests)
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);

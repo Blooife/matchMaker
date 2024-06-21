@@ -1,6 +1,6 @@
 namespace Profile.Application.DTOs.Education.Response;
 
-public class UserEducationResponseDto
+public class ProfileEducationResponseDto
 {
     public string ProfileId { get; set; }
     public int EducationId { get; set; }

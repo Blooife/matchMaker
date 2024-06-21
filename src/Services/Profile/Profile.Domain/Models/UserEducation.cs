@@ -1,6 +1,6 @@
 namespace Profile.Domain.Models;
 
-public class UserEducation
+public class ProfileEducation
 {
     public string ProfileId { get; set; }
     public UserProfile Profile { get; set; }

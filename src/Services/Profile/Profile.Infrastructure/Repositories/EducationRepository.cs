@@ -14,32 +14,32 @@ public class EducationRepository : GenericRepository<Education, int>, IEducation
         _dbContext = dbContext;
     }
     
-    public async Task AddEducationToProfile(UserProfile profile, UserEducation userEducation)
+    public async Task AddEducationToProfile(UserProfile profile, ProfileEducation userEducation)
     {
-        profile.UserEducations.Add(userEducation);
+        profile.ProfileEducations.Add(userEducation);
     }
     
-    public async Task RemoveEducationFromProfile(UserProfile profile, UserEducation userEducation)
+    public async Task RemoveEducationFromProfile(UserProfile profile, ProfileEducation userEducation)
     {
-        profile.UserEducations.Remove(userEducation);
+        profile.ProfileEducations.Remove(userEducation);
     }
     
-    public async Task UpdateUsersEducation(UserEducation userEducation, string description)
+    public async Task UpdateProfilesEducation(ProfileEducation userEducation, string description)
     {
         userEducation.Description = description;
     }
     
-    public async Task<List<UserEducation>> GetUsersEducation(UserProfile profile, CancellationToken cancellationToken)
+    public async Task<List<ProfileEducation>> GetProfilesEducation(UserProfile profile, CancellationToken cancellationToken)
     {
-        var userProfile = await _dbContext.Profiles.Include(p => p.UserEducations).ThenInclude(ue=>ue.Education).AsNoTracking()
+        var userProfile = await _dbContext.Profiles.Include(p => p.ProfileEducations).ThenInclude(ue=>ue.Education).AsNoTracking()
             .FirstOrDefaultAsync(p => p == profile, cancellationToken);
 
-        return userProfile!.UserEducations;
+        return userProfile!.ProfileEducations;
     }
     
-    public async Task<UserProfile?> GetUserWithEducation(string profileId, CancellationToken cancellationToken)
+    public async Task<UserProfile?> GetProfileWithEducation(string profileId, CancellationToken cancellationToken)
     {
-        var userProfile = await _dbContext.Profiles.Include(p => p.UserEducations)
+        var userProfile = await _dbContext.Profiles.Include(p => p.ProfileEducations)
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
 
         return userProfile;

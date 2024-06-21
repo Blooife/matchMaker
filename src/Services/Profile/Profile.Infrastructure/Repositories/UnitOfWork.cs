@@ -6,7 +6,7 @@ namespace Profile.Infrastructure.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly ProfileDbContext _dbContext;
-    private IUserProfileRepository _userProfileRepository;
+    private IUserProfileRepository _profileRepository;
     private ILanguageRepository _languageRepository;
     private IGoalRepository _goalRepository;
     private ICountryRepository _countryRepository;
@@ -14,13 +14,15 @@ public class UnitOfWork : IUnitOfWork
     private IInterestRepository _interestRepository;
     private IEducationRepository _educationRepository;
     private IImageRepository _imageRepository;
+    private IUserRepository _userRepository;
+    
     
     public UnitOfWork(ProfileDbContext context)
     {
         _dbContext = context;
     }
 
-    public IUserProfileRepository ProfileRepository => _userProfileRepository ??= new UserProfileRepository(_dbContext);
+    public IUserProfileRepository ProfileRepository => _profileRepository ??= new UserProfileRepository(_dbContext);
     public ILanguageRepository LanguageRepository => _languageRepository ??= new LanguageRepository(_dbContext);
     public IGoalRepository GoalRepository => _goalRepository ??= new GoalRepository(_dbContext);
     public ICountryRepository CountryRepository => _countryRepository ??= new CountryRepository(_dbContext);
@@ -28,6 +30,7 @@ public class UnitOfWork : IUnitOfWork
     public IInterestRepository InterestRepository => _interestRepository ??= new InterestRepository(_dbContext);
     public IEducationRepository EducationRepository => _educationRepository ??= new EducationRepository(_dbContext);
     public IImageRepository ImageRepository => _imageRepository ??= new ImageRepository(_dbContext);
+    public IUserRepository UserRepository => _userRepository ??= new UserRepository(_dbContext);
     
     private bool _disposed = false;
     protected virtual void Dispose(bool disposing)

@@ -11,14 +11,14 @@ public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHand
 {
     public async Task<GeneralResponseDto> Handle(AddLanguageToProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetUserWithLanguages(request.Dto.ProfileId, cancellationToken);
+        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetProfileWithLanguages(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithLanguages is null)
         {
             throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
-        var language = await _unitOfWork.LanguageRepository.GetByIdAsync(request.Dto.LanguageId, cancellationToken);
+        var language = await _unitOfWork.LanguageRepository.FirstOrDefaultAsync(request.Dto.LanguageId, cancellationToken);
         
         if (language is null)
         {

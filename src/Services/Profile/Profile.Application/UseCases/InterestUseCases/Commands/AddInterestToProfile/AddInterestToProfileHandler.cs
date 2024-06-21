@@ -11,14 +11,14 @@ public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHand
 {
     public async Task<GeneralResponseDto> Handle(AddInterestToProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithInterests = await _unitOfWork.InterestRepository.GetUserWithInterests(request.Dto.ProfileId, cancellationToken);
+        var profileWithInterests = await _unitOfWork.InterestRepository.GetProfileWithInterests(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithInterests is null)
         {
             throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
-        var interest = await _unitOfWork.InterestRepository.GetByIdAsync(request.Dto.InterestId, cancellationToken);
+        var interest = await _unitOfWork.InterestRepository.FirstOrDefaultAsync(request.Dto.InterestId, cancellationToken);
         
         if (interest is null)
         {
