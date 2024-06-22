@@ -1,5 +1,3 @@
-using Shared.Constants;
-
 namespace Profile.Application.DTOs.User.Request;
 
 public class CreateUserDto

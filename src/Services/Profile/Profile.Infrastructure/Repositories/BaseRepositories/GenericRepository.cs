@@ -11,11 +11,6 @@ public class GenericRepository<T, TKey>(ProfileDbContext _dbContext) : IGenericR
     {
         return await _dbContext.Set<T>().AsNoTracking().ToListAsync(cancellationToken);
     }
-
-    public async Task<T?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Set<T>().FindAsync(id, cancellationToken);
-    }
     
     public async Task<T?> FirstOrDefaultAsync(TKey id, CancellationToken cancellationToken)
     {

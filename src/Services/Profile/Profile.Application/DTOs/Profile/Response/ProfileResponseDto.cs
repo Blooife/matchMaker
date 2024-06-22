@@ -18,5 +18,5 @@ public class ProfileResponseDto
     public Gender PreferredGender { get; set; }
     public int? GoalId { get; set; }
     public int CityId { get; set; }
-    public int ProfileId { get; set; }
+    public string UserId { get; set; }
 }

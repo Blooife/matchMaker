@@ -1,4 +1,3 @@
-using Profile.Application.DTOs.Image.Request;
 using Profile.Application.DTOs.Image.Response;
 using Profile.Domain.Models;
 

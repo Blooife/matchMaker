@@ -31,8 +31,9 @@ public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork) : IReques
         {
             throw new NotContainsException(ExceptionMessages.ProfileNotContainsLanguage);
         }
-        
-        await _unitOfWork.LanguageRepository.RemoveLanguageFromProfile(profileWithLanguages, language);
+
+        var languageToRemove = profileWithLanguages.Languages.First(l=>l.Id == request.Dto.LanguageId);
+        await _unitOfWork.LanguageRepository.RemoveLanguageFromProfile(profileWithLanguages, languageToRemove);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         return new GeneralResponseDto();

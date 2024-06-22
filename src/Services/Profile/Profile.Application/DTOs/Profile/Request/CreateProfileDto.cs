@@ -17,5 +17,5 @@ public class CreateProfileDto
     public Gender PreferredGender { get; set; } = Gender.Undefined;
     public int? GoalId { get; set; }
     public int CityId { get; set; }
-    public int ProfileId { get; set; }
+    public string UserId { get; set; }
 }

@@ -1,5 +1,3 @@
-using Shared.Constants;
-
 namespace Profile.Application.DTOs.Profile.Response;
 
 public class UserResponseDto

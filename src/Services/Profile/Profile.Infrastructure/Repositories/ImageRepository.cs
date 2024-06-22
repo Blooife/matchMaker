@@ -18,14 +18,13 @@ public class ImageRepository : GenericRepository<Image, int>, IImageRepository
     public async Task<Image> AddImageToProfile(Image image, CancellationToken cancellationToken)
     {
         await _dbContext.Images.AddAsync(image, cancellationToken);
+        
         return image;
-        //profile.Images.Add(image);
     }
     
     public async Task RemoveImageFromProfile(Image image)
     {
         _dbContext.Images.Remove(image);
-        //profile.Images.Remove(image);
     }
 
     public async Task<List<Image>> GetProfilesImages(string profileId, CancellationToken cancellationToken)
