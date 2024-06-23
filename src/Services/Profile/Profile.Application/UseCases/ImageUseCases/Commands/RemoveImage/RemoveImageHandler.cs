@@ -2,13 +2,13 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Image.Response;
 using Profile.Application.Exceptions;
-using Profile.Application.Services.Implementations;
+using Profile.Application.Services.Interfaces;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 
 namespace Profile.Application.UseCases.ImageUseCases.Commands.RemoveImage;
 
-public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, MinioService _minioService) : IRequestHandler<RemoveImageCommand, ImageResponseDto>
+public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService) : IRequestHandler<RemoveImageCommand, ImageResponseDto>
 {
     public async Task<ImageResponseDto> Handle(RemoveImageCommand request, CancellationToken cancellationToken)
     {

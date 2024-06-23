@@ -63,7 +63,7 @@ public class ProfilesController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> UpdateProfile([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteProfile([FromRoute] string id, CancellationToken cancellationToken)
     {
         var command = new DeleteProfileCommand(id);
         

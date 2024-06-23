@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Profile.Application.Services.Implementations;
+using Profile.Application.Services.Interfaces;
 using Profile.Infrastructure.Contexts;
 using Shared.Models;
 
@@ -22,7 +23,7 @@ public static class ServiceExtension
 
     private static void ConfigureMinio(this IServiceCollection services, IConfiguration config)
     {
-        services.AddSingleton<MinioService>(provider =>
+        services.AddSingleton<IMinioService>(provider =>
         {
             var minioConfig = config.GetSection("Minio");
             var endpoint = minioConfig["Endpoint"];
