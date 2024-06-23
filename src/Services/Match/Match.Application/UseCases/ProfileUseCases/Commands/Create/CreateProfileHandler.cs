@@ -11,6 +11,13 @@ public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
     public async Task<ProfileResponseDto> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
     {
         var profileRepository = _unitOfWork.Profiles;
+        var alreadyExistsProfile = await profileRepository.GetByIdAsync(request.Dto.Id, cancellationToken);
+        
+        if (alreadyExistsProfile is not null)
+        {
+            throw new Exception();
+        }
+        
         var profile = _mapper.Map<Profile>(request.Dto);
         await profileRepository.CreateAsync(profile, cancellationToken);
         

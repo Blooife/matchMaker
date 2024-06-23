@@ -6,4 +6,5 @@ public interface IUnitOfWork : IDisposable
     IProfileRepository Profiles { get; }
     ILikeRepository Likes { get; }
     IChatRepository Chats { get; }
+    IMessageRepository Messages { get; }
 }

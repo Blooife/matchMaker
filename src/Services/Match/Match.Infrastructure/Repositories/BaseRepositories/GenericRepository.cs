@@ -1,10 +1,11 @@
 using System.Linq.Expressions;
 using Match.Domain.Repositories.BaseRepositories;
 using MongoDB.Driver;
+using Shared.Models;
 
 namespace Match.Infrastructure.Repositories.BaseRepositories;
 
-public class GenericRepository<T>(IMongoCollection<T> _collection) : IGenericRepository<T> where T : class
+public class GenericRepository<T, TKey>(IMongoCollection<T> _collection) : IGenericRepository<T, TKey> where T : class
 {
     public void Create(T entity)
     {
@@ -33,7 +34,7 @@ public class GenericRepository<T>(IMongoCollection<T> _collection) : IGenericRep
         return await _collection.Find(condition).ToListAsync(cancellationToken);
     }
 
-    public async Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken)
+    public async Task<T?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
     {
         var filter = Builders<T>.Filter.Eq("Id", id);
         return await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);

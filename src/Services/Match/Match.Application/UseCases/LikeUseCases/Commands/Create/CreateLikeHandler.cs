@@ -1,5 +1,6 @@
 using AutoMapper;
 using Match.Application.DTOs.Like.Response;
+using Match.Application.Exceptions;
 using Match.Domain.Models;
 using Match.Domain.Repositories;
 using MediatR;
@@ -19,12 +20,12 @@ public class CreateLikeHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
 
         if (profile1 is null || profile2 is null)
         {
-            
+            throw new NotFoundException();
         }
         
-        var isMutual = await likeRepository.CheckMutualLike(likeEntity, cancellationToken);
+        var mutualLike = await likeRepository.CheckMutualLike(likeEntity, cancellationToken);
             
-        if (isMutual)
+        if (mutualLike is not null)
         {
             var matchEntity = new CoupleMatch()
             {
@@ -32,6 +33,7 @@ public class CreateLikeHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
                 ProfileId2 = likeEntity.TargetProfileId
             };
             await _unitOfWork.Matches.CreateAsync(matchEntity, cancellationToken);
+            await _unitOfWork.Likes.DeleteAsync(mutualLike, cancellationToken);
         }
         else
         {

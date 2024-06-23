@@ -1,6 +1,9 @@
+using MediatR;
+using Shared.Models;
+
 namespace Match.Application.UseCases.ChatUseCases.Commands.Delete;
 
-public class DeleteChatCommand
+public sealed record DeleteChatCommand(int ChatId) : IRequest<GeneralResponseDto>
 {
     
 }

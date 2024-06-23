@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Match.Application.UseCases.MatchUseCases.Queries.GetByProfileId;
 
-public sealed record GetMatchesByProfileIdQuery(string ProfileId) : IRequest<IEnumerable<string>>
+public sealed record GetMatchesByProfileIdQuery(string ProfileId) : IRequest<IEnumerable<MatchResponseDto>>
 {
     
 }

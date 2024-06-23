@@ -1,63 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Match.Application.UseCases.ProfileUseCases.Queries.GetRecsByProfileId;
 using Match.Domain.Models;
 using Match.Domain.Repositories;
+using MediatR;
 
 namespace Match.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProfilesController : ControllerBase
+    public class ProfilesController(IMediator _mediator) : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ProfilesController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-        }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetRecommendations([FromRoute]string id, CancellationToken cancellationToken)
         {
-            var profile = await _unitOfWork.Profiles.GetByIdAsync(id, HttpContext.RequestAborted);
-            if (profile == null)
-            {
-                return NotFound();
-            }
-            return Ok(profile);
-        }
+            var query = new GetRecsByProfileIdQuery(id);
 
-        [HttpPost]
-        public async Task<IActionResult> Create(Profile profile)
-        {
-            _unitOfWork.Profiles.Create(profile);
-            return CreatedAtAction(nameof(GetById), new { id = profile.Id }, profile);
-        }
+            var recs = await _mediator.Send(query, cancellationToken);
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, Profile profile, CancellationToken cancellationToken)
-        {
-            if (id != profile.Id)
-            {
-                return BadRequest();
-            }
-
-            await _unitOfWork.Profiles.UpdateAsync(profile, cancellationToken);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id, CancellationToken cancellationToken)
-        {
-            var existingProfile = await _unitOfWork.Profiles.GetByIdAsync(id, HttpContext.RequestAborted);
-            if (existingProfile == null)
-            {
-                return NotFound();
-            }
-
-            await _unitOfWork.Profiles.DeleteAsync(existingProfile, cancellationToken);
-            return NoContent();
+            return Ok(recs);
         }
     }
 }

@@ -18,6 +18,7 @@ public class Profile
     public Gender Gender { get; set; }
     public Gender PreferredGender { get; set; }
     public int MaxDistance { get; set; }
-    public string? Country { get; set; }
+    public string Country { get; set; }
+    public string City { get; set; }
     public GeoJsonPoint<GeoJson2DCoordinates>? Location { get; set; }
 }

@@ -3,7 +3,7 @@ using Match.Domain.Repositories.BaseRepositories;
 
 namespace Match.Domain.Repositories;
 
-public interface ILikeRepository : IGenericRepository<Like>
+public interface ILikeRepository : IGenericRepository<Like, int>
 {
-    Task<bool> CheckMutualLike(Like likeParam, CancellationToken cancellationToken);
+    Task<Like?> CheckMutualLike(Like likeParam, CancellationToken cancellationToken);
 }

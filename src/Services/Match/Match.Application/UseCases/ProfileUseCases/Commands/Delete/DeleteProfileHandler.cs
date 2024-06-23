@@ -1,4 +1,5 @@
 using AutoMapper;
+using Match.Application.Exceptions;
 using Match.Domain.Repositories;
 using MediatR;
 using Shared.Models;
@@ -14,7 +15,7 @@ public class DeleteProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         
         if (profile == null)
         {
-            
+            throw new NotFoundException();
         }
         
         await profileRepository.DeleteAsync(profile, cancellationToken);

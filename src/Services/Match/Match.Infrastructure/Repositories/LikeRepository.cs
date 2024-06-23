@@ -5,12 +5,12 @@ using MongoDB.Driver;
 
 namespace Match.Infrastructure.Repositories;
 
-public class LikeRepository(IMongoCollection<Like> _collection) : GenericRepository<Like>(_collection), ILikeRepository
+public class LikeRepository(IMongoCollection<Like> _collection) : GenericRepository<Like, int>(_collection), ILikeRepository
 {
-    public async Task<bool> CheckMutualLike(Like likeParam, CancellationToken cancellationToken)
+    public async Task<Like?> CheckMutualLike(Like likeParam, CancellationToken cancellationToken)
     {
         var getResult = await GetAsync(like =>
             like.IsLike && like.ProfileId == likeParam.TargetProfileId && like.TargetProfileId == likeParam.ProfileId, cancellationToken);
-        return getResult.Count != 0;
+        return getResult.FirstOrDefault();
     }
 }

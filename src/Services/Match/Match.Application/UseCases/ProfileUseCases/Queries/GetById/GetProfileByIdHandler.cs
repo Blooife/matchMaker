@@ -1,5 +1,6 @@
 using AutoMapper;
 using Match.Application.DTOs.Profile.Response;
+using Match.Application.Exceptions;
 using Match.Domain.Repositories;
 using MediatR;
 
@@ -12,9 +13,9 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : I
         var profileRepository = _unitOfWork.Profiles;
         var profile = await profileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
         
-        if (profile == null)
+        if (profile is null)
         {
-            
+            throw new NotFoundException();
         }
         
         return _mapper.Map<ProfileResponseDto>(profile);

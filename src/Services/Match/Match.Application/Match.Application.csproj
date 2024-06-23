@@ -11,21 +11,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\Chat\Request\" />
-      <Folder Include="DTOs\Chat\Response\" />
-      <Folder Include="DTOs\Match\Request\" />
-      <Folder Include="DTOs\Message\Request\" />
-      <Folder Include="DTOs\Message\Response\" />
-      <Folder Include="Mappers\" />
       <Folder Include="UseCases\LikeUseCases\Queries\" />
       <Folder Include="UseCases\MatchUseCases\Commands\" />
-      <Folder Include="UseCases\MessageUseCases\Queries\GetByChatId\" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="13.0.1" />
       <PackageReference Include="MediatR" Version="12.3.0" />
       <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+      <PackageReference Include="Microsoft.AspNet.SignalR" Version="2.4.3" />
+      <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.6" />
     </ItemGroup>
 
 </Project>

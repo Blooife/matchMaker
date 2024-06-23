@@ -6,7 +6,7 @@ using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Match.Infrastructure.Repositories;
 
-public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericRepository<Profile>(_collection), IProfileRepository
+public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericRepository<Profile, string>(_collection), IProfileRepository
 {
     public async Task<IEnumerable<Profile>> GetRecommendationsAsync(List<string> excludedProfileIds, Profile userProfile, bool locationAccessGranted, CancellationToken cancellationToken)
     {
