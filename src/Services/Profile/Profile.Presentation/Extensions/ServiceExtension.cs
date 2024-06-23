@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Profile.Application.Services.Implementations;
 using Profile.Infrastructure.Contexts;
 using Shared.Models;
 
@@ -16,6 +17,21 @@ public static class ServiceExtension
         services.AddControllers();
         services.ConfigureAuthentication(config);
         services.ConfigureSwagger();
+        services.ConfigureMinio(config);
+    }
+
+    private static void ConfigureMinio(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddSingleton<MinioService>(provider =>
+        {
+            var minioConfig = config.GetSection("Minio");
+            var endpoint = minioConfig["Endpoint"];
+            var accessKey = minioConfig["AccessKey"];
+            var secretKey = minioConfig["SecretKey"];
+            var bucketName = minioConfig["BucketName"];
+            
+            return new MinioService(endpoint, accessKey, secretKey, bucketName);
+        });
     }
     
     private static void ConfigureAuthentication(this IServiceCollection services, IConfiguration config)

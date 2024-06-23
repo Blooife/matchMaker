@@ -2,12 +2,13 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Image.Response;
 using Profile.Application.Exceptions;
+using Profile.Application.Services.Implementations;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 
 namespace Profile.Application.UseCases.ImageUseCases.Commands.RemoveImage;
 
-public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<RemoveImageCommand, ImageResponseDto>
+public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, MinioService _minioService) : IRequestHandler<RemoveImageCommand, ImageResponseDto>
 {
     public async Task<ImageResponseDto> Handle(RemoveImageCommand request, CancellationToken cancellationToken)
     {
@@ -22,17 +23,7 @@ public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IReq
         await _unitOfWork.ImageRepository.RemoveImageFromProfile(imageEntity);
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        var parentDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).FullName; //to do directory
-        var path = Path.Combine(parentDirectory, "", image.ImageUrl);
-
-        if (File.Exists(path))
-        {
-            File.Delete(path);
-        }
-        else
-        {
-            throw new FileNotFoundException("The file does not exist.");
-        }
+        await _minioService.DeleteFileAsync(image.ImageUrl);
         
         return _mapper.Map<ImageResponseDto>(imageEntity);
     }

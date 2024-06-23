@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using Minio.Exceptions;
 using Newtonsoft.Json;
 using Profile.Application.Exceptions;
 using Shared.Models;
@@ -62,6 +63,9 @@ namespace Profile.Presentation.MiddlewareHandlers
                     break;
                 case FileNotFoundException fileNotFoundException:
                     statusCode = HttpStatusCode.NotFound;
+                    break;
+                case MinioException minioException:
+                    statusCode = HttpStatusCode.Conflict;
                     break;
                 default:
                     statusCode = HttpStatusCode.InternalServerError;
