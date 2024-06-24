@@ -1,9 +1,7 @@
 using Match.Domain.Repositories;
-using Match.Infrastructure.Context;
 using Match.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
 
 namespace Match.Infrastructure.Extensions;
 

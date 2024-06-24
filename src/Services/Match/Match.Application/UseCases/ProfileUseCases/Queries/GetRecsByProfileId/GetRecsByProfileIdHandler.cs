@@ -3,8 +3,6 @@ using Match.Application.DTOs.Profile.Response;
 using Match.Application.Exceptions;
 using Match.Domain.Repositories;
 using MediatR;
-using MongoDB.Driver;
-using Profile = Match.Domain.Models.Profile;
 
 namespace Match.Application.UseCases.ProfileUseCases.Queries.GetRecsByProfileId;
 

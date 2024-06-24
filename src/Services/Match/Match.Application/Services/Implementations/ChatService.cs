@@ -1,7 +1,6 @@
 using Match.Application.Services.Interfaces;
 using Match.Domain.Models;
 using Match.Domain.Repositories;
-using Microsoft.AspNet.SignalR;
 
 namespace Match.Application.Services.Implementations;
 
@@ -14,9 +13,9 @@ public class ChatService : IChatService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Message> SendMessageAsync(int chatId, string senderId, string message)
+    public async Task<Message> SendMessageAsync(string chatId, string senderId, string message, CancellationToken cancellationToken)
     {
-        var chat = await _unitOfWork.Chats.GetByIdAsync(chatId, CancellationToken.None);
+        var chat = await _unitOfWork.Chats.GetByIdAsync(chatId, cancellationToken);
         
         if (chat is null)
         {
@@ -31,7 +30,10 @@ public class ChatService : IChatService
             ChatId = chat.Id
         };
 
-        await _unitOfWork.Messages.CreateAsync(newMessage, CancellationToken.None);
+        await _unitOfWork.Messages.CreateAsync(newMessage, cancellationToken);
+
+        chat.LastMessageTimestamp = newMessage.Timestamp;
+        await _unitOfWork.Chats.UpdateAsync(chat, cancellationToken);
         
         return newMessage;
     }

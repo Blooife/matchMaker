@@ -1,10 +1,14 @@
 using Match.Domain.Models;
 using Match.Domain.Repositories.BaseRepositories;
+using Shared.Models;
 
 namespace Match.Domain.Repositories;
 
-public interface IMatchRepository : IGenericRepository<CoupleMatch, int>
+public interface IMatchRepository : IGenericRepository<MatchEntity, string>
 {
-    Task<IEnumerable<CoupleMatch>> GetMatchesByProfileIdAsync(string profileId, CancellationToken cancellationToken);
+    Task<IEnumerable<MatchEntity>> GetMatchesByProfileIdAsync(string profileId, CancellationToken cancellationToken);
     Task<bool> AreProfilesMatched(string profileId1, string profileId2, CancellationToken cancellationToken);
+
+    Task<PagedList<MatchEntity>> GetPagedAsync(string profileId, int pageNumber, int pageSize,
+        CancellationToken cancellationToken);
 }

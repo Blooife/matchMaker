@@ -7,9 +7,9 @@ using Shared.Models;
 
 namespace Match.Infrastructure.Repositories;
 
-public class MessageRepository(IMongoCollection<Message> _collection) : GenericRepository<Message, int>(_collection), IMessageRepository
+public class MessageRepository(IMongoCollection<Message> _collection) : GenericRepository<Message, string>(_collection), IMessageRepository
 {
-    public async Task<PagedList<Message>> GetPagedAsync(int chatId, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    public async Task<PagedList<Message>> GetPagedAsync(string chatId, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
         Expression<Func<Message, bool>> filter = x => x.ChatId == chatId;
 

@@ -3,10 +3,12 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Match.Domain.Models;
 
-public class CoupleMatch
+public class MatchEntity
 {
     [BsonId]
-    public int Id { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
     public string ProfileId1 { get; set; }
     public string ProfileId2 { get; set; }
+    public DateTime Timestamp { get; set; }
 }

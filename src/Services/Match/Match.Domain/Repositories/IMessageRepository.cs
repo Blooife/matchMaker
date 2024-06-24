@@ -4,8 +4,8 @@ using Shared.Models;
 
 namespace Match.Domain.Repositories;
 
-public interface IMessageRepository : IGenericRepository<Message, int>
+public interface IMessageRepository : IGenericRepository<Message, string>
 {
-    Task<PagedList<Message>> GetPagedAsync(int chatId, int pageNumber, int pageSize,
+    Task<PagedList<Message>> GetPagedAsync(string chatId, int pageNumber, int pageSize,
         CancellationToken cancellationToken);
 }

@@ -4,5 +4,5 @@ namespace Match.Application.Services.Interfaces;
 
 public interface IChatService
 {
-    Task<Message> SendMessageAsync(int chatId, string senderId, string message);
+    Task<Message> SendMessageAsync(string chatId, string senderId, string message, CancellationToken cancellationToken = default);
 }

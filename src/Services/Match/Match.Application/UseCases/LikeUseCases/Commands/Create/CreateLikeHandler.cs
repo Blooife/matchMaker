@@ -27,10 +27,11 @@ public class CreateLikeHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
             
         if (mutualLike is not null)
         {
-            var matchEntity = new CoupleMatch()
+            var matchEntity = new MatchEntity()
             {
                 ProfileId1 = likeEntity.ProfileId,
-                ProfileId2 = likeEntity.TargetProfileId
+                ProfileId2 = likeEntity.TargetProfileId,
+                Timestamp = DateTime.UtcNow
             };
             await _unitOfWork.Matches.CreateAsync(matchEntity, cancellationToken);
             await _unitOfWork.Likes.DeleteAsync(mutualLike, cancellationToken);

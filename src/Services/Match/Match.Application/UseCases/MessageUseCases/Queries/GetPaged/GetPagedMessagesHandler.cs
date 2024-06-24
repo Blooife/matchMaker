@@ -1,19 +1,17 @@
 using AutoMapper;
-using Match.Application.DTOs.Message.Response;
 using Match.Application.Exceptions;
 using Match.Domain.Models;
 using Match.Domain.Repositories;
 using MediatR;
 using Shared.Models;
 
-namespace Match.Application.UseCases.MessageUseCases.Queries.GetPagedByChatId;
+namespace Match.Application.UseCases.MessageUseCases.Queries.GetPaged;
 
 public class GetPagedMessagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetPagedMessagesQuery, PagedList<Message>>
 {
     public async Task<PagedList<Message>> Handle(GetPagedMessagesQuery request, CancellationToken cancellationToken)
     {
-        var dto = request.Dto;
-        var chat = await _unitOfWork.Chats.GetByIdAsync(dto.ChatId, cancellationToken);
+        var chat = await _unitOfWork.Chats.GetByIdAsync(request.ChatId, cancellationToken);
 
         if (chat is null)
         {
@@ -21,7 +19,7 @@ public class GetPagedMessagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) :
         }
 
         var messages =
-            await _unitOfWork.Messages.GetPagedAsync(dto.ChatId, dto.PageNumber, dto.PageSize, cancellationToken);
+            await _unitOfWork.Messages.GetPagedAsync(request.ChatId, request.PageNumber, request.PageSize, cancellationToken);
 
         return messages;
     }

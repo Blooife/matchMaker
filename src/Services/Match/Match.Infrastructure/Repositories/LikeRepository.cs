@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace Match.Infrastructure.Repositories;
 
-public class LikeRepository(IMongoCollection<Like> _collection) : GenericRepository<Like, int>(_collection), ILikeRepository
+public class LikeRepository(IMongoCollection<Like> _collection) : GenericRepository<Like, string>(_collection), ILikeRepository
 {
     public async Task<Like?> CheckMutualLike(Like likeParam, CancellationToken cancellationToken)
     {

@@ -11,6 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="DTOs\Match\Request\" />
+      <Folder Include="DTOs\Message\Request\" />
       <Folder Include="UseCases\LikeUseCases\Queries\" />
       <Folder Include="UseCases\MatchUseCases\Commands\" />
     </ItemGroup>

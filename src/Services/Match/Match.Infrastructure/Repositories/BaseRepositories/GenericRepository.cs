@@ -1,7 +1,6 @@
 using System.Linq.Expressions;
 using Match.Domain.Repositories.BaseRepositories;
 using MongoDB.Driver;
-using Shared.Models;
 
 namespace Match.Infrastructure.Repositories.BaseRepositories;
 

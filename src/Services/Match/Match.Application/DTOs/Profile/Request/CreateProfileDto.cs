@@ -13,4 +13,6 @@ public class CreateProfileDto
     public Gender Gender { get; set; }
     public Gender PreferredGender { get; set; }
     public int MaxDistance { get; set; }
+    public string Country { get; set; }
+    public string City { get; set; }
 }

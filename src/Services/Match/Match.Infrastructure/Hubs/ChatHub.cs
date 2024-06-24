@@ -12,19 +12,19 @@ public class ChatHub : Hub
         _chatService = chatService;
     }
 
-    public async Task SendMessage(int chatId, string senderId, string message)
+    public async Task SendMessage(string chatId, string senderId, string message)
     {
         var newMessage = await _chatService.SendMessageAsync(chatId, senderId, message);
         await Clients.Group(chatId.ToString()).SendAsync("ReceiveMessage", newMessage);
     }
 
-    public async Task JoinChat(int chatId)
+    public async Task JoinChat(string chatId)
     {
-        await Groups.Add(Context.ConnectionId, chatId.ToString());
+        await Groups.Add(Context.ConnectionId, chatId);
     }
 
-    public async Task LeaveChat(int chatId)
+    public async Task LeaveChat(string chatId)
     {
-        await Groups.Add(Context.ConnectionId, chatId.ToString());
+        await Groups.Add(Context.ConnectionId, chatId);
     }
 }
