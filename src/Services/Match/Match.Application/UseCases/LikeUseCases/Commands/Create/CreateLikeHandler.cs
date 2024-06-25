@@ -18,9 +18,14 @@ public class CreateLikeHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
         var profile1 = await profileRepository.GetByIdAsync(likeEntity.ProfileId, cancellationToken);
         var profile2 = await profileRepository.GetByIdAsync(likeEntity.TargetProfileId, cancellationToken);
 
-        if (profile1 is null || profile2 is null)
+        if (profile1 is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Profile", request.Dto.ProfileId);
+        }
+        
+        if (profile2 is null)
+        {
+            throw new NotFoundException("Profile", request.Dto.TargetProfileId);
         }
         
         var mutualLike = await likeRepository.CheckMutualLike(likeEntity, cancellationToken);

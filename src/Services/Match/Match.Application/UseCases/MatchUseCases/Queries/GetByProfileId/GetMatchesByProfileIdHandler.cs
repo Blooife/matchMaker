@@ -15,7 +15,7 @@ public class GetMatchesByProfileIdHandler(IUnitOfWork _unitOfWork, IMapper _mapp
         
         if (profile is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Profile", request.ProfileId);
         }
         
         var matchRepository = _unitOfWork.Matches;

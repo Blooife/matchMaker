@@ -15,7 +15,7 @@ public class GetPagedMessagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) :
 
         if (chat is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Chat", request.ChatId);
         }
 
         var messages =

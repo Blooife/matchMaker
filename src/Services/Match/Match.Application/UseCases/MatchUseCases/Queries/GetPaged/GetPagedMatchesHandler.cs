@@ -14,7 +14,7 @@ public class GetPagedMatchesHandler(IUnitOfWork _unitOfWork) : IRequestHandler<G
 
         if (profile is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Profile", request.ProfileId);
         }
 
         var matches = await _unitOfWork.Matches.GetPagedAsync(request.ProfileId, request.PageNumber, request.PageSize, cancellationToken);

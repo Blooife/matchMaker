@@ -1,9 +1,9 @@
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Match.Application.Exceptions;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Shared.Models;
+using ValidationException = Match.Application.Exceptions.ValidationException;
 
 namespace Match.Presentation.MiddlewareHandlers;
 
@@ -42,7 +42,10 @@ public class ExceptionMiddleware
         {
             case ValidationException validationException:
                 statusCode = HttpStatusCode.BadRequest;
-                //result = JsonConvert.SerializeObject();
+                result = JsonConvert.SerializeObject(validationException.Errors);
+                break;
+            case AlreadyExistsException alreadyExistsException:
+                statusCode = HttpStatusCode.Conflict;
                 break;
             case NotFoundException notFoundException:
                 statusCode = HttpStatusCode.NotFound;

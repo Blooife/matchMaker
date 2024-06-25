@@ -14,10 +14,11 @@ public class DeleteChatHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
 
         if (chat is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Chat", request.ChatId);
         }
 
         await _unitOfWork.Chats.DeleteAsync(chat, cancellationToken);
+        await _unitOfWork.Messages.DeleteMessagesByChatId(chat.Id, cancellationToken);
         
         return new GeneralResponseDto();
     }

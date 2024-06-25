@@ -15,7 +15,7 @@ public class GetRecsByProfileIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper)
 
         if (userProfile is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Profile", request.ProfileId);
         }
 
         var likedProfiles = await _unitOfWork.Likes

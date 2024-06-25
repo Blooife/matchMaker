@@ -1,5 +1,6 @@
 using AutoMapper;
 using Match.Application.DTOs.Profile.Response;
+using Match.Application.Exceptions;
 using Match.Domain.Repositories;
 using MediatR;
 using Profile = Match.Domain.Models.Profile;
@@ -15,7 +16,7 @@ public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         
         if (alreadyExistsProfile is not null)
         {
-            throw new Exception();
+            throw new AlreadyExistsException("Profile already exists in database");
         }
         
         var profile = _mapper.Map<Profile>(request.Dto);

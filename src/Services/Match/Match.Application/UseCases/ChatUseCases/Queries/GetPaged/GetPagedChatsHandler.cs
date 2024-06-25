@@ -15,7 +15,7 @@ public class GetPagedChatsHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
 
         if (profile is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Profile", request.ProfileId);
         }
 
         var chats = await _unitOfWork.Chats.GetPagedAsync(request.ProfileId, request.PageNumber, request.PageSize,

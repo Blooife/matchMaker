@@ -1,5 +1,6 @@
 using AutoMapper;
 using Match.Application.DTOs.Chat.Response;
+using Match.Application.Exceptions;
 using Match.Domain.Models;
 using Match.Domain.Repositories;
 using MediatR;
@@ -15,7 +16,7 @@ public class CreateChatHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
         
         if (!areProfilesMatched)
         {
-            throw new Exception();
+            throw new ProfileAreNotMatchedException("You cant create chat for unmatched users");
         }
         
         var chat = _mapper.Map<Chat>(request.Dto);

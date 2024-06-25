@@ -17,7 +17,7 @@ public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         
         if (profile is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Profile", request.Dto.Id);
         }
         
         await profileRepository.UpdateAsync(profileMapped, cancellationToken);

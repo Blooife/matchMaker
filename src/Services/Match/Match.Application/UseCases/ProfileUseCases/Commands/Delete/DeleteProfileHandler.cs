@@ -15,7 +15,7 @@ public class DeleteProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         
         if (profile == null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Profile", request.ProfileId);
         }
         
         await profileRepository.DeleteAsync(profile, cancellationToken);

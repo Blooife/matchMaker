@@ -15,7 +15,7 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : I
         
         if (profile is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Profile", request.ProfileId);
         }
         
         return _mapper.Map<ProfileResponseDto>(profile);

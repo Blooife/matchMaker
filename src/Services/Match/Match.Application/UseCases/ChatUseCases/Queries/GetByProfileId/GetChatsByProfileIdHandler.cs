@@ -14,7 +14,7 @@ public class GetChatsByProfileIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper
 
         if (profile is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException("Profile", request.ProfileId);
         }
 
         var chats = await _unitOfWork.Chats.GetChatsByProfileId(request.ProfileId, cancellationToken);
