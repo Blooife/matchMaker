@@ -1,3 +1,4 @@
+using Match.Application.Exceptions;
 using Match.Application.Services.Interfaces;
 using Match.Domain.Models;
 using Match.Domain.Repositories;
@@ -19,7 +20,7 @@ public class ChatService : IChatService
         
         if (chat is null)
         {
-            throw new Exception();
+            throw new NotFoundException("Chat", chatId);
         }
 
         var newMessage = new Message

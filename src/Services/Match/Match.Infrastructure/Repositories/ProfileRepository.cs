@@ -14,7 +14,7 @@ public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericR
     {
         var filter = GetFilterForRecommendations(excludedProfileIds, userProfile);
         
-        return await _collection.Find(filter).Limit(50).ToListAsync(cancellationToken);
+        return await _collection.Find(filter).ToListAsync(cancellationToken);
     }
     
     public async Task<PagedList<Profile>> GetPagedRecsAsync(List<string> excludedProfileIds, Profile userProfile, int pageNumber, int pageSize, CancellationToken cancellationToken)

@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Match.Application.DTOs.Profile.Request;
-using Match.Application.UseCases.ProfileUseCases.Commands.Create;
-using Match.Application.UseCases.ProfileUseCases.Commands.Update;
 using Match.Application.UseCases.ProfileUseCases.Commands.UpdateLocation;
 using Match.Application.UseCases.ProfileUseCases.Queries.GetPagedRecs;
 using Match.Application.UseCases.ProfileUseCases.Queries.GetRecsByProfileId;
@@ -43,36 +41,5 @@ namespace Match.Presentation.Controllers
 
             return Ok(profile);
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> CreateProfile([FromBody] CreateProfileDto dto, CancellationToken cancellationToken)
-        {
-            var query = new CreateProfileCommand(dto);
-
-            var recs = await _mediator.Send(query, cancellationToken);
-
-            return Ok(recs);
-        }
-        
-        [HttpPut]
-        public async Task<IActionResult> UpdateProfile([FromBody]UpdateProfileDto dto, CancellationToken cancellationToken)
-        {
-            var query = new UpdateProfileCommand(dto);
-
-            var recs = await _mediator.Send(query, cancellationToken);
-
-            return Ok(recs);
-        }
-        
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProfile([FromRoute]string id, CancellationToken cancellationToken)
-        {
-            var query = new GetRecsByProfileIdQuery(id);
-
-            var recs = await _mediator.Send(query, cancellationToken);
-
-            return Ok(recs);
-        }
-        
     }
 }

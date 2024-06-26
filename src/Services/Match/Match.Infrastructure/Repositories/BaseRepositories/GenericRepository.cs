@@ -6,11 +6,6 @@ namespace Match.Infrastructure.Repositories.BaseRepositories;
 
 public class GenericRepository<T, TKey>(IMongoCollection<T> _collection) : IGenericRepository<T, TKey> where T : class
 {
-    public void Create(T entity)
-    {
-        _collection.InsertOne(entity);
-    }
-
     public async Task CreateAsync(T entity, CancellationToken cancellationToken)
     {
         await _collection.InsertOneAsync(entity, null, cancellationToken);

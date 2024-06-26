@@ -11,13 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\Match\Request\" />
-      <Folder Include="DTOs\Message\Request\" />
-      <Folder Include="UseCases\LikeUseCases\Queries\" />
-      <Folder Include="UseCases\MatchUseCases\Commands\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="AutoMapper" Version="13.0.1" />
       <PackageReference Include="FluentValidation" Version="11.9.2" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />

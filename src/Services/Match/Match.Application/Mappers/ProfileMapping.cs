@@ -1,7 +1,6 @@
 using Match.Application.DTOs.Profile.Request;
 using Match.Application.DTOs.Profile.Response;
 using Match.Domain.Models;
-using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Match.Application.Mappers;
 

@@ -16,7 +16,7 @@ public class CreateChatHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
         
         if (!areProfilesMatched)
         {
-            throw new ProfileAreNotMatchedException("You cant create chat for unmatched users");
+            throw new ProfilesAreNotMatchedException("You cant create chat for unmatched users");
         }
         
         var chat = _mapper.Map<Chat>(request.Dto);

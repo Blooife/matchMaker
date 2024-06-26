@@ -4,7 +4,6 @@ using Match.Application.Exceptions;
 using Match.Domain.Repositories;
 using MediatR;
 using MongoDB.Driver.GeoJsonObjectModel;
-using Profile = Match.Domain.Models.Profile;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.UpdateLocation;
 
