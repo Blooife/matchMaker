@@ -26,29 +26,11 @@ public class AuthController(IAuthService _authService) : ControllerBase
         return Ok(response);
     }
     
-    [HttpPost("assign/role")]
-    [Authorize(Roles = Roles.Admin)]
-    public async Task<IActionResult> AssignRole([FromBody] AssignRoleRequestDto model, CancellationToken cancellationToken)
-    {
-        var response = await _authService.AssignRoleAsync(model.Email, model.Role, cancellationToken);
-        
-        return Ok(response);
-    }
-    
-    [HttpDelete("remove/from/role")]
-    [Authorize(Roles = Roles.Admin)]
-    public async Task<IActionResult> RemoveFromRole([FromBody] AssignRoleRequestDto model, CancellationToken cancellationToken)
-    {
-        var response = await _authService.RemoveUserFromRoleAsync(model.Email, model.Role, cancellationToken);
-        
-        return Ok(response);
-    }
-    
     [HttpPost("refresh")]
     [Authorize]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshRequestDto refreshToken, CancellationToken cancellationToken)
     {
-        var response = await _authService.RefreshToken(refreshToken.refreshToken, cancellationToken);
+        var response = await _authService.RefreshTokenAsync(refreshToken.refreshToken, cancellationToken);
 
         return Ok(response);
     }

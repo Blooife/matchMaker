@@ -14,6 +14,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Shared.Models;
@@ -22,81 +23,49 @@ namespace Authentication.API.Extensions;
 
 public static class ServicesExtension
 {
-    public static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)
+    public static void ConfigureApi(this IServiceCollection services, IConfiguration config)
     {
-        var connectionString = config.GetConnectionString("DefaultConnection");
-        services.AddDbContext<AuthContext>(options => options.UseNpgsql(connectionString));
-    }
-    
-    public static void ConfigureIdentity(this IServiceCollection services)
-    {
-        services.AddIdentity<User, Role>(o =>
-            {
-                o.Password.RequireDigit = false;
-                o.Password.RequireUppercase = false;
-                o.Password.RequireNonAlphanumeric = false;
-            })
-            .AddEntityFrameworkStores<AuthContext>()
-            .AddDefaultTokenProviders();
-    }
-    
-    public static void ConfigureServices(this IServiceCollection services)
-    {
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddScoped<IValidator<UserRequestDto>, UserValidator>();
+        services.ConfigureJwtOptions(config);
         
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IRoleService, RoleService>();
-        services.AddScoped<IAuthService, AuthService>();
+        var serviceProvider = services.BuildServiceProvider();
+        var jwtOptions = serviceProvider.GetService<IOptions<JwtOptions>>()!.Value;
+        services.ConfigureAuthentication(config, jwtOptions);
+        
+        services.ConfigureSwagger();
     }
-    
-    public static void ConfigureRepositories(this IServiceCollection services)
-    {
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
-    }
-    
-    public static void ConfigureProviders(this IServiceCollection services)
-    {
-        services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
-        services.AddScoped<IRefreshTokenProvider, RefreshTokenProvider>();
-    }
-    
-    public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration config)
+
+    private static void ConfigureJwtOptions(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));
-        
-        var settingsSection = config.GetSection("ApiSettings:JwtOptions");
+    }
+    
+    private static void ConfigureAuthentication(this IServiceCollection services, IConfiguration config, JwtOptions jwtOptions)
+    {
+        services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));
 
-        var secret = settingsSection.GetValue<string>("Secret");
-        var issuer = settingsSection.GetValue<string>("Issuer");
-        var audience = settingsSection.GetValue<string>("Audience");
-
-        var key = Encoding.ASCII.GetBytes(secret!);
+        var key = Encoding.ASCII.GetBytes(jwtOptions.Secret);
 
         services.AddAuthentication(authOptions =>
         {
             authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(jwtOptions =>
+        }).AddJwtBearer(jwtOpt =>
         {
-            jwtOptions.TokenValidationParameters = new TokenValidationParameters
+            jwtOpt.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = true,
-                ValidIssuer = issuer,
-                ValidAudience = audience,
+                ValidIssuer = jwtOptions.Issuer,
+                ValidAudience = jwtOptions.Audience,
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
         });
-
-        services.AddAuthentication();
     }
 
-    public static void ConfigureSwagger(this IServiceCollection services)
+    private static void ConfigureSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(option =>
         {

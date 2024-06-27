@@ -10,7 +10,7 @@ using Shared.Constants;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
-public class AuthService(IUserRepository _userRepository, IRoleRepository _roleRepository, IMapper _mapper,
+public class AuthService(IUserRepository _userRepository, IMapper _mapper,
     IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider) : IAuthService
 {
     public async Task<GeneralResponseDto> RegisterAsync(UserRequestDto registrationRequestDto)
@@ -63,7 +63,7 @@ public class AuthService(IUserRepository _userRepository, IRoleRepository _roleR
         return loginResponseDto;
     }
     
-    public async Task<LoginResponseDto> RefreshToken(string refreshToken, CancellationToken cancellationToken)
+    public async Task<LoginResponseDto> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByRefreshTokenAsync(refreshToken, cancellationToken);
             
@@ -94,57 +94,5 @@ public class AuthService(IUserRepository _userRepository, IRoleRepository _roleR
         };
 
         return loginResponseDto;
-    }
-
-    public async Task<GeneralResponseDto> AssignRoleAsync(string userId, string roleName, CancellationToken cancellationToken)
-    {
-        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-        
-        if (user is null)
-        {
-            throw new NotFoundException(userId);
-        }
-
-        var isRoleExist = await _roleRepository.RoleExistsAsync(roleName);
-        
-        if (!isRoleExist)
-        {
-            throw new AssignRoleException(ExceptionMessages.RoleNotExists);
-        }
-        
-        var result = await _userRepository.AddToRoleAsync(user, roleName);
-        
-        if (!result.Succeeded)
-        {
-            throw new AssignRoleException();
-        }
-        
-        return new GeneralResponseDto { Message = "Role assigned successfully" };
-    }
-    
-    public async Task<GeneralResponseDto> RemoveUserFromRoleAsync(string userId, string roleName, CancellationToken cancellationToken)
-    {
-        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-        
-        if (user is null)
-        {
-            throw new NotFoundException(userId);
-        }
-
-        var roles = await _userRepository.GetRolesAsync(user);
-        
-        if (roles.Count == 1)
-        {
-            throw new RemoveRoleException("User can't have less than 1 role");
-        }
-        
-        var result = await _userRepository.RemoveFromRoleAsync(user, roleName);
-        
-        if (!result.Succeeded)
-        {
-            throw new RemoveRoleException(result.Errors.First().Description);
-        }
-        
-        return new GeneralResponseDto { Message = "Role removed successfully" };
     }
 }

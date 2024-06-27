@@ -66,7 +66,8 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
     
     public async Task<PagedList<User>> GetPaginatedUsersAsync(int pageNumber, int pageSize)
     {
-        IQueryable<User> query = _dbContext.Set<User>();
+        var query = _dbContext.Set<User>();
+        
         return PagedList<User>.ToPagedList(query.OrderBy(e=>e.Email),
             pageNumber,
             pageSize);

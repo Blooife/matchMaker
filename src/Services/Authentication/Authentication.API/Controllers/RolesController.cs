@@ -1,3 +1,4 @@
+using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,4 +18,22 @@ public class RolesController(IRoleService _roleService): ControllerBase
         
         return Ok(roles);
     } 
+    
+    [HttpPost("assignment")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> AssignRole([FromBody] AssignRoleRequestDto model, CancellationToken cancellationToken)
+    {
+        var response = await _roleService.AssignRoleAsync(model.Email, model.Role, cancellationToken);
+        
+        return Ok(response);
+    }
+    
+    [HttpDelete("removal")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> RemoveFromRole([FromBody] AssignRoleRequestDto model, CancellationToken cancellationToken)
+    {
+        var response = await _roleService.RemoveUserFromRoleAsync(model.Email, model.Role, cancellationToken);
+        
+        return Ok(response);
+    }
 }

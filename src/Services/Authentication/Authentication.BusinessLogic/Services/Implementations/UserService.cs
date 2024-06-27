@@ -33,7 +33,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
         return new GeneralResponseDto() { Message = "User deleted successfully" };
     }
     
-    public async Task<GeneralResponseDto> UpdateUser(UserRequestDto userDto)
+    public async Task<GeneralResponseDto> UpdateUserAsync(UserRequestDto userDto)
     {
         var user = _mapper.Map<User>(userDto);
 
@@ -64,6 +64,11 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
     public async Task<UserResponseDto> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+
+        if (user is null)
+        {
+            throw new NotFoundException(userId);
+        }
         
         return _mapper.Map<UserResponseDto>(user);
     }
@@ -72,10 +77,15 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
     {
         var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
         
+        if (user is null)
+        {
+            throw new NotFoundException(email);
+        }
+        
         return _mapper.Map<UserResponseDto>(user);
     }
 
-    public async Task<IEnumerable<RoleResponseDto>> GetUsersRoles(string userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RoleResponseDto>> GetUsersRolesAsync(string userId, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
         

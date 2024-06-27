@@ -21,7 +21,7 @@ public class UsersController(IUserService _userService): ControllerBase
         return Ok(user);
     } 
     
-    [HttpGet("get/by/email/{email}")]
+    [HttpGet("email/{email}")]
     [Authorize]
     public async Task<IActionResult> GetUserByEmail([FromRoute] string email, CancellationToken cancellationToken)
     {
@@ -30,11 +30,11 @@ public class UsersController(IUserService _userService): ControllerBase
         return Ok(user);
     } 
     
-    [HttpGet("roles/{userId}")]
+    [HttpGet("{userId}/roles")]
     [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
     public async Task<IActionResult> GetUsersRoles([FromRoute] string userId, CancellationToken cancellationToken)
     {
-        var roles = await _userService.GetUsersRoles(userId, cancellationToken);
+        var roles = await _userService.GetUsersRolesAsync(userId, cancellationToken);
         
         return Ok(roles);
     } 
@@ -48,7 +48,7 @@ public class UsersController(IUserService _userService): ControllerBase
         return Ok(users);
     } 
     
-    [HttpGet("paginated/users")]
+    [HttpGet("paginated")]
     [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
     public async Task<IActionResult> GetPaginatedUsers([FromQuery] int pageSize, [FromQuery] int pageNumber, CancellationToken cancellationToken)
     {
@@ -82,7 +82,7 @@ public class UsersController(IUserService _userService): ControllerBase
     [Authorize]
     public async Task<IActionResult> UpdateUser([FromBody] UserRequestDto userRequestDto)
     {
-        var users = await _userService.UpdateUser(userRequestDto);
+        var users = await _userService.UpdateUserAsync(userRequestDto);
         
         return Ok(users);
     } 

@@ -12,7 +12,7 @@ public interface IUserService
     Task<IEnumerable<UserResponseDto>> GetAllUsersAsync(CancellationToken cancellationToken);
     Task<UserResponseDto> GetUserByIdAsync(string userId, CancellationToken cancellationToken);
     Task<UserResponseDto> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
-    Task<IEnumerable<RoleResponseDto>> GetUsersRoles(string userId, CancellationToken cancellationToken);
+    Task<IEnumerable<RoleResponseDto>> GetUsersRolesAsync(string userId, CancellationToken cancellationToken);
     Task<PagedList<User>> GetPaginatedUsersAsync(int pageSize, int pageNumber);
-    Task<GeneralResponseDto> UpdateUser(UserRequestDto userDto);
+    Task<GeneralResponseDto> UpdateUserAsync(UserRequestDto userDto);
 }
