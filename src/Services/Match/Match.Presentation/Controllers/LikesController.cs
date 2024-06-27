@@ -1,5 +1,5 @@
 using Match.Application.DTOs.Like.Request;
-using Match.Application.UseCases.LikeUseCases.Commands.Create;
+using Match.Application.UseCases.LikeUseCases.Commands.Add;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +10,12 @@ namespace Match.Presentation.Controllers;
 public class LikesController(IMediator _mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateLike([FromBody]CreateLikeDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddLike([FromBody]AddLikeDto dto, CancellationToken cancellationToken)
     {
-        var command = new CreateLikeCommand(dto);
+        var command = new AddLikeCommand(dto);
 
-        var recs = await _mediator.Send(command, cancellationToken);
+        var like = await _mediator.Send(command, cancellationToken);
 
-        return Ok(recs);
+        return Ok(like);
     }
 }

@@ -17,7 +17,7 @@ public class GetChatsByProfileIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper
             throw new NotFoundException("Profile", request.ProfileId);
         }
 
-        var chats = await _unitOfWork.Chats.GetChatsByProfileId(request.ProfileId, cancellationToken);
+        var chats = await _unitOfWork.Chats.GetChatsByProfileIdAsync(request.ProfileId, cancellationToken);
 
         return _mapper.Map<IEnumerable<ChatResponseDto>>(chats);
     }

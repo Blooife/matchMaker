@@ -6,19 +6,18 @@ using Shared.Models;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.Delete;
 
-public class DeleteProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<DeleteProfileCommand, GeneralResponseDto>
+public class DeleteProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<DeleteProfileCommand, GeneralResponseDto>
 {
     public async Task<GeneralResponseDto> Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileRepository = _unitOfWork.Profiles;
-        var profile = await profileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.Profiles.GetByIdAsync(request.ProfileId, cancellationToken);
         
-        if (profile == null)
+        if (profile is null)
         {
             throw new NotFoundException("Profile", request.ProfileId);
         }
         
-        await profileRepository.DeleteAsync(profile, cancellationToken);
+        await _unitOfWork.Profiles.DeleteAsync(profile, cancellationToken);
         
         return new GeneralResponseDto();
     }

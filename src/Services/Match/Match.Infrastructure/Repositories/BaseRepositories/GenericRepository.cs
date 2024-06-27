@@ -31,6 +31,7 @@ public class GenericRepository<T, TKey>(IMongoCollection<T> _collection) : IGene
     public async Task<T?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
     {
         var filter = Builders<T>.Filter.Eq("Id", id);
+        
         return await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -42,10 +43,12 @@ public class GenericRepository<T, TKey>(IMongoCollection<T> _collection) : IGene
     private static object GetIdValue(T entity)
     {
         var propertyInfo = typeof(T).GetProperty("Id");
+        
         if (propertyInfo == null)
         {
             throw new ArgumentException("Entity does not have an Id property");
         }
+        
         return propertyInfo.GetValue(entity)!;
     }
 }

@@ -12,17 +12,17 @@ namespace Match.Presentation.Controllers
     public class ProfilesController(IMediator _mediator) : ControllerBase
     {
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetRecommendations([FromRoute]string id, CancellationToken cancellationToken)
+        [HttpGet("{profileId}/recommendations")]
+        public async Task<IActionResult> GetRecommendations([FromRoute]string profileId, CancellationToken cancellationToken)
         {
-            var query = new GetRecsByProfileIdQuery(id);
+            var query = new GetRecsByProfileIdQuery(profileId);
 
-            var recs = await _mediator.Send(query, cancellationToken);
+            var recommendations = await _mediator.Send(query, cancellationToken);
 
-            return Ok(recs);
+            return Ok(recommendations);
         }
         
-        [HttpGet("paged/{profileId}")]
+        [HttpGet("{profileId}/paged/recommendations")]
         public async Task<IActionResult> GetPagedRecommendations([FromRoute] string profileId, CancellationToken cancellationToken, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var query = new GetPagedRecsQuery(profileId, pageNumber, pageSize);
@@ -32,7 +32,7 @@ namespace Match.Presentation.Controllers
             return Ok(profiles);
         }
         
-        [HttpPut("location")]
+        [HttpPatch("location")]
         public async Task<IActionResult> UpdateLocation([FromBody]UpdateLocationDto dto, CancellationToken cancellationToken)
         {
             var command = new UpdateLocationCommand(dto);

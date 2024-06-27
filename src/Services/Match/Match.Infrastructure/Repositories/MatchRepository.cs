@@ -12,23 +12,23 @@ public class MatchRepository(IMongoCollection<MatchEntity> _collection) : Generi
     public async Task<IEnumerable<MatchEntity>> GetMatchesByProfileIdAsync(string profileId, CancellationToken cancellationToken)
     {
         var filter = Builders<MatchEntity>.Filter.Or(
-            Builders<MatchEntity>.Filter.Eq(match => match.ProfileId1, profileId),
-            Builders<MatchEntity>.Filter.Eq(match => match.ProfileId2, profileId)
+            Builders<MatchEntity>.Filter.Eq(match => match.FirstProfileId, profileId),
+            Builders<MatchEntity>.Filter.Eq(match => match.SecondProfileId, profileId)
         );
 
         return await _collection.Find(filter).ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> AreProfilesMatched(string profileId1, string profileId2, CancellationToken cancellationToken)
+    public async Task<bool> AreProfilesMatchedAsync(string profileId1, string profileId2, CancellationToken cancellationToken)
     {
         var filter = Builders<MatchEntity>.Filter.Or(
             Builders<MatchEntity>.Filter.And(
-                Builders<MatchEntity>.Filter.Eq(match => match.ProfileId1, profileId1),
-                Builders<MatchEntity>.Filter.Eq(match => match.ProfileId2, profileId2)
+                Builders<MatchEntity>.Filter.Eq(match => match.FirstProfileId, profileId1),
+                Builders<MatchEntity>.Filter.Eq(match => match.SecondProfileId, profileId2)
             ),
             Builders<MatchEntity>.Filter.And(
-                Builders<MatchEntity>.Filter.Eq(match => match.ProfileId1, profileId2),
-                Builders<MatchEntity>.Filter.Eq(match => match.ProfileId2, profileId1)
+                Builders<MatchEntity>.Filter.Eq(match => match.FirstProfileId, profileId2),
+                Builders<MatchEntity>.Filter.Eq(match => match.SecondProfileId, profileId1)
             )
         );
 
@@ -37,7 +37,7 @@ public class MatchRepository(IMongoCollection<MatchEntity> _collection) : Generi
     
     public async Task<PagedList<MatchEntity>> GetPagedAsync(string profileId, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        Expression<Func<MatchEntity, bool>> filter = match => match.ProfileId1 == profileId || match.ProfileId2 == profileId;
+        Expression<Func<MatchEntity, bool>> filter = match => match.FirstProfileId == profileId || match.SecondProfileId == profileId;
 
         var count = await _collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
 

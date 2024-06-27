@@ -9,15 +9,15 @@ namespace Match.Infrastructure.Repositories;
 
 public class ChatRepository(IMongoCollection<Chat> _collection) : GenericRepository<Chat, string>(_collection), IChatRepository
 {
-    public async Task<IEnumerable<Chat>> GetChatsByProfileId(string profileId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Chat>> GetChatsByProfileIdAsync(string profileId, CancellationToken cancellationToken)
     {
-        var chats = await GetAsync(chat => chat.ProfileId1 == profileId || chat.ProfileId2 == profileId, cancellationToken);
+        var chats = await GetAsync(chat => chat.FirstProfileId == profileId || chat.SecondProfileId == profileId, cancellationToken);
         return chats;
     }
     
     public async Task<PagedList<Chat>> GetPagedAsync(string profileId, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        Expression<Func<Chat, bool>> filter = x => x.ProfileId1 == profileId || x.ProfileId2 == profileId;
+        Expression<Func<Chat, bool>> filter = chat => chat.FirstProfileId == profileId || chat.SecondProfileId == profileId;
 
         var count = await _collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
 

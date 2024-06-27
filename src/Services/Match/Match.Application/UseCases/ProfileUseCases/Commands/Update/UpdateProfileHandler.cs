@@ -11,16 +11,15 @@ public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
 {
     public async Task<ProfileResponseDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileRepository = _unitOfWork.Profiles;
         var profileMapped = _mapper.Map<Profile>(request.Dto);
-        var profile = await profileRepository.GetByIdAsync(profileMapped.Id, cancellationToken);
+        var profile = await _unitOfWork.Profiles.GetByIdAsync(profileMapped.Id, cancellationToken);
         
         if (profile is null)
         {
             throw new NotFoundException("Profile", request.Dto.Id);
         }
         
-        await profileRepository.UpdateAsync(profileMapped, cancellationToken);
+        await _unitOfWork.Profiles.UpdateAsync(profileMapped, cancellationToken);
         
         return _mapper.Map<ProfileResponseDto>(profile);
     }

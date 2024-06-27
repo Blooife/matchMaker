@@ -11,7 +11,7 @@ namespace Match.Presentation.Controllers;
 [Route("api/[controller]")]
 public class ChatsController(IMediator _mediator) : ControllerBase
 {
-    [HttpGet("profile/{id}")]
+    [HttpGet("profiles/{id}")]
     public async Task<IActionResult> GetByProfileId([FromRoute]string id, CancellationToken cancellationToken)
     {
         var query = new GetChatsByProfileIdQuery(id);
@@ -21,7 +21,7 @@ public class ChatsController(IMediator _mediator) : ControllerBase
         return Ok(chats);
     }
     
-    [HttpGet("paged/{profileId}")]
+    [HttpGet("paged/profiles/{profileId}")]
     public async Task<IActionResult> GetPagedChats([FromRoute] string profileId, CancellationToken cancellationToken, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var query = new GetPagedChatsQuery(profileId, pageNumber, pageSize);

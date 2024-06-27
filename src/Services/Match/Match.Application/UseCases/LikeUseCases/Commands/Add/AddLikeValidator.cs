@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace Match.Application.UseCases.LikeUseCases.Commands.Create;
+namespace Match.Application.UseCases.LikeUseCases.Commands.Add;
 
-public class CreateLikeValidator : AbstractValidator<CreateLikeCommand>
+public class AddLikeValidator : AbstractValidator<AddLikeCommand>
 {
-    public CreateLikeValidator()
+    public AddLikeValidator()
     {
         RuleFor(command => command.Dto.ProfileId).NotEmpty();
         RuleFor(command => command.Dto.TargetProfileId).NotEmpty();

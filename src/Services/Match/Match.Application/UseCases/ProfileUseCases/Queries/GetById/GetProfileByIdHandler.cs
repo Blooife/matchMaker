@@ -10,8 +10,7 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : I
 {
     public async Task<ProfileResponseDto> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
     {
-        var profileRepository = _unitOfWork.Profiles;
-        var profile = await profileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.Profiles.GetByIdAsync(request.ProfileId, cancellationToken);
         
         if (profile is null)
         {

@@ -18,7 +18,7 @@ public class DeleteChatHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
         }
 
         await _unitOfWork.Chats.DeleteAsync(chat, cancellationToken);
-        await _unitOfWork.Messages.DeleteMessagesByChatId(chat.Id, cancellationToken);
+        await _unitOfWork.Messages.DeleteMessagesByChatIdAsync(chat.Id, cancellationToken);
         
         return new GeneralResponseDto();
     }

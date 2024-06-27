@@ -32,7 +32,7 @@ public class ExceptionMiddleware
     {
         context.Response.ContentType = "application/json";
         HttpStatusCode statusCode;
-        string result = JsonConvert.SerializeObject(new ErrorDetails
+        var result = JsonConvert.SerializeObject(new ErrorDetails
         {
             ErrorMessage = exception.Message,
             ErrorType = "Failure"

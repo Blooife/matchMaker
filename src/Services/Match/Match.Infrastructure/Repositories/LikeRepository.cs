@@ -7,7 +7,7 @@ namespace Match.Infrastructure.Repositories;
 
 public class LikeRepository(IMongoCollection<Like> _collection) : GenericRepository<Like, string>(_collection), ILikeRepository
 {
-    public async Task<Like?> CheckMutualLike(Like likeParam, CancellationToken cancellationToken)
+    public async Task<Like?> CheckMutualLikeAsync(Like likeParam, CancellationToken cancellationToken)
     {
         var getResult = await GetAsync(like =>
             like.IsLike && like.ProfileId == likeParam.TargetProfileId && like.TargetProfileId == likeParam.ProfileId, cancellationToken);

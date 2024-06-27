@@ -10,8 +10,7 @@ public class GetRecsByProfileIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper)
 {
     public async Task<IEnumerable<ProfileResponseDto>> Handle(GetRecsByProfileIdQuery request, CancellationToken cancellationToken)
     {
-        string profileId = request.ProfileId;
-        var userProfile = await _unitOfWork.Profiles.GetByIdAsync(profileId, cancellationToken);
+        var userProfile = await _unitOfWork.Profiles.GetByIdAsync(request.ProfileId, cancellationToken);
 
         if (userProfile is null)
         {
@@ -19,12 +18,12 @@ public class GetRecsByProfileIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper)
         }
 
         var likedProfiles = await _unitOfWork.Likes
-                                        .GetAsync(like => like.ProfileId == profileId, cancellationToken);
+                                        .GetAsync(like => like.ProfileId == request.ProfileId, cancellationToken);
         var likedProfilesIds = likedProfiles.Select(l => l.TargetProfileId);
         
         var matchedProfiles = await _unitOfWork.Matches
-                                          .GetAsync(match => match.ProfileId1 == profileId || match.ProfileId2 == profileId, cancellationToken);
-        var matchedProfilesIds = matchedProfiles.Select(match => match.ProfileId1 == profileId ? match.ProfileId2 : match.ProfileId1);
+                                          .GetAsync(match => match.FirstProfileId == request.ProfileId || match.SecondProfileId == request.ProfileId, cancellationToken);
+        var matchedProfilesIds = matchedProfiles.Select(match => match.FirstProfileId == request.ProfileId ? match.SecondProfileId : match.FirstProfileId);
 
         var excludedProfileIds = likedProfilesIds.Concat(matchedProfilesIds).Distinct().ToList();
 

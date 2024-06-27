@@ -5,5 +5,5 @@ namespace Match.Domain.Repositories;
 
 public interface ILikeRepository : IGenericRepository<Like, string>
 {
-    Task<Like?> CheckMutualLike(Like likeParam, CancellationToken cancellationToken);
+    Task<Like?> CheckMutualLikeAsync(Like likeParam, CancellationToken cancellationToken);
 }

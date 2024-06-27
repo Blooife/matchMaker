@@ -12,7 +12,7 @@ public class CreateChatHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
     public async Task<ChatResponseDto> Handle(CreateChatCommand request, CancellationToken cancellationToken)
     {
         var areProfilesMatched =
-            await _unitOfWork.Matches.AreProfilesMatched(request.Dto.ProfileId1, request.Dto.ProfileId2, cancellationToken);
+            await _unitOfWork.Matches.AreProfilesMatchedAsync(request.Dto.FirstProfileId, request.Dto.SecondProfileId, cancellationToken);
         
         if (!areProfilesMatched)
         {

@@ -2,6 +2,6 @@ namespace Match.Application.DTOs.Chat.Request;
 
 public class CreateChatDto
 {
-    public string ProfileId1 { get; set; }
-    public string ProfileId2 { get; set; }
+    public string FirstProfileId { get; set; }
+    public string SecondProfileId { get; set; }
 }

@@ -31,11 +31,9 @@ public class MessageRepository(IMongoCollection<Message> _collection) : GenericR
         return new PagedList<Message>(items, (int)count, pageNumber, pageSize);
     }
 
-    public async Task DeleteMessagesByChatId(string chatId, CancellationToken cancellationToken)
+    public async Task DeleteMessagesByChatIdAsync(string chatId, CancellationToken cancellationToken)
     {
         var messageFilter = Builders<Message>.Filter.Eq(m => m.ChatId, chatId);
         await _collection.DeleteManyAsync(messageFilter, cancellationToken);
     }
-    
-
 }
