@@ -1,5 +1,6 @@
 using Match.Application.Extensions;
 using Match.Infrastructure.Extensions;
+using Match.Infrastructure.Hubs;
 using Match.Presentation.MiddlewareHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.ConfigureInfrastructure(builder.Configuration);
 builder.Services.ConfigureApplication();
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -21,6 +23,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.MapHub<ChatHub>("/chat");
 
 app.UseHttpsRedirection();
 app.MapControllers();
