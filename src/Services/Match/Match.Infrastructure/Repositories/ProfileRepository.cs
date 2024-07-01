@@ -2,22 +2,13 @@ using Match.Domain.Models;
 using Match.Domain.Repositories;
 using Match.Infrastructure.Repositories.BaseRepositories;
 using MongoDB.Driver;
-using MongoDB.Driver.GeoJsonObjectModel;
 using Shared.Constants;
-using Shared.Models;
 
 namespace Match.Infrastructure.Repositories;
 
 public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericRepository<Profile, string>(_collection), IProfileRepository
 {
-    public async Task<IEnumerable<Profile>> GetRecommendationsAsync(List<string> excludedProfileIds, Profile userProfile, bool locationAccessGranted, CancellationToken cancellationToken)
-    {
-        var filter = GetFilterForRecommendations(excludedProfileIds, userProfile);
-        
-        return await _collection.Find(filter).ToListAsync(cancellationToken);
-    }
-    
-    public async Task<PagedList<Profile>> GetPagedRecsAsync(List<string> excludedProfileIds, Profile userProfile, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    public async Task<(List<string> Ids, int TotalCount)> GetPagedRecsAsync(List<string> excludedProfileIds, Profile userProfile, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
         var filter = GetFilterForRecommendations(excludedProfileIds, userProfile);
 
@@ -27,14 +18,16 @@ public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericR
         {
             Skip = (pageNumber - 1) * pageSize,
             Limit = pageSize,
+            Projection = Builders<Profile>.Projection.Include(p => p.Id)
         };
 
-        var items = await _collection.Find(filter)
+        var ids = await _collection.Find(filter)
+            .Project(p=>p.Id)
             .Skip(findOptions.Skip)
             .Limit(findOptions.Limit)
             .ToListAsync(cancellationToken);
         
-        return new PagedList<Profile>(items, (int)count, pageNumber, pageSize);
+        return (ids, (int)count);
     }
 
     private FilterDefinition<Profile> GetFilterForRecommendations(List<string> excludedProfileIds, Profile userProfile)
@@ -49,30 +42,19 @@ public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericR
         {
             filters.Add(Builders<Profile>.Filter.Eq(p => p.Gender, userProfile.PreferredGender));
         }
-        else
-        {
-            filters.Add(Builders<Profile>.Filter.Or(
-                Builders<Profile>.Filter.Eq(p => p.Gender, Gender.Male),
-                Builders<Profile>.Filter.Eq(p => p.Gender, Gender.Female)
-            ));
-        }
 
         if (userProfile.AgeFrom != 0 && userProfile.AgeTo != 0)
         {
             filters.Add(Builders<Profile>.Filter.And(
                 Builders<Profile>.Filter.Gte(p => p.BirthDate, DateTime.Now.AddYears(-userProfile.AgeTo)),
-                Builders<Profile>.Filter.Lte(p => p.BirthDate, DateTime.Now.AddYears(-userProfile.AgeFrom)),
-                Builders<Profile>.Filter.Gte(p => p.AgeFrom, userProfile.AgeFrom),
-                Builders<Profile>.Filter.Lte(p => p.AgeTo, userProfile.AgeTo)
+                Builders<Profile>.Filter.Lte(p => p.BirthDate, DateTime.Now.AddYears(-userProfile.AgeFrom))
             ));
         }
 
         if (userProfile is { Location: not null, MaxDistance: > 0 })
         {
-            var maxDistanceInMeters = userProfile.MaxDistance * 1000;
             var coordinates = userProfile.Location.Coordinates;
-            var point = new GeoJsonPoint<GeoJson2DCoordinates>(coordinates);
-            filters.Add(Builders<Profile>.Filter.NearSphere(p => p.Location, point, maxDistanceInMeters));
+            filters.Add(Builders<Profile>.Filter.GeoWithinCenterSphere(p=>p.Location, coordinates.X, coordinates.Y, userProfile.MaxDistance / 6371.0 ));
         }
         else
         {

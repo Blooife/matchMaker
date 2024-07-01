@@ -26,6 +26,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapHub<ChatHub>("/chat");
 
+app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapControllers();
 

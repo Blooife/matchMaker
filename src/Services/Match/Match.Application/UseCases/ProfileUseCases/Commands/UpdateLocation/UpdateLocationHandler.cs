@@ -1,5 +1,4 @@
 using AutoMapper;
-using Match.Application.DTOs.Profile.Response;
 using Match.Application.Exceptions;
 using Match.Domain.Repositories;
 using MediatR;
@@ -7,9 +6,9 @@ using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.UpdateLocation;
 
-public class UpdateLocationHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<UpdateLocationCommand, ProfileResponseDto>
+public class UpdateLocationHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<UpdateLocationCommand>
 {
-    public async Task<ProfileResponseDto> Handle(UpdateLocationCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateLocationCommand request, CancellationToken cancellationToken)
     {
         var profile = await _unitOfWork.Profiles.GetByIdAsync(request.Dto.ProfileId, cancellationToken);
         
@@ -29,7 +28,5 @@ public class UpdateLocationHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : I
         }
         
         await _unitOfWork.Profiles.UpdateAsync(profile, cancellationToken);
-        
-        return _mapper.Map<ProfileResponseDto>(profile);
     }
 }

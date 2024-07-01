@@ -1,15 +1,15 @@
-using AutoMapper;
+using Match.Application.DTOs.Profile.Response;
 using Match.Application.Exceptions;
+using Match.Application.Services.Interfaces;
 using Match.Domain.Repositories;
 using MediatR;
 using Shared.Models;
-using Profile = Match.Domain.Models.Profile;
 
 namespace Match.Application.UseCases.ProfileUseCases.Queries.GetPagedRecs;
 
-public class GetPagedRecsHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetPagedRecsQuery, PagedList<Profile>>
+public class GetPagedRecsHandler(IUnitOfWork _unitOfWork, IProfileGrpcClient _client) : IRequestHandler<GetPagedRecsQuery, PagedList<FullProfileResponseDto>>
 {
-    public async Task<PagedList<Profile>> Handle(GetPagedRecsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedList<FullProfileResponseDto>> Handle(GetPagedRecsQuery request, CancellationToken cancellationToken)
     {
         var userProfile = await _unitOfWork.Profiles.GetByIdAsync(request.ProfileId, cancellationToken);
 
@@ -28,9 +28,11 @@ public class GetPagedRecsHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRe
 
         var excludedProfileIds = likedProfilesIds.Concat(matchedProfilesIds).Distinct().ToList();
 
-        var recommendations =
+        var pagedRecs =
             await _unitOfWork.Profiles.GetPagedRecsAsync(excludedProfileIds, userProfile, request.PageNumber, request.PageSize, cancellationToken);
-
-        return recommendations;
+        
+        var profiles = await _client.GetProfilesInfo(pagedRecs.Ids);
+        
+        return new PagedList<FullProfileResponseDto>(profiles, pagedRecs.TotalCount, request.PageNumber, request.PageSize);
     }
 }
