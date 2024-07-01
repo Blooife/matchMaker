@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Profile.Application.Extensions;
 using Profile.Infrastructure.Extensions;
 using Profile.Infrastructure.Services;
@@ -27,11 +26,11 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
 app.MapControllers();
 
 app.UseRouting();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapGrpcService<ProfileGrpcService>();
 
 app.ApplyMigrations(app.Services);

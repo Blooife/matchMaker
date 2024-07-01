@@ -33,7 +33,7 @@ public class UserProfileRepository : GenericRepository<UserProfile, string>, IUs
         return profile;
     }   
     
-    public async Task<UserProfile?> GetAllProfileInfoByIdAsync(string profileId)
+    public async Task<IEnumerable<UserProfile>> GetAllProfileInfoByIdsAsync(IEnumerable<string> profileIds)
     {
         return await _dbContext.Profiles
             .Include(p => p.Goal)
@@ -41,9 +41,7 @@ public class UserProfileRepository : GenericRepository<UserProfile, string>, IUs
             .ThenInclude(c => c.Country)
             .Include(p => p.Languages)
             .Include(p => p.Interests)
-            .Include(p => p.ProfileEducations)
-            .ThenInclude(pe => pe.Education)
             .Include(p => p.Images)
-            .FirstOrDefaultAsync(p => p.Id == profileId);
+            .Where(profile=>profileIds.Contains(profile.Id)).AsNoTracking().ToListAsync();
     }
 }

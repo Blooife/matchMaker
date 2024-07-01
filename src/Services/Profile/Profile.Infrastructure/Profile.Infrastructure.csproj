@@ -24,11 +24,9 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
-
        <ItemGroup>
            <Protobuf Include="Protos\profile.proto" GrpcServices="Server" />
        </ItemGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\Profile.Application\Profile.Application.csproj" />
     </ItemGroup>

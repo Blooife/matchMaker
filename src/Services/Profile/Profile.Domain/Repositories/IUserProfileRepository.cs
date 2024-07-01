@@ -8,5 +8,5 @@ public interface IUserProfileRepository : IGenericRepository<UserProfile, string
     Task<UserProfile> UpdateProfileAsync(UserProfile profile, CancellationToken cancellationToken);
     Task DeleteProfileAsync(UserProfile profile, CancellationToken cancellationToken);
     Task<UserProfile> CreateProfileAsync(UserProfile profile, CancellationToken cancellationToken);
-    Task<UserProfile?> GetAllProfileInfoByIdAsync(string profileId);
+    Task<IEnumerable<UserProfile>> GetAllProfileInfoByIdsAsync(IEnumerable<string> profileIds);
 }
