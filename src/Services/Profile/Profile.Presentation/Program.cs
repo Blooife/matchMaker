@@ -1,9 +1,12 @@
 using Profile.Application.Extensions;
 using Profile.Infrastructure.Extensions;
+using Profile.Infrastructure.Services;
 using Profile.Presentation.Extensions;
 using Profile.Presentation.MiddlewareHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,8 +26,12 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
 app.MapControllers();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapGrpcService<ProfileGrpcService>();
 
 app.ApplyMigrations(app.Services);
 
