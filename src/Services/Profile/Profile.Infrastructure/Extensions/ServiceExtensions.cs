@@ -13,6 +13,7 @@ public static class ServiceExtensions
     {
         services.ConfigureDbContext(config);
         services.ConfigureRepositories();
+        services.AddGrpc();
     }
     
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)

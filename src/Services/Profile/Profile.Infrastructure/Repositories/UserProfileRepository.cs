@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
@@ -31,4 +32,18 @@ public class UserProfileRepository : GenericRepository<UserProfile, string>, IUs
         
         return profile;
     }   
+    
+    public async Task<UserProfile?> GetAllProfileInfoByIdAsync(string profileId)
+    {
+        return await _dbContext.Profiles
+            .Include(p => p.Goal)
+            .Include(p => p.City)
+            .ThenInclude(c => c.Country)
+            .Include(p => p.Languages)
+            .Include(p => p.Interests)
+            .Include(p => p.ProfileEducations)
+            .ThenInclude(pe => pe.Education)
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(p => p.Id == profileId);
+    }
 }
