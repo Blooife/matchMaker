@@ -10,11 +10,11 @@ public class ProfileGrpcService(IUnitOfWork _unitOfWork) : ProfileService.Profil
     {
         var userProfile = await _unitOfWork.ProfileRepository.GetAllProfileInfoByIdAsync(request.ProfileId);
 
-        if (userProfile == null)
+        if (userProfile is null)
         {
             throw new RpcException(new Status(StatusCode.NotFound, "Profile not found"));
         }
-
+ 
         var response = new GetProfileResponse
         {
             Profile = new Protos.Profile()
@@ -24,7 +24,7 @@ public class ProfileGrpcService(IUnitOfWork _unitOfWork) : ProfileService.Profil
                 LastName = userProfile.LastName,
                 BirthDate = userProfile.BirthDate.ToString("o"),
                 Gender = (Gender)userProfile.Gender,
-                Bio = userProfile.Bio,
+                Bio = userProfile.Bio ?? "",
                 Height = userProfile.Height ?? 0,
                 ShowAge = userProfile.ShowAge,
                 AgeFrom = userProfile.AgeFrom,
@@ -45,12 +45,6 @@ public class ProfileGrpcService(IUnitOfWork _unitOfWork) : ProfileService.Profil
                 },
                 Languages = { userProfile.Languages.Select(lang => new Language { Id = lang.Id, Name = lang.Name }) },
                 Interests = { userProfile.Interests.Select(interest => new Interest { Id = interest.Id, Name = interest.Name }) },
-                Educations = { userProfile.ProfileEducations.Select(pe => new ProfileEducation
-                {
-                    ProfileId = pe.ProfileId,
-                    Education = new Education { Id = pe.Education.Id, Name = pe.Education.Name },
-                    Description = pe.Description
-                }) },
                 Images = { userProfile.Images.Select(img => new Image { Id = img.Id, Url = img.ImageUrl }) }
             }
         };
