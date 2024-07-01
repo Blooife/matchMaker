@@ -18,6 +18,7 @@ public static class ServiceExtensions
         services.ConfigureDbContext(configuration);
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.ConfigureGrpcClient();
+       // services.AddScoped<IProfileGrpcClient, ProfileGrpcClient>();
     }
     
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)

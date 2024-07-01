@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Match.Application.DTOs.Profile.Request;
 using Match.Application.UseCases.ProfileUseCases.Commands.UpdateLocation;
+using Match.Application.UseCases.ProfileUseCases.Queries.GetById;
 using Match.Application.UseCases.ProfileUseCases.Queries.GetPagedRecs;
 using Match.Application.UseCases.ProfileUseCases.Queries.GetRecsByProfileId;
 using MediatR;
@@ -26,6 +27,16 @@ namespace Match.Presentation.Controllers
         public async Task<IActionResult> GetPagedRecommendations([FromRoute] string profileId, CancellationToken cancellationToken, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var query = new GetPagedRecsQuery(profileId, pageNumber, pageSize);
+
+            var profiles = await _mediator.Send(query, cancellationToken);
+
+            return Ok(profiles);
+        }
+        
+        [HttpGet("{profileId}")]
+        public async Task<IActionResult> GetById([FromRoute] string profileId, CancellationToken cancellationToken)
+        {
+            var query = new GetProfileByIdQuery(profileId);
 
             var profiles = await _mediator.Send(query, cancellationToken);
 
