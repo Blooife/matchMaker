@@ -4,5 +4,5 @@ namespace Match.Application.Services.Interfaces;
 
 public interface IProfileGrpcClient
 {
-    ProfileResponseDto GetProfileInfo(string profileId);
+    Task<List<FullProfileResponseDto>> GetProfilesInfo(IEnumerable<string> profileIds);
 }

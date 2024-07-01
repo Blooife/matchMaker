@@ -1,5 +1,4 @@
 using AutoMapper;
-using Match.Application.DTOs.Profile.Response;
 using Match.Application.Exceptions;
 using Match.Domain.Repositories;
 using MediatR;
@@ -7,9 +6,9 @@ using Profile = Match.Domain.Models.Profile;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.Update;
 
-public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<UpdateProfileCommand, ProfileResponseDto>
+public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<UpdateProfileCommand>
 {
-    public async Task<ProfileResponseDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var profileMapped = _mapper.Map<Profile>(request.Dto);
         var profile = await _unitOfWork.Profiles.GetByIdAsync(profileMapped.Id, cancellationToken);
@@ -20,7 +19,5 @@ public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         }
         
         await _unitOfWork.Profiles.UpdateAsync(profileMapped, cancellationToken);
-        
-        return _mapper.Map<ProfileResponseDto>(profile);
     }
 }

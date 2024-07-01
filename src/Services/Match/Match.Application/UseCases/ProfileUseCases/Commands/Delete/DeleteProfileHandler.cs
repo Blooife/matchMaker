@@ -1,4 +1,3 @@
-using AutoMapper;
 using Match.Application.Exceptions;
 using Match.Domain.Repositories;
 using MediatR;

@@ -25,9 +25,6 @@
     <ItemGroup>
         <Protobuf Include="Protos\profile.proto" GrpcServices="Client" />
     </ItemGroup>
-
-
-
     <ItemGroup>
       <ProjectReference Include="..\Match.Application\Match.Application.csproj" />
     </ItemGroup>
