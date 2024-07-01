@@ -24,7 +24,7 @@ public class ProfileGrpcService(IUnitOfWork _unitOfWork) : ProfileService.Profil
                 LastName = userProfile.LastName,
                 BirthDate = userProfile.BirthDate.ToString("o"),
                 Gender = (Gender)userProfile.Gender,
-                Bio = userProfile.Bio,
+                Bio = userProfile.Bio ?? "",
                 Height = userProfile.Height ?? 0,
                 ShowAge = userProfile.ShowAge,
                 AgeFrom = userProfile.AgeFrom,

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Profile.Application.Extensions;
 using Profile.Infrastructure.Extensions;
 using Profile.Infrastructure.Services;
@@ -5,6 +6,8 @@ using Profile.Presentation.Extensions;
 using Profile.Presentation.MiddlewareHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
