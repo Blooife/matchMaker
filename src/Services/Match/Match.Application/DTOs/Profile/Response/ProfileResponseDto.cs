@@ -15,6 +15,10 @@ public class ProfileResponseDto
     public int MaxDistance { get; set; }
     public string Country { get; set; }
     public string City { get; set; }
+    public List<string> Languages { get; set; } = new List<string>();
+    public List<string> Interests { get; set; } = new List<string>();
+    public string Goal { get; set; }
+    
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
 }

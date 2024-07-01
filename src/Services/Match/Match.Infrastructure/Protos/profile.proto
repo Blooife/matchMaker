@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+option csharp_namespace = "Match.Infrastructure.Protos";
+
+message Profile {
+  string id = 1;
+  string name = 2;
+  string last_name = 3;
+  string birth_date = 4;
+  Gender gender = 5;
+  string bio = 6;
+  int32 height = 7;
+  bool show_age = 8;
+  int32 age_from = 9;
+  int32 age_to = 10;
+  int32 max_distance = 11;
+  Gender preferred_gender = 12;
+  string user_id = 13;
+  Goal goal = 14;
+  City city = 15;
+  repeated Language languages = 16;
+  repeated Interest interests = 17;
+  repeated ProfileEducation educations = 18;
+  repeated Image images = 19;
+}
+
+message Goal {
+  int32 id = 1;
+  string name = 2;
+}
+
+message City {
+  int32 id = 1;
+  string name = 2;
+  Country country = 3;
+}
+
+message Country {
+  int32 id = 1;
+  string name = 2;
+}
+
+message Language {
+  int32 id = 1;
+  string name = 2;
+}
+
+message Interest {
+  int32 id = 1;
+  string name = 2;
+}
+
+message ProfileEducation {
+  string profile_id = 1;
+  Education education = 2;
+  string description = 3;
+}
+
+message Education {
+  int32 id = 1;
+  string name = 2;
+}
+
+message Image {
+  int32 id = 1;
+  string url = 2;
+}
+
+enum Gender {
+  MALE = 0;
+  FEMALE = 1;
+  UNDEFINED = 2;
+}
+
+message GetProfileRequest {
+  string profile_id = 1;
+}
+
+message GetProfileResponse {
+  Profile profile = 1;
+}
+
+service ProfileService {
+  rpc GetProfileById(GetProfileRequest) returns (GetProfileResponse);
+}

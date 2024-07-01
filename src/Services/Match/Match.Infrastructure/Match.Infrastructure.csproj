@@ -14,8 +14,19 @@
       <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Grpc.Net.Client" Version="2.45.0" />
+        <PackageReference Include="Google.Protobuf" Version="3.19.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.45.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Protobuf Include="Protos\profile.proto" GrpcServices="Client" />
+    </ItemGroup>
 
-    
+
 
     <ItemGroup>
       <ProjectReference Include="..\Match.Application\Match.Application.csproj" />
