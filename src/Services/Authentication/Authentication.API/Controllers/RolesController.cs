@@ -11,7 +11,7 @@ namespace Authentication.API.Controllers;
 public class RolesController(IRoleService _roleService): ControllerBase
 {
     [HttpGet]
-    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
+    //[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
     public async Task<IActionResult> GetAllRoles(CancellationToken cancellationToken)
     {
         var roles = await _roleService.GetAllRolesAsync(cancellationToken);
@@ -20,7 +20,7 @@ public class RolesController(IRoleService _roleService): ControllerBase
     } 
     
     [HttpPost("assignment")]
-    [Authorize(Roles = Roles.Admin)]
+    //[Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> AssignRole([FromBody] AssignRoleRequestDto model, CancellationToken cancellationToken)
     {
         var response = await _roleService.AssignRoleAsync(model.Email, model.Role, cancellationToken);
@@ -29,7 +29,7 @@ public class RolesController(IRoleService _roleService): ControllerBase
     }
     
     [HttpDelete("removal")]
-    [Authorize(Roles = Roles.Admin)]
+    //[Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> RemoveFromRole([FromBody] AssignRoleRequestDto model, CancellationToken cancellationToken)
     {
         var response = await _roleService.RemoveUserFromRoleAsync(model.Email, model.Role, cancellationToken);

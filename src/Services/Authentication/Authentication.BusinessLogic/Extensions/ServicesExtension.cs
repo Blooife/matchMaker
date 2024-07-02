@@ -1,5 +1,6 @@
 using System.Reflection;
 using Authentication.BusinessLogic.DTOs.Request;
+using Authentication.BusinessLogic.Producers;
 using Authentication.BusinessLogic.Providers.Implementations;
 using Authentication.BusinessLogic.Providers.Interfaces;
 using Authentication.BusinessLogic.Services.Implementations;
@@ -16,6 +17,7 @@ public static class ServicesExtension
     {
         services.ConfigureServices();
         services.ConfigureProviders();
+        services.AddSingleton<ProducerService>();
     }
     
     private static void ConfigureServices(this IServiceCollection services)

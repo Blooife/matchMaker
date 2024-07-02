@@ -27,7 +27,7 @@ public class AuthController(IAuthService _authService) : ControllerBase
     }
     
     [HttpPost("refresh")]
-    [Authorize]
+    //[Authorize]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshRequestDto refreshToken, CancellationToken cancellationToken)
     {
         var response = await _authService.RefreshTokenAsync(refreshToken.refreshToken, cancellationToken);

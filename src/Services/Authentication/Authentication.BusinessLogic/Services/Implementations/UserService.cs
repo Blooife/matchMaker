@@ -2,17 +2,19 @@ using Authentication.BusinessLogic.DTOs;
 using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.DTOs.Response;
 using Authentication.BusinessLogic.Exceptions;
+using Authentication.BusinessLogic.Producers;
 using Authentication.BusinessLogic.Providers.Interfaces;
 using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
 using Shared.Constants;
+using Shared.Messages.Authentication;
 using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
-public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUserService
+public class UserService(IUserRepository _userRepository, IMapper _mapper, ProducerService _producerService) : IUserService
 {
     public async Task<GeneralResponseDto> DeleteUserByIdAsync(string userId, CancellationToken cancellationToken)
     {
@@ -29,6 +31,9 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
         {
             throw new DeleteUserException(ExceptionMessages.DeleteUserFailed);
         }
+
+        var message = _mapper.Map<UserDeletedMessage>(user);
+        await _producerService.ProduceAsync("user-deleted", message);
         
         return new GeneralResponseDto() { Message = "User deleted successfully" };
     }
