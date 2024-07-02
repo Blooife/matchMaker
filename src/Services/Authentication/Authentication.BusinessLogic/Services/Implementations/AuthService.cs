@@ -28,7 +28,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, Produ
         await _userRepository.AddToRoleAsync(user, Roles.User);
         
         var message = _mapper.Map<UserCreatedMessage>(user);
-        await _producerService.ProduceAsync("user-created", message);
+        await _producerService.ProduceAsync(message);
         
         return new  GeneralResponseDto() { Message = "User registered successfully"};
     }

@@ -1,35 +1,34 @@
-using System.Text.Json;
 using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Shared.Messages.Authentication;
 
 namespace Authentication.BusinessLogic.Producers;
 
 public class ProducerService
 {
-    private readonly IConfiguration _configuration;
+    private readonly string _topic;
     private readonly IProducer<string, string> _producer;
 
-    public ProducerService(IConfiguration configuration)
+    public ProducerService(IConfiguration configuration, IOptions<ProducerConfig> producerConfig)
     {
-        _configuration = configuration;
-
-        var producerConfig = new ProducerConfig
-        {
-            BootstrapServers = _configuration["Kafka:Consumer:BootstrapServers"]
-        };
-
-        _producer = new ProducerBuilder<string, string>(producerConfig).Build();
+        _topic = configuration["Kafka:Producer:Topic"]!;
+        _producer = new ProducerBuilder<string, string>(producerConfig.Value).Build();
     }
 
-    public async Task ProduceAsync<T>(string topic, T message) where T : BaseMessage
+    public async Task ProduceAsync<T>(T message) where T : BaseMessage
     {
         var kafkaMessage = new Message<string, string>
         {
             Key = message.Id,
-            Value = JsonSerializer.Serialize(message)
+            Value = JsonConvert.SerializeObject(new
+            {
+                Type = typeof(T).AssemblyQualifiedName,
+                Payload = message
+            })
         };
 
-        await _producer.ProduceAsync(topic, kafkaMessage);
+        await _producer.ProduceAsync(_topic, kafkaMessage);
     }
 }

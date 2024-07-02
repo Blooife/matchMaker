@@ -6,18 +6,21 @@ using Authentication.BusinessLogic.Providers.Interfaces;
 using Authentication.BusinessLogic.Services.Implementations;
 using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.BusinessLogic.Validators;
+using Confluent.Kafka;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Authentication.BusinessLogic.Extensions;
 
 public static class ServicesExtension
 {
-    public static void ConfigureBusinessLogic(this IServiceCollection services)
+    public static void ConfigureBusinessLogic(this IServiceCollection services, IConfiguration config)
     {
         services.ConfigureServices();
         services.ConfigureProviders();
         services.AddSingleton<ProducerService>();
+        services.Configure<ProducerConfig>(config.GetRequiredSection("Kafka:Producer"));
     }
     
     private static void ConfigureServices(this IServiceCollection services)

@@ -33,7 +33,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, Produ
         }
 
         var message = _mapper.Map<UserDeletedMessage>(user);
-        await _producerService.ProduceAsync("user-deleted", message);
+        await _producerService.ProduceAsync(message);
         
         return new GeneralResponseDto() { Message = "User deleted successfully" };
     }
