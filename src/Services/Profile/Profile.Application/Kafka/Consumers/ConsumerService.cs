@@ -12,7 +12,7 @@ using Profile.Application.UseCases.UserUseCases.Commands.Create;
 using Profile.Application.UseCases.UserUseCases.Commands.Delete;
 using Shared.Messages.Authentication;
 
-namespace Profile.Application.Consumers;
+namespace Profile.Application.Kafka.Consumers;
 
 public class ConsumerService : BackgroundService
 {

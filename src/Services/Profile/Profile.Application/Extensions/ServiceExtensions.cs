@@ -5,7 +5,8 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Profile.Application.Behavior;
-using Profile.Application.Consumers;
+using Profile.Application.Kafka.Consumers;
+using Profile.Application.Kafka.Producers;
 
 namespace Profile.Application.Extensions;
 
@@ -25,5 +26,7 @@ public static class ServiceExtensions
         services.AddScoped<MessageHandler>();
         services.AddHostedService<ConsumerService>();
         services.Configure<ConsumerConfig>(config.GetRequiredSection("Kafka:Consumer"));
+        services.AddSingleton<ProducerService>();
+        services.Configure<ProducerConfig>(config.GetRequiredSection("Kafka:Producer"));
     }
 }

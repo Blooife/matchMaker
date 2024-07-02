@@ -1,4 +1,4 @@
-namespace Shared.Messages.Authentication;
+namespace Shared.Messages;
 
 public class BaseMessage
 {

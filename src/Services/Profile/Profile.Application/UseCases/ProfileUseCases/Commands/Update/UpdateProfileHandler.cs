@@ -2,12 +2,14 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
+using Profile.Application.Kafka.Producers;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
+using Shared.Messages.Profile;
 
 namespace Profile.Application.UseCases.ProfileUseCases.Commands.Update;
 
-public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<UpdateProfileCommand, ProfileResponseDto>
+public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ProducerService _producerService) : IRequestHandler<UpdateProfileCommand, ProfileResponseDto>
 {
     public async Task<ProfileResponseDto> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
@@ -22,6 +24,9 @@ public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         var profile = _mapper.Map<UserProfile>(request.UpdateProfileDto);
         var result = await _unitOfWork.ProfileRepository.UpdateProfileAsync(profile, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
+        
+        var message = _mapper.Map<ProfileUpdatedMessage>(profile);
+        await _producerService.ProduceAsync(message);
         
         return _mapper.Map<ProfileResponseDto>(result);
     }
