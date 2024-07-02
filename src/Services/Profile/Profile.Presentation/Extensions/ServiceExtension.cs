@@ -1,4 +1,5 @@
 using System.Text;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +20,7 @@ public static class ServiceExtension
         services.ConfigureAuthentication(config);
         services.ConfigureSwagger();
         services.ConfigureMinio(config);
+        services.Configure<ConsumerConfig>(config.GetRequiredSection("Kafka:Consumer"));
     }
 
     private static void ConfigureMinio(this IServiceCollection services, IConfiguration config)
