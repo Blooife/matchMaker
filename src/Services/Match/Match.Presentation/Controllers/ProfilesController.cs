@@ -5,41 +5,40 @@ using Match.Application.UseCases.ProfileUseCases.Queries.GetPagedRecs;
 using Match.Application.UseCases.ProfileUseCases.Queries.GetRecsByProfileId;
 using MediatR;
 
-namespace Match.Presentation.Controllers
+namespace Match.Presentation.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ProfilesController(IMediator _mediator) : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProfilesController(IMediator _mediator) : ControllerBase
+
+    [HttpGet("{profileId}/recommendations")]
+    public async Task<IActionResult> GetRecommendations([FromRoute]string profileId, CancellationToken cancellationToken)
     {
+        var query = new GetRecsByProfileIdQuery(profileId);
 
-        [HttpGet("{profileId}/recommendations")]
-        public async Task<IActionResult> GetRecommendations([FromRoute]string profileId, CancellationToken cancellationToken)
-        {
-            var query = new GetRecsByProfileIdQuery(profileId);
+        var recommendations = await _mediator.Send(query, cancellationToken);
 
-            var recommendations = await _mediator.Send(query, cancellationToken);
-
-            return Ok(recommendations);
-        }
+        return Ok(recommendations);
+    }
         
-        [HttpGet("{profileId}/paged/recommendations")]
-        public async Task<IActionResult> GetPagedRecommendations([FromRoute] string profileId, CancellationToken cancellationToken, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        {
-            var query = new GetPagedRecsQuery(profileId, pageNumber, pageSize);
+    [HttpGet("{profileId}/paged/recommendations")]
+    public async Task<IActionResult> GetPagedRecommendations([FromRoute] string profileId, CancellationToken cancellationToken, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var query = new GetPagedRecsQuery(profileId, pageNumber, pageSize);
 
-            var profiles = await _mediator.Send(query, cancellationToken);
+        var profiles = await _mediator.Send(query, cancellationToken);
 
-            return Ok(profiles);
-        }
+        return Ok(profiles);
+    }
         
-        [HttpPatch("location")]
-        public async Task<IActionResult> UpdateLocation([FromBody]UpdateLocationDto dto, CancellationToken cancellationToken)
-        {
-            var command = new UpdateLocationCommand(dto);
+    [HttpPatch("location")]
+    public async Task<IActionResult> UpdateLocation([FromBody]UpdateLocationDto dto, CancellationToken cancellationToken)
+    {
+        var command = new UpdateLocationCommand(dto);
 
-            var profile = await _mediator.Send(command, cancellationToken);
+        var profile = await _mediator.Send(command, cancellationToken);
 
-            return Ok(profile);
-        }
+        return Ok(profile);
     }
 }

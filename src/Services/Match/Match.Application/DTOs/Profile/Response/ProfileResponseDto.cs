@@ -5,8 +5,6 @@ namespace Match.Application.DTOs.Profile.Response;
 public class ProfileResponseDto
 {
     public string Id { get; set; }
-    public string Name { get; set; }
-    public string LastName { get; set; }
     public DateTime BirthDate { get; set; }
     public int AgeFrom { get; set; }
     public int AgeTo { get; set; }
