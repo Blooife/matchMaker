@@ -12,7 +12,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class ProfilesController : ControllerBase
 {
     private readonly IMediator _mediator;

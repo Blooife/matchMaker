@@ -26,13 +26,13 @@ public class UpdateProfileValidator : AbstractValidator<UpdateProfileCommand>
             .LessThanOrEqualTo(DateTime.Today.AddYears(-16))
             .WithMessage("Age must be at least 16 years.");
         RuleFor(command => command.UpdateProfileDto.MaxDistance)
-            .NotEmpty().GreaterThanOrEqualTo(0)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("Max distance must be >= 0");
         RuleFor(command => command.UpdateProfileDto.AgeFrom)
-            .NotEmpty().GreaterThanOrEqualTo(0)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("Age from must be >= 0");
         RuleFor(command => command.UpdateProfileDto.AgeTo)
-            .NotEmpty().GreaterThanOrEqualTo(0)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("Age to must be >= 0");
         RuleFor(command => command.UpdateProfileDto.AgeFrom)
             .LessThan(command => command.UpdateProfileDto.AgeTo)

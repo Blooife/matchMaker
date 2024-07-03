@@ -15,9 +15,13 @@ public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, Prod
         var profile = _mapper.Map<UserProfile>(request.CreateProfileDto);
         var result = await _unitOfWork.ProfileRepository.CreateProfileAsync(profile, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
-
+        
         var message = _mapper.Map<ProfileCreatedMessage>(profile);
+        var city = await _unitOfWork.CityRepository.GetCityWithCountryById(profile.CityId, cancellationToken);
+        message.City = city.Name;
+        message.Country = city.Country.Name;
         await _producerService.ProduceAsync(message);
+        
             
         return _mapper.Map<ProfileResponseDto>(result);
     }

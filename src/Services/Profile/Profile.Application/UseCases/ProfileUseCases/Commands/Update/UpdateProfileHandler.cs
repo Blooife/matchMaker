@@ -25,7 +25,10 @@ public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, Prod
         var result = await _unitOfWork.ProfileRepository.UpdateProfileAsync(profile, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        var message = _mapper.Map<ProfileUpdatedMessage>(profile);
+        var message = _mapper.Map<ProfileUpdatedMessage>(result);
+        var city = await _unitOfWork.CityRepository.GetCityWithCountryById(result.CityId, cancellationToken);
+        message.City = city.Name;
+        message.Country = city.Country.Name;
         await _producerService.ProduceAsync(message);
         
         return _mapper.Map<ProfileResponseDto>(result);

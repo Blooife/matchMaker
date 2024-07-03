@@ -10,17 +10,8 @@ using Shared.Messages.Authentication;
 
 namespace Profile.Application.Kafka.Consumers;
 
-public class MessageHandler
+public class MessageHandler(IMapper _mapper, IMediator _mediator)
 {
-    private readonly IMapper _mapper;
-    private readonly IMediator _mediator;
-
-    public MessageHandler(IMapper mapper, IMediator mediator)
-    {
-        _mapper = mapper;
-        _mediator = mediator;
-    }
-
     public async Task HandleMessageAsync(string message, CancellationToken cancellationToken)
     {
         var deserializedMessage = JsonConvert.DeserializeObject<JObject>(message);
