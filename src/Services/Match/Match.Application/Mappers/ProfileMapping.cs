@@ -1,6 +1,7 @@
 using Match.Application.DTOs.Profile.Request;
 using Match.Application.DTOs.Profile.Response;
 using Match.Domain.Models;
+using Shared.Messages.Profile;
 
 namespace Match.Application.Mappers;
 
@@ -12,6 +13,9 @@ public class ProfileMapping : AutoMapper.Profile
         CreateMap<UpdateProfileDto, Profile>();
         CreateMap<Profile, ProfileResponseDto>()
             .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Location != null ? (double?)src.Location.Coordinates.X : null))
-            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Location != null ? (double?)src.Location.Coordinates.Y : null));;
+            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Location != null ? (double?)src.Location.Coordinates.Y : null));
+
+        CreateMap<ProfileCreatedMessage, CreateProfileDto>();
+        CreateMap<ProfileUpdatedMessage, UpdateProfileDto>();
     }
 }
