@@ -18,6 +18,10 @@ public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
         }
         
         await _unitOfWork.UserRepository.DeleteUserAsync(user, cancellationToken);
+
+        var profile =
+            await _unitOfWork.ProfileRepository.GetAsync(profile => profile.UserId == user.Id, cancellationToken);
+        await _unitOfWork.ProfileRepository.DeleteProfileAsync(profile.First(), cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         return _mapper.Map<UserResponseDto>(user);
