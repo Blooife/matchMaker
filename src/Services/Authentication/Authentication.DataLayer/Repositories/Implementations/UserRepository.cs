@@ -11,7 +11,7 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
 {
     public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+        return await _dbContext.Users.Where(u => u.DeletedAt == null).FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
     }
 
     public async Task<IdentityResult> RegisterAsync(User user, string password)
@@ -41,12 +41,12 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
 
     public async Task<User?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users.FirstOrDefaultAsync(u => u.RefreshToken == token, cancellationToken);
+        return await _dbContext.Users.Where(u => u.DeletedAt == null).FirstOrDefaultAsync(u => u.RefreshToken == token, cancellationToken);
     }
 
     public async Task<User?> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        return await _dbContext.Users.Where(u => u.DeletedAt == null).FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
     
     public async Task<IdentityResult> UpdateUserAsync(User user)
@@ -56,17 +56,18 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
     
     public async Task<IdentityResult> DeleteUserByIdAsync(User user)
     {
-        return await _userManager.DeleteAsync(user);
+        user.DeletedAt = DateTime.UtcNow;
+        return await _userManager.UpdateAsync(user);
     }
 
     public async Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
-        return await _userManager.Users.AsNoTracking().ToListAsync(cancellationToken);
+        return await _userManager.Users.Where(u => u.DeletedAt == null).AsNoTracking().ToListAsync(cancellationToken);
     }
     
     public async Task<PagedList<User>> GetPaginatedUsersAsync(int pageNumber, int pageSize)
     {
-        var query = _dbContext.Set<User>();
+        var query = _dbContext.Set<User>().Where(u => u.DeletedAt == null);
         
         return PagedList<User>.ToPagedList(query.OrderBy(e=>e.Email),
             pageNumber,
