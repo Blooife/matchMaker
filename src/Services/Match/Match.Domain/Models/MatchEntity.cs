@@ -1,9 +1,10 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Shared.Interfaces;
 
 namespace Match.Domain.Models;
 
-public class MatchEntity
+public class MatchEntity : ISoftDeletable
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -11,4 +12,5 @@ public class MatchEntity
     public string FirstProfileId { get; set; }
     public string SecondProfileId { get; set; }
     public DateTime Timestamp { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

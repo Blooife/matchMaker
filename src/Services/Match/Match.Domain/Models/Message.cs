@@ -1,9 +1,10 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Shared.Interfaces;
 
 namespace Match.Domain.Models;
 
-public class Message
+public class Message : ISoftDeletable
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -13,4 +14,5 @@ public class Message
     public DateTime Timestamp { get; set; }
     
     public string ChatId { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }
