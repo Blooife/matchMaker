@@ -13,7 +13,7 @@ namespace Authentication.API.Controllers;
 public class UsersController(IUserService _userService): ControllerBase
 {
     [HttpGet("{userId}")]
-    //[Authorize]
+    [Authorize]
     public async Task<IActionResult> GetUserById([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
@@ -22,7 +22,7 @@ public class UsersController(IUserService _userService): ControllerBase
     } 
     
     [HttpGet("email/{email}")]
-    //[Authorize]
+    [Authorize]
     public async Task<IActionResult> GetUserByEmail([FromRoute] string email, CancellationToken cancellationToken)
     {
         var user = await _userService.GetUserByEmailAsync(email, cancellationToken);
@@ -31,7 +31,7 @@ public class UsersController(IUserService _userService): ControllerBase
     } 
     
     [HttpGet("{userId}/roles")]
-    //[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
     public async Task<IActionResult> GetUsersRoles([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var roles = await _userService.GetUsersRolesAsync(userId, cancellationToken);
@@ -40,7 +40,7 @@ public class UsersController(IUserService _userService): ControllerBase
     } 
     
     [HttpGet]
-    //[Authorize]
+    [Authorize]
     public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
         var users = await _userService.GetAllUsersAsync(cancellationToken);
@@ -49,7 +49,7 @@ public class UsersController(IUserService _userService): ControllerBase
     } 
     
     [HttpGet("paginated")]
-    //[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
     public async Task<IActionResult> GetPaginatedUsers([FromQuery] int pageSize, [FromQuery] int pageNumber, CancellationToken cancellationToken)
     {
         var pagedList = await _userService.GetPaginatedUsersAsync(pageSize, pageNumber);
@@ -69,8 +69,8 @@ public class UsersController(IUserService _userService): ControllerBase
     } 
     
     [HttpDelete("{userId}")]
-    //[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
-    //[Authorize]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
+    [Authorize]
     public async Task<IActionResult> DeleteUserById([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var users = await _userService.DeleteUserByIdAsync(userId, cancellationToken);
@@ -79,7 +79,7 @@ public class UsersController(IUserService _userService): ControllerBase
     } 
     
     [HttpPut]
-    //[Authorize]
+    [Authorize]
     public async Task<IActionResult> UpdateUser([FromBody] UserRequestDto userRequestDto)
     {
         var users = await _userService.UpdateUserAsync(userRequestDto);

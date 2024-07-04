@@ -1,14 +1,11 @@
-using Authentication.BusinessLogic.DTOs;
 using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.DTOs.Response;
 using Authentication.BusinessLogic.Exceptions;
 using Authentication.BusinessLogic.Producers;
-using Authentication.BusinessLogic.Providers.Interfaces;
 using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
-using Shared.Constants;
 using Shared.Messages.Authentication;
 using Shared.Models;
 

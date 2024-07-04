@@ -1,5 +1,4 @@
 using Authentication.DataLayer.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace Authentication.DataLayer.Repositories.Interfaces;
 
