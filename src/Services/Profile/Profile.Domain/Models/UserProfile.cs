@@ -1,8 +1,9 @@
 using Shared.Constants;
+using Shared.Interfaces;
 
 namespace Profile.Domain.Models;
 
-public class UserProfile
+public class UserProfile : ISoftDeletable
 {
     public string Id { get; set; }
     public string Name { get; set; }
@@ -23,6 +24,7 @@ public class UserProfile
     public City City { get; set; }
     public User User { get; set; }
     public Goal? Goal { get; set; }
+    public DateTime? DeletedAt { get; set; }
 
     public List<Language> Languages { get; set; } = new List<Language>();
     public List<Interest> Interests { get; set; } = new List<Interest>();

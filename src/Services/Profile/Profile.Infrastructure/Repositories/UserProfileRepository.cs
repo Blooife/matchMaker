@@ -22,7 +22,8 @@ public class UserProfileRepository : GenericRepository<UserProfile, string>, IUs
 
     public async Task DeleteProfileAsync(UserProfile profile, CancellationToken cancellationToken)
     {
-        _dbContext.Profiles.Remove(profile);
+        profile.DeletedAt = DateTime.UtcNow;
+        _dbContext.Update(profile);
     }
 
     public async Task<UserProfile> CreateProfileAsync(UserProfile profile, CancellationToken cancellationToken)

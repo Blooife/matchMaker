@@ -16,7 +16,8 @@ public class UserRepository(ProfileDbContext _dbContext) : GenericRepository<Use
 
     public async Task DeleteUserAsync(User user, CancellationToken cancellationToken)
     {
-        _dbContext.Users.Remove(user);
+        user.DeletedAt = DateTime.UtcNow;
+        _dbContext.Update(user);
     }
 
     public async Task<User> CreateUserAsync(User user, CancellationToken cancellationToken)
