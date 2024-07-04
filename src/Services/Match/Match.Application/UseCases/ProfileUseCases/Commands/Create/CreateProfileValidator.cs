@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace Match.Application.UseCases.ProfileUseCases.Commands.Update;
+namespace Match.Application.UseCases.ProfileUseCases.Commands.Create;
 
-public class UpdateProfileValidator : AbstractValidator<UpdateProfileCommand>
+public class CreateProfileValidator : AbstractValidator<CreateProfileCommand>
 {
-    public UpdateProfileValidator()
+    public CreateProfileValidator()
     {
         RuleFor(command => command.Dto.Name)
             .MinimumLength(2)
@@ -18,13 +18,13 @@ public class UpdateProfileValidator : AbstractValidator<UpdateProfileCommand>
             .LessThanOrEqualTo(DateTime.Today.AddYears(-16))
             .WithMessage("Age must be at least 16 years.");
         RuleFor(command => command.Dto.MaxDistance)
-            .NotEmpty().GreaterThanOrEqualTo(0)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("Max distance must be >= 0");
         RuleFor(command => command.Dto.AgeFrom)
-            .NotEmpty().GreaterThanOrEqualTo(0)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("Age from must be >= 0");
         RuleFor(command => command.Dto.AgeTo)
-            .NotEmpty().GreaterThanOrEqualTo(0)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("Age to must be >= 0");
         RuleFor(command => command.Dto.AgeFrom)
             .LessThan(command => command.Dto.AgeTo)

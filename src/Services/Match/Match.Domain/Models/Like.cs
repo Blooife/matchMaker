@@ -4,7 +4,7 @@ using Shared.Interfaces;
 
 namespace Match.Domain.Models;
 
-public class Like : ISoftDeletable
+public class Like
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -12,5 +12,4 @@ public class Like : ISoftDeletable
     public string ProfileId { get; set; }
     public string TargetProfileId { get; set; }
     public bool IsLike { get; set; }
-    public DateTime? DeletedAt { get; set; }
 }

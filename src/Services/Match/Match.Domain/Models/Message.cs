@@ -4,7 +4,7 @@ using Shared.Interfaces;
 
 namespace Match.Domain.Models;
 
-public class Message : ISoftDeletable
+public class Message
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -12,7 +12,5 @@ public class Message : ISoftDeletable
     public string SenderId { get; set; }
     public string Content { get; set; }
     public DateTime Timestamp { get; set; }
-    
     public string ChatId { get; set; }
-    public DateTime? DeletedAt { get; set; }
 }
