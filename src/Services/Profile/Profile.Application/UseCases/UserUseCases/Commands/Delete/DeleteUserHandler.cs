@@ -15,7 +15,7 @@ public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
         if (user is null)
         {
             throw new NotFoundException("User", request.UserId);
-        }
+        } 
         
         await _unitOfWork.UserRepository.DeleteUserAsync(user, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);

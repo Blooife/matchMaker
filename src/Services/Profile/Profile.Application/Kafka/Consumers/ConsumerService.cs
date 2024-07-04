@@ -21,19 +21,28 @@ public class ConsumerService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        await Task.Yield();
-        _consumer.Subscribe(_topic);
-        
-        while (!cancellationToken.IsCancellationRequested)
+        try
         {
-            var consumeResult = _consumer.Consume(cancellationToken);
-            var message = consumeResult.Message.Value;
+            await Task.Yield();
+            _consumer.Subscribe(_topic);
 
-            using var scope = _serviceProvider.CreateScope();
-            var messageHandler = scope.ServiceProvider.GetRequiredService<MessageHandler>();
-            await messageHandler.HandleMessageAsync(message, cancellationToken);
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                var consumeResult = _consumer.Consume(cancellationToken);
+                var message = consumeResult.Message.Value;
+
+                using var scope = _serviceProvider.CreateScope();
+                var messageHandler = scope.ServiceProvider.GetRequiredService<MessageHandler>();
+                await messageHandler.HandleMessageAsync(message, cancellationToken);
+            }
         }
-
-        _consumer.Close();
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _consumer.Close();
+        }
     }
 }
