@@ -33,7 +33,7 @@ public class RemoveInterestFromProfileHandler(IUnitOfWork _unitOfWork) : IReques
         }
         
         var interestToRemove = profileWithInterests.Interests.First(i=>i.Id == request.Dto.InterestId);
-        await _unitOfWork.InterestRepository.RemoveInterestFromProfile(profileWithInterests, interestToRemove);
+        await _unitOfWork.InterestRepository.RemoveInterestFromProfile(profileWithInterests, interestToRemove, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         return new GeneralResponseDto();

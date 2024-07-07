@@ -5,7 +5,7 @@ using Profile.Domain.Repositories;
 
 namespace Profile.Application.UseCases.CityUseCases.Queries.GetAll;
 
-public class GetAllCitysHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetAllCitiesQuery, IEnumerable<CityResponseDto>>
+public class GetAllCitiesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetAllCitiesQuery, IEnumerable<CityResponseDto>>
 {
     public async Task<IEnumerable<CityResponseDto>> Handle(GetAllCitiesQuery request, CancellationToken cancellationToken)
     {

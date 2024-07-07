@@ -2,18 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
+using Profile.Infrastructure.Redis.Interfaces;
 using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class EducationRepository : GenericRepository<Education, int>, IEducationRepository
+public class EducationRepository(ProfileDbContext _dbContext, ICacheService _cacheService)
+    : GenericRepository<Education, int>(_dbContext, _cacheService), IEducationRepository
 {
-    private readonly ProfileDbContext _dbContext;
-    public EducationRepository(ProfileDbContext dbContext) : base(dbContext)
-    {
-        _dbContext = dbContext;
-    }
-    
     public async Task AddEducationToProfile(UserProfile profile, ProfileEducation userEducation)
     {
         profile.ProfileEducations.Add(userEducation);

@@ -1,9 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Profile.Application.DTOs.Goal.Request;
-using Profile.Application.UseCases.GoalUseCases.Commands.AddGoalToProfile;
-using Profile.Application.UseCases.GoalUseCases.Commands.RemoveGoalFromProfile;
 using Profile.Application.UseCases.GoalUseCases.Queries.GetAll;
 using Profile.Application.UseCases.GoalUseCases.Queries.GetById;
 
@@ -39,25 +36,5 @@ public class GoalsController : ControllerBase
         var goal = await _mediator.Send(query, cancellationToken);
         
         return Ok(goal);
-    }
-
-    [HttpPost("to/profile")]
-    public async Task<IActionResult> AddGoalToProfile([FromBody] AddGoalToProfileDto dto, CancellationToken cancellationToken)
-    {
-        var command = new AddGoalToProfileCommand(dto);
-        
-        var result = await _mediator.Send(command, cancellationToken);
-        
-        return Ok(result);
-    }
-    
-    [HttpDelete("from/profile")]
-    public async Task<IActionResult> RemoveGoalFromProfile([FromBody] RemoveGoalFromProfileDto dto, CancellationToken cancellationToken)
-    {
-        var command = new RemoveGoalFromProfileCommand(dto);
-        
-        var result = await _mediator.Send(command, cancellationToken);
-        
-        return Ok(result);
     }
 }
