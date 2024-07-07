@@ -32,20 +32,6 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
         
         return new GeneralResponseDto() { Message = "User deleted successfully" };
     }
-    
-    public async Task<GeneralResponseDto> UpdateUserAsync(UserRequestDto userDto)
-    {
-        var user = _mapper.Map<User>(userDto);
-
-        var result = await _userRepository.UpdateUserAsync(user);
-        
-        if (!result.Succeeded)
-        {
-            throw new UpdateUserException(ExceptionMessages.UpdateUserFailed);
-        }
-        
-        return new GeneralResponseDto() { Message = "User updated successfully" };
-    }
 
     public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync(CancellationToken cancellationToken)
     {

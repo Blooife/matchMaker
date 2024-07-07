@@ -14,5 +14,4 @@ public interface IUserService
     Task<UserResponseDto> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
     Task<IEnumerable<RoleResponseDto>> GetUsersRolesAsync(string userId, CancellationToken cancellationToken);
     Task<PagedList<User>> GetPaginatedUsersAsync(int pageSize, int pageNumber);
-    Task<GeneralResponseDto> UpdateUserAsync(UserRequestDto userDto);
 }

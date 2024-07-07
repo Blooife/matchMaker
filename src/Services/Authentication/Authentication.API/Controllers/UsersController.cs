@@ -40,7 +40,7 @@ public class UsersController(IUserService _userService): ControllerBase
     } 
     
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
     public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
     {
         var users = await _userService.GetAllUsersAsync(cancellationToken);
@@ -70,19 +70,9 @@ public class UsersController(IUserService _userService): ControllerBase
     
     [HttpDelete("{userId}")]
     [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
-    [Authorize]
     public async Task<IActionResult> DeleteUserById([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var users = await _userService.DeleteUserByIdAsync(userId, cancellationToken);
-        
-        return Ok(users);
-    } 
-    
-    [HttpPut]
-    [Authorize]
-    public async Task<IActionResult> UpdateUser([FromBody] UserRequestDto userRequestDto)
-    {
-        var users = await _userService.UpdateUserAsync(userRequestDto);
         
         return Ok(users);
     } 
