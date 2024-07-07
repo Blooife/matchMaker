@@ -19,6 +19,7 @@ public static class ServiceExtension
         services.ConfigureAuthentication(config);
         services.ConfigureSwagger();
         services.ConfigureMinio(config);
+        services.ConfigureRedisCache(config);
     }
 
     private static void ConfigureMinio(this IServiceCollection services, IConfiguration config)
@@ -32,6 +33,14 @@ public static class ServiceExtension
             var bucketName = minioConfig["BucketName"];
             
             return new MinioService(endpoint, accessKey, secretKey, bucketName);
+        });
+    }
+    
+    private static void ConfigureRedisCache(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = config["Redis:Server"];
         });
     }
     

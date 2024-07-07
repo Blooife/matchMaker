@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
+using Profile.Infrastructure.Redis.Implementations;
+using Profile.Infrastructure.Redis.Interfaces;
 using Profile.Infrastructure.Repositories;
 
 namespace Profile.Infrastructure.Extensions;
@@ -13,6 +15,7 @@ public static class ServiceExtensions
     {
         services.ConfigureDbContext(config);
         services.ConfigureRepositories();
+        services.AddSingleton<ICacheService, CacheService>();
     }
     
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)
