@@ -1,16 +1,20 @@
+using AutoMapper;
 using MediatR;
+using Profile.Application.DTOs.Education.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
+using Profile.Application.Services.Interfaces;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Domain.Specifications.ProfileSpecifications;
-using Shared.Models;
 
 namespace Profile.Application.UseCases.EducationUseCases.Commands.RemoveEducationFromProfile;
 
-public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<RemoveEducationFromProfileCommand, GeneralResponseDto>
+public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<RemoveEducationFromProfileCommand, List<ProfileEducationResponseDto>>
 {
-    public async Task<GeneralResponseDto> Handle(RemoveEducationFromProfileCommand request, CancellationToken cancellationToken)
+    private readonly string _cacheKeyPrefix = "education";
+    
+    public async Task<List<ProfileEducationResponseDto>> Handle(RemoveEducationFromProfileCommand request, CancellationToken cancellationToken)
     {
         var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducation(request.Dto.ProfileId, cancellationToken);
         
@@ -38,6 +42,11 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork) : IReque
         await _unitOfWork.EducationRepository.RemoveEducationFromProfile(profileWithEducation, userEducation);
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        return new GeneralResponseDto();
+        var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";
+        var mappedEducations = _mapper.Map<List<ProfileEducationResponseDto>>(profileWithEducation.ProfileEducations);
+        await _cacheService.SetAsync(cacheKey, mappedEducations,
+            cancellationToken: cancellationToken);
+        
+        return mappedEducations;
     }
 }

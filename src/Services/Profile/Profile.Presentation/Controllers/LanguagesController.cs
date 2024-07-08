@@ -42,7 +42,7 @@ public class LanguagesController : ControllerBase
         return Ok(language);
     }
     
-    [HttpGet("user/{id}")]
+    [HttpGet("profile/{id}")]
     public async Task<IActionResult> GetProfileLanguages(string id, CancellationToken cancellationToken)
     {
         var query = new GetProfilesLanguagesQuery(id);

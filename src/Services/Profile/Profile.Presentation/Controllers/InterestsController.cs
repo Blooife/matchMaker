@@ -42,7 +42,7 @@ public class InterestsController : ControllerBase
         return Ok(interest);
     }
     
-    [HttpGet("user/{id}")]
+    [HttpGet("profile/{id}")]
     public async Task<IActionResult> GetProfileInterests(string id, CancellationToken cancellationToken)
     {
         var query = new GetProfilesInterestsQuery(id);

@@ -43,7 +43,7 @@ public class EducationsController : ControllerBase
         return Ok(education);
     }
     
-    [HttpGet("user/{id}")]
+    [HttpGet("profile/{id}")]
     public async Task<IActionResult> GetProfileEducations(string id, CancellationToken cancellationToken)
     {
         var query = new GetProfilesEducationsQuery(id);

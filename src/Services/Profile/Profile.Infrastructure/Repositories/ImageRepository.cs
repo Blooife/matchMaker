@@ -2,16 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
-using Profile.Infrastructure.Redis.Interfaces;
 using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class ImageRepository(ProfileDbContext _dbContext, ICacheService _cacheService)
-    : GenericRepository<Image, int>(_dbContext, _cacheService), IImageRepository
+public class ImageRepository(ProfileDbContext _dbContext)
+    : GenericRepository<Image, int>(_dbContext), IImageRepository
 {
-    private readonly string _cacheKeyPrefix = typeof(Image).Name;
-    
     public async Task<Image> AddImageToProfile(Image image, CancellationToken cancellationToken)
     {
         await _dbContext.Images.AddAsync(image, cancellationToken);
@@ -22,9 +19,6 @@ public class ImageRepository(ProfileDbContext _dbContext, ICacheService _cacheSe
     public async Task RemoveImageFromProfile(Image image, CancellationToken cancellationToken)
     {
         _dbContext.Images.Remove(image);
-        
-        var cacheKey = $"{_cacheKeyPrefix}_{image.Id}";
-        await _cacheService.RemoveAsync(cacheKey, cancellationToken);
     }
 
     public async Task<List<Image>> GetProfilesImages(string profileId, CancellationToken cancellationToken)

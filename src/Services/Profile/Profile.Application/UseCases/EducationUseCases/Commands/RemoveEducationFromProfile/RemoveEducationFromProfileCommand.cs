@@ -1,10 +1,10 @@
 using MediatR;
 using Profile.Application.DTOs.Education.Request;
-using Shared.Models;
+using Profile.Application.DTOs.Education.Response;
 
 namespace Profile.Application.UseCases.EducationUseCases.Commands.RemoveEducationFromProfile;
 
-public sealed record RemoveEducationFromProfileCommand(RemoveEducationFromProfileDto Dto) : IRequest<GeneralResponseDto>
+public sealed record RemoveEducationFromProfileCommand(RemoveEducationFromProfileDto Dto) : IRequest<List<ProfileEducationResponseDto>>
 {
     
 }

@@ -1,17 +1,20 @@
 using AutoMapper;
 using MediatR;
+using Profile.Application.DTOs.Education.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
+using Profile.Application.Services.Interfaces;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Domain.Specifications.ProfileSpecifications;
-using Shared.Models;
 
 namespace Profile.Application.UseCases.EducationUseCases.Commands.AddEducationToProfile;
 
-public class AddEducationToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<AddEducationToProfileCommand, GeneralResponseDto>
+public class AddEducationToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<AddEducationToProfileCommand, List<ProfileEducationResponseDto>>
 {
-    public async Task<GeneralResponseDto> Handle(AddEducationToProfileCommand request, CancellationToken cancellationToken)
+    private readonly string _cacheKeyPrefix = "education";
+    
+    public async Task<List<ProfileEducationResponseDto>> Handle(AddEducationToProfileCommand request, CancellationToken cancellationToken)
     {
         var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducation(request.Dto.ProfileId, cancellationToken);
         
@@ -34,11 +37,16 @@ public class AddEducationToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapp
             throw new AlreadyContainsException(ExceptionMessages.ProfileContainsEducation);
         }
 
-        ProfileEducation userEducation = _mapper.Map<ProfileEducation>(request.Dto);
-        
-        await _unitOfWork.EducationRepository.AddEducationToProfile(profileWithEducation, userEducation);
+        ProfileEducation profileEducation = _mapper.Map<ProfileEducation>(request.Dto);
+        await _unitOfWork.EducationRepository.AddEducationToProfile(profileWithEducation, profileEducation);
         await _unitOfWork.SaveAsync(cancellationToken);
+
+        profileEducation.Education = education;
+        var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";
+        var mappedEducations = _mapper.Map<List<ProfileEducationResponseDto>>(profileWithEducation.ProfileEducations);
+        await _cacheService.SetAsync(cacheKey, mappedEducations,
+            cancellationToken: cancellationToken);
         
-        return new GeneralResponseDto();
+        return mappedEducations;
     }
 }

@@ -24,7 +24,7 @@ public class ImagesController : ControllerBase
         _minioService = minioService;
     }
     
-    [HttpGet("user/{id}")]
+    [HttpGet("profile/{id}")]
     public async Task<IActionResult> GetProfileImages(string id, CancellationToken cancellationToken)
     {
         var query = new GetProfilesImagesQuery(id);
