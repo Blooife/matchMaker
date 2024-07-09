@@ -2,10 +2,11 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.GeoJsonObjectModel;
 using Shared.Constants;
+using Shared.Interfaces;
 
 namespace Match.Domain.Models;
 
-public class Profile
+public class Profile : ISoftDeletable
 {
     [BsonId]
     public string Id { get; set; }
@@ -18,4 +19,5 @@ public class Profile
     public string Country { get; set; }
     public string City { get; set; }
     public GeoJsonPoint<GeoJson2DCoordinates>? Location { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

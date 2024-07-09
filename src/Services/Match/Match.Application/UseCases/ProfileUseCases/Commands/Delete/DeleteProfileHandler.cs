@@ -18,6 +18,13 @@ public class DeleteProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<Del
         }
         
         await _unitOfWork.Profiles.DeleteAsync(profile, cancellationToken);
+        await _unitOfWork.Chats.DeleteManyAsync(
+            chat => chat.FirstProfileId == profile.Id || chat.SecondProfileId == profile.Id, cancellationToken);
+        var chats = await _unitOfWork.Chats.GetChatsByProfileIdAsync(profile.Id, cancellationToken);
+        var chatIds = chats.Select(c => c.Id).ToList();
+        await _unitOfWork.Messages.DeleteManyAsync(message => chatIds.Contains(message.ChatId), cancellationToken);
+        await _unitOfWork.Matches.DeleteManyAsync(
+            match => match.FirstProfileId == profile.Id || match.SecondProfileId == profile.Id, cancellationToken);
         
         return new GeneralResponseDto();
     }
