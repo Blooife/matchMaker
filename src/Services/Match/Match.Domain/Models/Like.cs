@@ -1,5 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Shared.Interfaces;
 
 namespace Match.Domain.Models;
 
