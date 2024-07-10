@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Authentication.API.Logging;
+namespace Shared.Logging;
 
 public class LoggingService : ILoggingService
 {

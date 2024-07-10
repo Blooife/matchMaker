@@ -1,4 +1,6 @@
-namespace Authentication.API.Logging;
+using Microsoft.AspNetCore.Http;
+
+namespace Shared.Logging;
 
 public interface ILoggingService
 {

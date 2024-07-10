@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Authentication.API.Logging.Filters;
+namespace Shared.Logging.Filters;
 
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Threading.Tasks;

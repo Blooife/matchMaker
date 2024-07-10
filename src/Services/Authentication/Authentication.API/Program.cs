@@ -1,10 +1,10 @@
-using System.Reflection;
 using Authentication.API.Extensions;
-using Authentication.API.Logging.Filters;
 using Authentication.API.MiddlewareHandlers;
 using Authentication.BusinessLogic.Extensions;
 using Authentication.DataLayer.Extensions;
 using FluentValidation.AspNetCore;
+using Shared.Extensions;
+using Shared.Logging.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
