@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Authentication.API.Logging.Filters;
+namespace Shared.Logging.Filters;
 
 public class RequestLoggingFilter : IAsyncActionFilter
 {

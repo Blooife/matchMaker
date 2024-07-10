@@ -1,16 +1,11 @@
 using System.Text;
-using Authentication.API.Logging;
 using Authentication.DataLayer.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using Serilog.Configuration;
-using Serilog.Exceptions;
-using Serilog.Sinks.Elasticsearch;
-using Serilog.Sinks.SystemConsole.Themes;
+using Shared.Logging;
 using Shared.Models;
 
 namespace Authentication.API.Extensions;
@@ -35,8 +30,6 @@ public static class ServicesExtension
     
     private static void ConfigureAuthentication(this IServiceCollection services, IConfiguration config, JwtOptions jwtOptions)
     {
-        services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));
-
         var key = Encoding.ASCII.GetBytes(jwtOptions.Secret);
 
         services.AddAuthentication(authOptions =>
@@ -96,23 +89,5 @@ public static class ServicesExtension
         {
             db.Database.Migrate();
         }
-    }
-    
-    public static void ConfigureLogstash(this
-        WebApplicationBuilder builder)
-    {
-        builder.Host
-            .UseSerilog((context, configuration) =>
-            {
-                var env = context.HostingEnvironment;
-                var configurationRoot = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .Build();
-
-                configuration
-                    .ReadFrom.Configuration(configurationRoot)
-                    .WriteTo.Http(configurationRoot["LogstashConfiguration:Uri"], null)
-                    .Enrich.WithProperty("Environment", env.EnvironmentName);
-            });
     }
 }
