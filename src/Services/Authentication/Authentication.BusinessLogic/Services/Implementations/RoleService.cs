@@ -15,13 +15,13 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         return _mapper.Map<IEnumerable<RoleResponseDto>>(roles);
     }
     
-    public async Task<GeneralResponseDto> AssignRoleAsync(string userId, string roleName, CancellationToken cancellationToken)
+    public async Task<GeneralResponseDto> AssignRoleAsync(string email, string roleName, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
         
         if (user is null)
         {
-            throw new NotFoundException(userId);
+            throw new NotFoundException(email);
         }
 
         var isRoleExist = await _roleRepository.RoleExistsAsync(roleName);
@@ -35,19 +35,19 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (!result.Succeeded)
         {
-            throw new AssignRoleException();
+            throw new AssignRoleException(result.Errors.First().Description);
         }
         
         return new GeneralResponseDto { Message = "Role assigned successfully" };
     }
     
-    public async Task<GeneralResponseDto> RemoveUserFromRoleAsync(string userId, string roleName, CancellationToken cancellationToken)
+    public async Task<GeneralResponseDto> RemoveUserFromRoleAsync(string email, string roleName, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
         
         if (user is null)
         {
-            throw new NotFoundException(userId);
+            throw new NotFoundException(email);
         }
 
         var roles = await _userRepository.GetRolesAsync(user);

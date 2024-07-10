@@ -6,15 +6,17 @@ using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
+using FluentValidation;
 using Shared.Constants;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
 public class AuthService(IUserRepository _userRepository, IMapper _mapper,
-    IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider) : IAuthService
+    IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider, IValidator<UserRequestDto> _validator) : IAuthService
 {
     public async Task<GeneralResponseDto> RegisterAsync(UserRequestDto registrationRequestDto)
     {
+        await _validator.ValidateAndThrowAsync(registrationRequestDto);
         var user = _mapper.Map<User>(registrationRequestDto);
         
         var result = await _userRepository.RegisterAsync(user, registrationRequestDto.Password);
@@ -30,6 +32,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper,
 
     public async Task<LoginResponseDto> LoginAsync(UserRequestDto loginRequestDto, CancellationToken cancellationToken)
     {
+        await _validator.ValidateAndThrowAsync(loginRequestDto);
         var user = await _userRepository.GetByEmailAsync(loginRequestDto.Email, cancellationToken);
             
         if (user is null)

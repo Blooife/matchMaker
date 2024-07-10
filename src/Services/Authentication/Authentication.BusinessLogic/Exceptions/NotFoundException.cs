@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Authentication.BusinessLogic.Exceptions
+﻿namespace Authentication.BusinessLogic.Exceptions
 {
     public class NotFoundException : Exception
     {

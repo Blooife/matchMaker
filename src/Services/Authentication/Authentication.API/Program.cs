@@ -1,4 +1,6 @@
+using System.Reflection;
 using Authentication.API.Extensions;
+using Authentication.API.Logging.Filters;
 using Authentication.API.MiddlewareHandlers;
 using Authentication.BusinessLogic.Extensions;
 using Authentication.DataLayer.Extensions;
@@ -10,11 +12,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization(); 
-builder.Services.AddFluentValidationAutoValidation(); 
-builder.Services.AddControllers(); 
+builder.Services.AddFluentValidationClientsideAdapters(); 
+builder.Services.AddControllers(config =>
+{
+    config.Filters.Add<ResponseLoggingFilter>();
+    config.Filters.Add<ExceptionLoggingFilter>();
+    config.Filters.Add<RequestLoggingFilter>();
+});
 builder.Services.ConfigureDataLayer(builder.Configuration);
 builder.Services.ConfigureBusinessLogic();
 builder.Services.ConfigureApi(builder.Configuration);
+builder.ConfigureLogstash();
 
 var app = builder.Build();
 

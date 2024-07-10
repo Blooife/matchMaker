@@ -1,5 +1,3 @@
-using Authentication.BusinessLogic.DTOs;
-using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.DTOs.Response;
 using Authentication.DataLayer.Models;
 using Shared.Models;

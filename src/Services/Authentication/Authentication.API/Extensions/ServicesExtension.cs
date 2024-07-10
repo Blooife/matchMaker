@@ -1,22 +1,16 @@
-using System.Reflection;
 using System.Text;
-using Authentication.BusinessLogic.DTOs.Request;
-using Authentication.BusinessLogic.Providers.Implementations;
-using Authentication.BusinessLogic.Providers.Interfaces;
-using Authentication.BusinessLogic.Services.Implementations;
-using Authentication.BusinessLogic.Services.Interfaces;
-using Authentication.BusinessLogic.Validators;
+using Authentication.API.Logging;
 using Authentication.DataLayer.Contexts;
-using Authentication.DataLayer.Models;
-using Authentication.DataLayer.Repositories.Implementations;
-using Authentication.DataLayer.Repositories.Interfaces;
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Configuration;
+using Serilog.Exceptions;
+using Serilog.Sinks.Elasticsearch;
+using Serilog.Sinks.SystemConsole.Themes;
 using Shared.Models;
 
 namespace Authentication.API.Extensions;
@@ -30,10 +24,10 @@ public static class ServicesExtension
         var serviceProvider = services.BuildServiceProvider();
         var jwtOptions = serviceProvider.GetService<IOptions<JwtOptions>>()!.Value;
         services.ConfigureAuthentication(config, jwtOptions);
-        
         services.ConfigureSwagger();
+        services.AddScoped<ILoggingService, LoggingService>();
     }
-
+    
     private static void ConfigureJwtOptions(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));
@@ -102,5 +96,23 @@ public static class ServicesExtension
         {
             db.Database.Migrate();
         }
+    }
+    
+    public static void ConfigureLogstash(this
+        WebApplicationBuilder builder)
+    {
+        builder.Host
+            .UseSerilog((context, configuration) =>
+            {
+                var env = context.HostingEnvironment;
+                var configurationRoot = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
+
+                configuration
+                    .ReadFrom.Configuration(configurationRoot)
+                    .WriteTo.Http(configurationRoot["LogstashConfiguration:Uri"], null)
+                    .Enrich.WithProperty("Environment", env.EnvironmentName);
+            });
     }
 }
