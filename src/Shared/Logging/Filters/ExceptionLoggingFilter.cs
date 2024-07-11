@@ -14,9 +14,12 @@ public class ExceptionLoggingFilter : IAsyncExceptionFilter
 
     public async Task OnExceptionAsync(ExceptionContext context)
     {
+        var controllerName = context.ActionDescriptor.RouteValues["controller"];
+        var actionName = context.ActionDescriptor.RouteValues["action"];
+        
         await _loggingService.LogErrorAsync(
-            context.RouteData.Values["controller"].ToString(),
-            context.ActionDescriptor.DisplayName,
+            controllerName,
+            actionName,
             context.Exception);
     }
 }
