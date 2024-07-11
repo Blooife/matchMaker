@@ -1,5 +1,7 @@
 using System.Text;
 using Authentication.DataLayer.Contexts;
+using Hangfire;
+using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -78,6 +80,21 @@ public static class ServicesExtension
                     }, new string[]{}
                 }
             });
+        });
+    }
+    
+    public static void AppendHangfireDashboard(this IApplicationBuilder builder, IConfiguration configuration)
+    {
+        builder.UseHangfireDashboard("/hangfire", new DashboardOptions
+        {
+            Authorization = new[]
+            {
+                new HangfireCustomBasicAuthenticationFilter
+                {
+                    User = configuration.GetSection("HangfireOptions:User").Value,
+                    Pass = configuration.GetSection("HangfireOptions:Password").Value
+                }
+            }
         });
     }
     
