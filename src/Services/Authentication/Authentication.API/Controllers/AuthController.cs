@@ -2,7 +2,6 @@ using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Constants;
 
 namespace Authentication.API.Controllers;
 
