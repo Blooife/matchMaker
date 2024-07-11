@@ -13,7 +13,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddFluentValidationAutoValidation(); 
 builder.Services.AddControllers(); 
 builder.Services.ConfigureDataLayer(builder.Configuration);
-builder.Services.ConfigureBusinessLogic();
+builder.Services.ConfigureBusinessLogic(builder.Configuration);
 builder.Services.ConfigureApi(builder.Configuration);
 
 var app = builder.Build();
@@ -31,6 +31,9 @@ app.MapControllers();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.AppendHangfireDashboard(builder.Configuration);
+app.ConfigureAndScheduleHangfireJobs();
 
 app.ApplyMigrations(app.Services);
 
