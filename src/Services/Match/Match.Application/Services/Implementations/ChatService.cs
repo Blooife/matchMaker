@@ -1,7 +1,7 @@
 using Match.Application.Exceptions;
 using Match.Application.Services.Interfaces;
 using Match.Domain.Models;
-using Match.Domain.Repositories;
+using Match.Domain.Interfaces;
 
 namespace Match.Application.Services.Implementations;
 

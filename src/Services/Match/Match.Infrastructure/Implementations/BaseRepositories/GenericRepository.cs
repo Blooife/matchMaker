@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
-using Match.Domain.Repositories.BaseRepositories;
+using Match.Domain.Interfaces.BaseRepositories;
 using MongoDB.Driver;
 using Shared.Interfaces;
 
-namespace Match.Infrastructure.Repositories.BaseRepositories;
+namespace Match.Infrastructure.Implementations.BaseRepositories;
 
 public class GenericRepository<T, TKey>(IMongoCollection<T> _collection) : IGenericRepository<T, TKey> where T : class
 {

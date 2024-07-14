@@ -1,8 +1,8 @@
 
 
-using Match.Domain.Repositories;
+using Match.Domain.Interfaces;
 using Match.Infrastructure.Context;
-using Match.Infrastructure.Repositories;
+using Match.Infrastructure.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
@@ -15,6 +15,7 @@ public static class ServiceExtensions
     {
         services.ConfigureDbContext(configuration);
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IDbCleanupService, DbCleanupService>();
     }
     
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)

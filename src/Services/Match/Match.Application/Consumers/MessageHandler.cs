@@ -3,6 +3,7 @@ using Confluent.Kafka;
 using Match.Application.DTOs.Profile.Request;
 using Match.Application.UseCases.ProfileUseCases.Commands.Create;
 using Match.Application.UseCases.ProfileUseCases.Commands.Delete;
+using Match.Application.UseCases.ProfileUseCases.Commands.DeletePermanently;
 using Match.Application.UseCases.ProfileUseCases.Commands.Update;
 using MediatR;
 using Newtonsoft.Json;
@@ -41,10 +42,15 @@ public class MessageHandler(IMapper _mapper, IMediator _mediator)
                 {
                     var command = new DeleteProfileCommand(profileDeletedMessage.Id);
                     await _mediator.Send(command, cancellationToken);
-                }else if (typedMessage is ProfileUpdatedMessage profileUpdatedMessage)
+                }
+                else if (typedMessage is ProfileUpdatedMessage profileUpdatedMessage)
                 {
-                    Console.WriteLine("updting");
                     var command = new UpdateProfileCommand(_mapper.Map<UpdateProfileDto>(profileUpdatedMessage));
+                    await _mediator.Send(command, cancellationToken);
+                }
+                else if (typedMessage is ManyProfilesDeletedMessage manyProfilesDeletedMessage)
+                {
+                    var command = new DeleteProfilesPermanentlyCommand(manyProfilesDeletedMessage.ProfilesIds);
                     await _mediator.Send(command, cancellationToken);
                 }
             }

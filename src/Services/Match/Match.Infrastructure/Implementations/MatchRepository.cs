@@ -1,11 +1,11 @@
 using System.Linq.Expressions;
-using Match.Domain.Repositories;
-using Match.Infrastructure.Repositories.BaseRepositories;
+using Match.Domain.Interfaces;
+using Match.Infrastructure.Implementations.BaseRepositories;
 using MongoDB.Driver;
 using Match.Domain.Models;
 using Shared.Models;
 
-namespace Match.Infrastructure.Repositories;
+namespace Match.Infrastructure.Implementations;
 
 public class MatchRepository(IMongoCollection<MatchEntity> _collection) : GenericRepository<MatchEntity, string>(_collection), IMatchRepository
 {

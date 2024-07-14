@@ -1,9 +1,9 @@
 using Match.Domain.Models;
-using Match.Domain.Repositories;
-using Match.Infrastructure.Repositories.BaseRepositories;
+using Match.Domain.Interfaces;
+using Match.Infrastructure.Implementations.BaseRepositories;
 using MongoDB.Driver;
 
-namespace Match.Infrastructure.Repositories;
+namespace Match.Infrastructure.Implementations;
 
 public class LikeRepository(IMongoCollection<Like> _collection) : GenericRepository<Like, string>(_collection), ILikeRepository
 {

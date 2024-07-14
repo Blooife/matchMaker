@@ -1,4 +1,4 @@
-namespace Match.Domain.Repositories;
+namespace Match.Domain.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {

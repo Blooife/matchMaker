@@ -1,7 +1,7 @@
 using AutoMapper;
 using Match.Application.DTOs.Profile.Response;
 using Match.Application.Exceptions;
-using Match.Domain.Repositories;
+using Match.Domain.Interfaces;
 using MediatR;
 using MongoDB.Driver.GeoJsonObjectModel;
 
