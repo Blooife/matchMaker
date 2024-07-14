@@ -28,8 +28,8 @@ public class DbCleanupService : IDbCleanupService
             var chatsCollection = mongoContext.GetCollection<Chat>(_options.Value.ChatsCollectionName);
 
             var profileFilter = Builders<Profile>.Filter.In(p => p.Id, profileIds);
-            await profilesCollection.DeleteManyAsync(profileFilter, cancellationToken);
-
+            var result = await profilesCollection.DeleteManyAsync(profileFilter, cancellationToken);
+                Console.WriteLine(result);
             var matchFilter = Builders<MatchEntity>.Filter.Or(
                 Builders<MatchEntity>.Filter.In(m => m.FirstProfileId, profileIds),
                 Builders<MatchEntity>.Filter.In(m => m.SecondProfileId, profileIds));

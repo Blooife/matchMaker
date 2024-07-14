@@ -39,6 +39,7 @@ public class ConsumerService : BackgroundService
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+            Console.WriteLine("njdnkd");
         }
         finally
         {
