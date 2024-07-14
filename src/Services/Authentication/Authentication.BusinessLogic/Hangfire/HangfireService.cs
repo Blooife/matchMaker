@@ -2,7 +2,7 @@ using Hangfire;
 
 namespace Authentication.BusinessLogic.Hangfire;
 
-public class HangfireService : IHangfireService
+public class HangfireService
 {
     private readonly IRecurringJobManager _recurringJobManager;
 
