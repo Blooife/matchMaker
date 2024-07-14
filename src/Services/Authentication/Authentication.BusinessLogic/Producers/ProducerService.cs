@@ -28,7 +28,7 @@ public class ProducerService
                 Payload = message
             })
         };
-
+        
         await _producer.ProduceAsync(_topic, kafkaMessage);
     }
 }

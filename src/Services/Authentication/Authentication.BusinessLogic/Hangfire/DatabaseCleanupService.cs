@@ -16,7 +16,7 @@ public class DatabaseCleanupService
         _producerService = producerService;
     }
 
-    public async void DeleteOldRecords()
+    public async Task DeleteOldRecords()
     {
         using (var scope = _serviceProvider.CreateScope())
         {
@@ -25,15 +25,27 @@ public class DatabaseCleanupService
             var oldRecords = dbContext.Users
                 .Where(e => e.DeletedAt != null && e.DeletedAt <= twoMonthAgo)
                 .ToList();
-
+            var ids = oldRecords.Select(u => u.Id).ToList();
+            foreach (var id in ids)
+            {
+                Console.WriteLine(id);
+            }
             if (oldRecords.Any())
             {
                 dbContext.Users.RemoveRange(oldRecords);
                 await dbContext.SaveChangesAsync();
             }
 
-            var ids = oldRecords.Select(u => u.Id);
-            await _producerService.ProduceAsync(new ManyUsersDeletedMessage(ids));
+            
+            foreach (var id in ids)
+            {
+                Console.WriteLine(id);
+            }
+
+            var mes = new ManyUsersDeletedMessage(ids);
+            Console.WriteLine(mes.UsersIds);
+            await _producerService.ProduceAsync(mes);
+            Console.WriteLine(new ManyUsersDeletedMessage(ids).ToString());
         }
     }
 }
