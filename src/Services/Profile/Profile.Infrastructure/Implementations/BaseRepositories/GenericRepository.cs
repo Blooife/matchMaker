@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Profile.Domain.Repositories.BaseRepositories;
+using Profile.Domain.Interfaces.BaseRepositories;
 using Profile.Infrastructure.Contexts;
 
-namespace Profile.Infrastructure.Repositories.BaseRepositories;
+namespace Profile.Infrastructure.Implementations.BaseRepositories;
 
 public class GenericRepository<T, TKey>(ProfileDbContext _dbContext) : IGenericRepository<T, TKey> where T : class
 {

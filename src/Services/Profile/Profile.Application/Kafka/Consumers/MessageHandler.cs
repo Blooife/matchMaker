@@ -4,6 +4,7 @@ using MediatR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Profile.Application.DTOs.User.Request;
+using Profile.Application.UseCases.ProfileUseCases.Commands.DeletePermanently;
 using Profile.Application.UseCases.UserUseCases.Commands.Create;
 using Profile.Application.UseCases.UserUseCases.Commands.Delete;
 using Shared.Messages.Authentication;
@@ -40,6 +41,11 @@ public class MessageHandler(IMapper _mapper, IMediator _mediator)
                 {
                     var command = new DeleteUserCommand(userDeletedMessage.Id);
                     var result = await _mediator.Send(command, cancellationToken);
+                }
+                else if(typedMessage is ManyUsersDeletedMessage manyUsersDeletedMessage)
+                {
+                    var command = new DeleteProfilesPermanentlyCommand(manyUsersDeletedMessage.UsersIds);
+                    await _mediator.Send(command, cancellationToken);
                 }
             }
         }

@@ -1,7 +1,7 @@
 using MediatR;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 using Profile.Domain.Specifications.ProfileSpecifications;
 using Shared.Models;
 

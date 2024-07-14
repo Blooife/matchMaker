@@ -1,7 +1,7 @@
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 using Profile.Infrastructure.Contexts;
 
-namespace Profile.Infrastructure.Repositories;
+namespace Profile.Infrastructure.Implementations;
 
 public class UnitOfWork : IUnitOfWork
 {

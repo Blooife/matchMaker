@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Education.Response;
 using Profile.Application.Exceptions;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 
 namespace Profile.Application.UseCases.EducationUseCases.Queries.GetProfilesEducation;
 

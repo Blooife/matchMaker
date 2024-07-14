@@ -1,9 +1,9 @@
 using Profile.Domain.Models;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 using Profile.Infrastructure.Contexts;
-using Profile.Infrastructure.Repositories.BaseRepositories;
+using Profile.Infrastructure.Implementations.BaseRepositories;
 
-namespace Profile.Infrastructure.Repositories;
+namespace Profile.Infrastructure.Implementations;
 
 public class UserRepository(ProfileDbContext _dbContext) : GenericRepository<User, string>(_dbContext), IUserRepository
 {

@@ -3,7 +3,7 @@ using MediatR;
 using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Kafka.Producers;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 using Shared.Messages.Profile;
 
 namespace Profile.Application.UseCases.ProfileUseCases.Commands.Delete;

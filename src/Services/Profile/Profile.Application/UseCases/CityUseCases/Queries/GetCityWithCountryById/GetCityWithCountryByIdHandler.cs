@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.City.Response;
 using Profile.Application.Exceptions;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 
 namespace Profile.Application.UseCases.CityUseCases.Queries.GetCityWithCountryById;
 

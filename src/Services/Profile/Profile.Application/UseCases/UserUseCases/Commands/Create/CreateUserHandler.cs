@@ -3,7 +3,7 @@ using MediatR;
 using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
 using Profile.Domain.Models;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 
 namespace Profile.Application.UseCases.UserUseCases.Commands.Create;
 

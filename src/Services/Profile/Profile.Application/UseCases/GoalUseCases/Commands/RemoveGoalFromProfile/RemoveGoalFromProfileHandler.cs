@@ -1,6 +1,6 @@
 using MediatR;
 using Profile.Application.Exceptions;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 using Shared.Models;
 
 namespace Profile.Application.UseCases.GoalUseCases.Commands.RemoveGoalFromProfile;

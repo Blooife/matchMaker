@@ -1,4 +1,4 @@
-namespace Profile.Domain.Repositories;
+namespace Profile.Domain.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {

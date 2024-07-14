@@ -1,7 +1,7 @@
 using Profile.Domain.Models;
-using Profile.Domain.Repositories.BaseRepositories;
+using Profile.Domain.Interfaces.BaseRepositories;
 
-namespace Profile.Domain.Repositories;
+namespace Profile.Domain.Interfaces;
 
 public interface IImageRepository : IGenericRepository<Image, int>
 {
