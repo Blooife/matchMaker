@@ -4,11 +4,12 @@ using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
-public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUserService
+public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogger<UserService> _logger) : IUserService
 {
     public async Task<GeneralResponseDto> DeleteUserByIdAsync(string userId, CancellationToken cancellationToken)
     {
@@ -16,6 +17,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
         
         if (user is null)
         {
+            _logger.LogError($"User with id = {userId} was not found");
             throw new NotFoundException(userId);
         }
 
@@ -23,6 +25,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
         
         if (!result.Succeeded)
         {
+            _logger.LogError(ExceptionMessages.DeleteUserFailed);
             throw new DeleteUserException(ExceptionMessages.DeleteUserFailed);
         }
         
@@ -61,6 +64,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
         
         if (user is null)
         {
+            _logger.LogError($"User with email = {email} was not found");
             throw new NotFoundException(email);
         }
         
@@ -73,6 +77,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
         
         if (user is null)
         {
+            _logger.LogError($"User with id = {userId} was not found");
             throw new NotFoundException(userId);
         }
 

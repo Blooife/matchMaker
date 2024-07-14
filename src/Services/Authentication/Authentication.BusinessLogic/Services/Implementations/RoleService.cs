@@ -3,10 +3,11 @@ using Authentication.BusinessLogic.Exceptions;
 using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
-public class RoleService(IRoleRepository _roleRepository, IUserRepository _userRepository, IMapper _mapper) : IRoleService
+public class RoleService(IRoleRepository _roleRepository, IUserRepository _userRepository, IMapper _mapper, ILogger<RoleService> _logger) : IRoleService
 {
     public async Task<IEnumerable<RoleResponseDto>> GetAllRolesAsync(CancellationToken cancellationToken)
     {
@@ -21,6 +22,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (user is null)
         {
+            _logger.LogError($"User with email = {email} was not found");
             throw new NotFoundException(email);
         }
 
@@ -28,6 +30,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (!isRoleExist)
         {
+            _logger.LogError($"{roleName} role does not exist");
             throw new AssignRoleException(ExceptionMessages.RoleNotExists);
         }
         
@@ -35,6 +38,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (!result.Succeeded)
         {
+            _logger.LogError(result.Errors.First().Description);
             throw new AssignRoleException(result.Errors.First().Description);
         }
         
@@ -47,6 +51,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (user is null)
         {
+            _logger.LogError($"User with email = {email} was not found");
             throw new NotFoundException(email);
         }
 
@@ -54,6 +59,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (roles.Count == 1)
         {
+            _logger.LogError($"User can't have less than 1 role");
             throw new RemoveRoleException("User can't have less than 1 role");
         }
         
@@ -61,6 +67,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (!result.Succeeded)
         {
+            _logger.LogError(result.Errors.First().Description);
             throw new RemoveRoleException(result.Errors.First().Description);
         }
         

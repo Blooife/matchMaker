@@ -11,10 +11,12 @@ namespace Authentication.API.MiddlewareHandlers
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionMiddleware> _logger;
         
-        public ExceptionMiddleware(RequestDelegate next)
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
         
         public async Task InvokeAsync(HttpContext httpContext)
@@ -40,6 +42,7 @@ namespace Authentication.API.MiddlewareHandlers
                 case ValidationException validationException:
                     statusCode = HttpStatusCode.BadRequest;
                     result = CreateErrorResponse(validationException.Message, "ValidationError");
+                    _logger.LogError(validationException.Message);
                     break;
                 case NotFoundException notFoundException:
                     statusCode = HttpStatusCode.NotFound;
@@ -64,10 +67,6 @@ namespace Authentication.API.MiddlewareHandlers
                 case DbException dbException:
                     statusCode = HttpStatusCode.BadRequest;
                     result = CreateDbErrorResponse(dbException);
-                    break;
-                case CreateRoleException createRoleException:
-                    statusCode = HttpStatusCode.BadRequest;
-                    result = CreateErrorResponse(createRoleException.Message, "CreateRoleError");
                     break;
                 case DbUpdateException dbUpdateException:
                     statusCode = HttpStatusCode.BadRequest;
@@ -99,6 +98,8 @@ namespace Authentication.API.MiddlewareHandlers
             {
                 errorMessage += $" | Inner Exception: {dbException.InnerException.Message}";
             }
+            _logger.LogError(errorMessage);
+            
             return CreateErrorResponse(errorMessage, "DatabaseError");
         }
 
@@ -114,7 +115,9 @@ namespace Authentication.API.MiddlewareHandlers
             {
                 errorMessage += $" | Entity: {entry.Entity.GetType().Name}, State: {entry.State}";
             }
-
+            
+            _logger.LogError(errorMessage);
+            
             return CreateErrorResponse(errorMessage, "DatabaseUpdateError");
         }
     }

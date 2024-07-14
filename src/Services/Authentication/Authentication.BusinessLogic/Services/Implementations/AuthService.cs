@@ -7,11 +7,12 @@ using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Shared.Constants;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
-public class AuthService(IUserRepository _userRepository, IMapper _mapper,
+public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogger<AuthService> _logger,
     IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider, IValidator<UserRequestDto> _validator) : IAuthService
 {
     public async Task<GeneralResponseDto> RegisterAsync(UserRequestDto registrationRequestDto)
@@ -23,6 +24,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper,
         
         if (!result.Succeeded)
         {
+            _logger.LogError(result.Errors.First().Description);
             throw new RegisterException(result.Errors.First().Description);
         }
         await _userRepository.AddToRoleAsync(user, Roles.User);
@@ -37,6 +39,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper,
             
         if (user is null)
         {
+            _logger.LogError($"User with email = {loginRequestDto.Email} was not found");
             throw new LoginException(ExceptionMessages.LoginFailed);
         }
 
@@ -44,6 +47,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper,
 
         if (isValid == false)
         {
+            _logger.LogError("Username or password is incorrect");
             throw new LoginException(ExceptionMessages.LoginFailed);
         }
         
@@ -72,11 +76,13 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper,
             
         if (user is null)
         {
+            _logger.LogError($"User with refresh token = {refreshToken} was not found");
             throw new LoginException(ExceptionMessages.LoginFailed);
         }
             
         if(user.RefreshTokenExpiredAt < DateTime.Now)
         {
+            _logger.LogError("Refresh token expired");
             throw new LoginException("Refresh token expired");
         }
 

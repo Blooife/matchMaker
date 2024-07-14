@@ -4,7 +4,6 @@ using Authentication.BusinessLogic.Extensions;
 using Authentication.DataLayer.Extensions;
 using FluentValidation.AspNetCore;
 using Shared.Extensions;
-using Shared.Logging.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,12 +12,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization(); 
 builder.Services.AddFluentValidationClientsideAdapters(); 
-builder.Services.AddControllers(config =>
-{
-    config.Filters.Add<ResponseLoggingFilter>();
-    config.Filters.Add<ExceptionLoggingFilter>();
-    config.Filters.Add<RequestLoggingFilter>();
-});
+builder.Services.AddControllers();
 builder.Services.ConfigureDataLayer(builder.Configuration);
 builder.Services.ConfigureBusinessLogic();
 builder.Services.ConfigureApi(builder.Configuration);

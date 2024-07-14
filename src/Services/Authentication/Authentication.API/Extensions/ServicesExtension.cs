@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Shared.Logging;
 using Shared.Models;
 
 namespace Authentication.API.Extensions;
@@ -20,7 +19,6 @@ public static class ServicesExtension
         var jwtOptions = serviceProvider.GetService<IOptions<JwtOptions>>()!.Value;
         services.ConfigureAuthentication(config, jwtOptions);
         services.ConfigureSwagger();
-        services.AddScoped<ILoggingService, LoggingService>();
     }
     
     private static void ConfigureJwtOptions(this IServiceCollection services, IConfiguration config)
