@@ -1,8 +1,5 @@
-using AutoMapper;
-using Match.Application.Exceptions;
 using Match.Domain.Interfaces;
 using MediatR;
-using Shared.Models;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.DeletePermanently;
 

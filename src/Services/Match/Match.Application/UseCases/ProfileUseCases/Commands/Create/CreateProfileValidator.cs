@@ -1,5 +1,4 @@
 using FluentValidation;
-using Match.Application.DTOs.Profile.Request;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.Create;
 
