@@ -67,8 +67,6 @@ public static class ServiceExtension
                 ClockSkew = TimeSpan.Zero
             };
         });
-
-        services.AddAuthentication();
     }
 
     private static void ConfigureSwagger(this IServiceCollection services)

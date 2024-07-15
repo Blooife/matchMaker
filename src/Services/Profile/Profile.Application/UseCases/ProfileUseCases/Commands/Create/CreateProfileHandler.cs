@@ -22,7 +22,6 @@ public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, Prod
         message.Country = city.Country.Name;
         await _producerService.ProduceAsync(message);
         
-            
         return _mapper.Map<ProfileResponseDto>(result);
     }
 }

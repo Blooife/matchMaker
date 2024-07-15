@@ -7,12 +7,13 @@ using Profile.Application.UseCases.ProfileUseCases.Commands.Delete;
 using Profile.Application.UseCases.ProfileUseCases.Commands.Update;
 using Profile.Application.UseCases.ProfileUseCases.Queries.GetAll;
 using Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
+using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+
 public class ProfilesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -43,6 +44,7 @@ public class ProfilesController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = $"{Roles.User}")]
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new CreateProfileCommand(dto);
