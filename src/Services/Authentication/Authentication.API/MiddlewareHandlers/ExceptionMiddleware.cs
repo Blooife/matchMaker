@@ -75,6 +75,7 @@ namespace Authentication.API.MiddlewareHandlers
                 default:
                     statusCode = HttpStatusCode.InternalServerError;
                     result = CreateErrorResponse(exception.Message, "Failure");
+                    _logger.LogError(exception.Message);
                     break;
             }
 

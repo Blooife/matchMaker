@@ -34,7 +34,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
 
     public async Task<LoginResponseDto> LoginAsync(UserRequestDto loginRequestDto, CancellationToken cancellationToken)
     {
-        await _validator.ValidateAndThrowAsync(loginRequestDto);
+        await _validator.ValidateAndThrowAsync(loginRequestDto, cancellationToken);
         var user = await _userRepository.GetByEmailAsync(loginRequestDto.Email, cancellationToken);
             
         if (user is null)
