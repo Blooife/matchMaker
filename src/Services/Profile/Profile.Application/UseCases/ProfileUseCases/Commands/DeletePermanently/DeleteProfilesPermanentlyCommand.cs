@@ -3,7 +3,7 @@ using Profile.Application.DTOs.Profile.Response;
 
 namespace Profile.Application.UseCases.ProfileUseCases.Commands.DeletePermanently;
 
-public sealed record DeleteProfilesPermanentlyCommand(IEnumerable<string> ids) : IRequest
+public sealed record DeleteProfilesPermanentlyCommand(List<string> Ids) : IRequest
 {
     
 }

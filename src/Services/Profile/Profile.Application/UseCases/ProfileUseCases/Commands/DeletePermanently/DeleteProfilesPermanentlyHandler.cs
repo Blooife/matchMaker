@@ -12,7 +12,7 @@ public class DeleteProfilesPermanentlyHandler(IDbCleanupService _cleanupService,
 {
     public async Task Handle(DeleteProfilesPermanentlyCommand request, CancellationToken cancellationToken)
     {
-        _cleanupService.DeleteOldRecords(request.ids);
-        await _producerService.ProduceAsync(new ManyProfilesDeletedMessage(request.ids));
+        _cleanupService.DeleteOldRecords(request.Ids);
+        await _producerService.ProduceAsync(new ManyProfilesDeletedMessage(request.Ids));
     }
 }

@@ -18,7 +18,7 @@ namespace Profile.Infrastructure.Implementations
             _serviceProvider = serviceProvider;
         }
 
-        public async void DeleteOldRecords(IEnumerable<string> ids)
+        public async void DeleteOldRecords(List<string> ids)
         {
             using (var scope = _serviceProvider.CreateScope())
             {

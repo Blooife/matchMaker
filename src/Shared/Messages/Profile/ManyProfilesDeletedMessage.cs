@@ -2,9 +2,9 @@ namespace Shared.Messages.Profile;
 
 public class ManyProfilesDeletedMessage : BaseMessage
 {
-    private IEnumerable<string> ProfilesIds { get; set; }
+    private List<string> ProfilesIds { get; set; }
 
-    public ManyProfilesDeletedMessage(IEnumerable<string> profilesIds)
+    public ManyProfilesDeletedMessage(List<string> profilesIds)
     {
         ProfilesIds = profilesIds;
         Id = Guid.NewGuid().ToString();

@@ -2,9 +2,9 @@ namespace Shared.Messages.Authentication;
 
 public class ManyUsersDeletedMessage : BaseMessage
 {
-    public IEnumerable<string> UsersIds { get; set; }
+    public List<string> UsersIds { get; set; }
 
-    public ManyUsersDeletedMessage(IEnumerable<string> usersIds)
+    public ManyUsersDeletedMessage(List<string> usersIds)
     {
         UsersIds = usersIds;
         Id = Guid.NewGuid().ToString();
