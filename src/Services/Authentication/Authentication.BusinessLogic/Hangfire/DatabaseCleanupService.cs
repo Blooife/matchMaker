@@ -26,26 +26,15 @@ public class DatabaseCleanupService
                 .Where(e => e.DeletedAt != null && e.DeletedAt <= twoMonthAgo)
                 .ToList();
             var ids = oldRecords.Select(u => u.Id).ToList();
-            foreach (var id in ids)
-            {
-                Console.WriteLine(id);
-            }
+            
             if (oldRecords.Any())
             {
                 dbContext.Users.RemoveRange(oldRecords);
                 await dbContext.SaveChangesAsync();
             }
 
-            
-            foreach (var id in ids)
-            {
-                Console.WriteLine(id);
-            }
-
-            var mes = new ManyUsersDeletedMessage(ids);
-            Console.WriteLine(mes.UsersIds);
-            await _producerService.ProduceAsync(mes);
-            Console.WriteLine(new ManyUsersDeletedMessage(ids).ToString());
+            var message = new ManyUsersDeletedMessage(ids);
+            await _producerService.ProduceAsync(message);
         }
     }
 }
