@@ -17,9 +17,9 @@ public static class ServicesExtension
         
         var serviceProvider = services.BuildServiceProvider();
         var jwtOptions = serviceProvider.GetService<IOptions<JwtOptions>>()!.Value;
-        services.ConfigureAuthentication(config, jwtOptions);
-        
+        services.ConfigureAuthentication(jwtOptions);
         services.ConfigureSwagger();
+        services.ConfigureCors();
     }
 
     private static void ConfigureJwtOptions(this IServiceCollection services, IConfiguration config)
@@ -27,10 +27,8 @@ public static class ServicesExtension
         services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));
     }
     
-    private static void ConfigureAuthentication(this IServiceCollection services, IConfiguration config, JwtOptions jwtOptions)
+    private static void ConfigureAuthentication(this IServiceCollection services, JwtOptions jwtOptions)
     {
-        services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));
-
         var key = Encoding.ASCII.GetBytes(jwtOptions.Secret);
 
         services.AddAuthentication(authOptions =>
@@ -78,6 +76,18 @@ public static class ServicesExtension
                     }, new string[]{}
                 }
             });
+        });
+    }
+    
+    private static void ConfigureCors(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("MyCorsPolicy", builder =>
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
         });
     }
     
