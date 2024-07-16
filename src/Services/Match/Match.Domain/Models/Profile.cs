@@ -9,7 +9,6 @@ namespace Match.Domain.Models;
 public class Profile : ISoftDeletable
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
     public string Name { get; set; }
     public string LastName { get; set; }
