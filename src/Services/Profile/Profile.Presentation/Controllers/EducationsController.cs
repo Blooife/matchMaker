@@ -8,12 +8,13 @@ using Profile.Application.UseCases.EducationUseCases.Commands.Update;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetAll;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetById;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetProfilesEducation;
+using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
 public class EducationsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -43,7 +44,7 @@ public class EducationsController : ControllerBase
         return Ok(education);
     }
     
-    [HttpGet("user/{id}")]
+    [HttpGet("profile/{id}")]
     public async Task<IActionResult> GetProfileEducations(string id, CancellationToken cancellationToken)
     {
         var query = new GetProfilesEducationsQuery(id);

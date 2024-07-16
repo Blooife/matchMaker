@@ -7,12 +7,13 @@ using Profile.Application.UseCases.ProfileUseCases.Commands.Delete;
 using Profile.Application.UseCases.ProfileUseCases.Commands.Update;
 using Profile.Application.UseCases.ProfileUseCases.Queries.GetAll;
 using Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
+using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
 public class ProfilesController : ControllerBase
 {
     private readonly IMediator _mediator;

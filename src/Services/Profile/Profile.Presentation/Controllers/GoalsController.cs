@@ -6,12 +6,13 @@ using Profile.Application.UseCases.GoalUseCases.Commands.AddGoalToProfile;
 using Profile.Application.UseCases.GoalUseCases.Commands.RemoveGoalFromProfile;
 using Profile.Application.UseCases.GoalUseCases.Queries.GetAll;
 using Profile.Application.UseCases.GoalUseCases.Queries.GetById;
+using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
 public class GoalsController : ControllerBase
 {
     private readonly IMediator _mediator;

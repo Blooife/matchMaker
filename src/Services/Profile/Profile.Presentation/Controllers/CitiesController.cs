@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Profile.Application.UseCases.CityUseCases.Queries.GetAll;
 using Profile.Application.UseCases.CityUseCases.Queries.GetById;
 using Profile.Application.UseCases.CityUseCases.Queries.GetCityWithCountryById;
+using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
 public class CitiesController : ControllerBase
 {
     private readonly IMediator _mediator;

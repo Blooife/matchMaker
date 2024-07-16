@@ -7,12 +7,13 @@ using Profile.Application.UseCases.ImageUseCases.Commands.AddImage;
 using Profile.Application.UseCases.ImageUseCases.Commands.RemoveImage;
 using Profile.Application.UseCases.ImageUseCases.Queries.GetById;
 using Profile.Application.UseCases.ImageUseCases.Queries.GetProfilesImages;
+using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
 public class ImagesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -24,7 +25,7 @@ public class ImagesController : ControllerBase
         _minioService = minioService;
     }
     
-    [HttpGet("user/{id}")]
+    [HttpGet("profile/{id}")]
     public async Task<IActionResult> GetProfileImages(string id, CancellationToken cancellationToken)
     {
         var query = new GetProfilesImagesQuery(id);

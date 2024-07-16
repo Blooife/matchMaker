@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Profile.Application.Services.Implementations;
@@ -16,7 +17,11 @@ public static class ServiceExtension
     {
         services.AddAuthorization();
         services.AddControllers();
-        services.ConfigureAuthentication(config);
+        services.ConfigureJwtOptions(config);
+        var serviceProvider = services.BuildServiceProvider();
+        var jwtOptions = serviceProvider.GetService<IOptions<JwtOptions>>()!.Value;
+        services.ConfigureAuthentication(jwtOptions);
+        services.ConfigureCors();
         services.ConfigureSwagger();
         services.ConfigureMinio(config);
     }
@@ -35,38 +40,33 @@ public static class ServiceExtension
         });
     }
     
-    private static void ConfigureAuthentication(this IServiceCollection services, IConfiguration config)
+    private static void ConfigureJwtOptions(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));
-        
-        var settingsSection = config.GetSection("ApiSettings:JwtOptions");
-
-        var secret = settingsSection.GetValue<string>("Secret");
-        var issuer = settingsSection.GetValue<string>("Issuer");
-        var audience = settingsSection.GetValue<string>("Audience");
-
-        var key = Encoding.ASCII.GetBytes(secret!);
+    }
+    
+    private static void ConfigureAuthentication(this IServiceCollection services, JwtOptions jwtOptions)
+    {
+        var key = Encoding.ASCII.GetBytes(jwtOptions.Secret);
 
         services.AddAuthentication(authOptions =>
         {
             authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(jwtOptions =>
+        }).AddJwtBearer(jwtOpt =>
         {
-            jwtOptions.TokenValidationParameters = new TokenValidationParameters
+            jwtOpt.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = true,
-                ValidIssuer = issuer,
-                ValidAudience = audience,
+                ValidIssuer = jwtOptions.Issuer,
+                ValidAudience = jwtOptions.Audience,
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
         });
-
-        services.AddAuthentication();
     }
 
     private static void ConfigureSwagger(this IServiceCollection services)
@@ -94,6 +94,18 @@ public static class ServiceExtension
                     }, new string[]{}
                 }
             });
+        });
+    }
+    
+    private static void ConfigureCors(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("MyCorsPolicy", builder =>
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
         });
     }
     

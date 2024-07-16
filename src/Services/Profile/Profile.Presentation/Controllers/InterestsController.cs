@@ -7,12 +7,13 @@ using Profile.Application.UseCases.InterestUseCases.Commands.RemoveInterestFromP
 using Profile.Application.UseCases.InterestUseCases.Queries.GetAll;
 using Profile.Application.UseCases.InterestUseCases.Queries.GetById;
 using Profile.Application.UseCases.InterestUseCases.Queries.GetProfilesInterests;
+using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
 public class InterestsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -42,7 +43,7 @@ public class InterestsController : ControllerBase
         return Ok(interest);
     }
     
-    [HttpGet("user/{id}")]
+    [HttpGet("profile/{id}")]
     public async Task<IActionResult> GetProfileInterests(string id, CancellationToken cancellationToken)
     {
         var query = new GetProfilesInterestsQuery(id);

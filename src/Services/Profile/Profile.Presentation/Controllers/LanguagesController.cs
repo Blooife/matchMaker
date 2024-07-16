@@ -7,12 +7,13 @@ using Profile.Application.UseCases.LanguageUseCases.Commands.RemoveLanguageFromP
 using Profile.Application.UseCases.LanguageUseCases.Queries.GetAll;
 using Profile.Application.UseCases.LanguageUseCases.Queries.GetById;
 using Profile.Application.UseCases.LanguageUseCases.Queries.GetProfilesLanguages;
+using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
 public class LanguagesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -42,7 +43,7 @@ public class LanguagesController : ControllerBase
         return Ok(language);
     }
     
-    [HttpGet("user/{id}")]
+    [HttpGet("profile/{id}")]
     public async Task<IActionResult> GetProfileLanguages(string id, CancellationToken cancellationToken)
     {
         var query = new GetProfilesLanguagesQuery(id);
