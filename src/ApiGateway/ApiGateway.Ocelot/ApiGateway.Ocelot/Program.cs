@@ -1,17 +1,10 @@
-using Ocelot.DependencyInjection;
+using ApiGateway.Ocelot.Extensions;
 using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("ocelot.Docker.json", optional: false, reloadOnChange: true)
-    .AddEnvironmentVariables();
-
-builder.Services.AddOcelot(builder.Configuration);
-
+builder.Services.ConfigureServices(builder.Configuration, builder.Environment);
 builder.Services.AddSwaggerForOcelot(builder.Configuration);
-
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
@@ -21,6 +14,10 @@ app.UseSwaggerForOcelotUI(options =>
     options.PathToSwaggerGenerator = app.Configuration.GetSection("OcelotOptions:PathToSwaggerGenerator").Value;
 });
 
-await app.UseOcelot();
+app.UseRouting();
+app.MapControllers();
+
+await app.UseAuthentication().UseOcelot();
+app.UseAuthorization();
 
 app.Run();

@@ -2,183 +2,500 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/auth/register",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/auth/register",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamPathTemplate": "/auth/register",
+      "UpstreamHttpMethod": [ "POST" ],
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/auth/login",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/auth/login",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamPathTemplate": "/auth/login",
+      "UpstreamHttpMethod": [ "POST" ],
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/auth/refresh",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/auth/refresh",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamPathTemplate": "/auth/refresh",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/roles",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/roles",
+      "UpstreamPathTemplate": "/roles",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/roles/assignment",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/roles/assignment",
+      "UpstreamPathTemplate": "/roles/assignment",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/roles/removal",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/roles/removal",
+      "UpstreamPathTemplate": "/roles/removal",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/users/{userId}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/users/{userId}",
+      "UpstreamPathTemplate": "/users/{userId}",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/users/email/{email}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/users/email/{email}",
+      "UpstreamPathTemplate": "/users/email/{email}",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/users/{userId}/roles",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/users/{userId}/roles",
+      "UpstreamPathTemplate": "/users/{userId}/roles",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/users",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/users",
+      "UpstreamPathTemplate": "/users",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/users/paginated",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/users/paginated",
+      "UpstreamPathTemplate": "/users/paginated",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
       "DownstreamPathTemplate": "/api/users/{userId}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5000
+          "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/users/{userId}",
+      "UpstreamPathTemplate": "/users/{userId}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+      },
+      "SwaggerKey": "auth",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "profiles",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT","DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "profiles",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/chats/profiles/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/chats/profiles/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/chats/paged/profiles/{profileId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/chats/paged/profiles/{profileId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/chats",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/chats",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/likes",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/likes",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/matches/profiles/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/matches/profiles/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/matches/paged/profiles/{profileId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/matches/paged/profiles/{profileId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/messages/paged/{chatId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/messages/paged/{chatId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/profiles/{profileId}/recommendations",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/profiles/{profileId}/recommendations",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/profiles/{profileId}/paged/recommendations",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/profiles/{profileId}/paged/recommendations",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/profiles/location",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/profiles/location",
+      "UpstreamHttpMethod": [ "PATCH" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "auth",
+      "Config": [
+        {
+          "Name": "Authentication.API",
+          "Version": "v1",
+          "Url": "https://localhost:5001/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "profiles",
+      "Config": [
+        {
+          "Name": "Profile.API",
+          "Version": "v1",
+          "Url": "https://localhost:5002/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "matches",
+      "Config": [
+        {
+          "Name": "Match.API",
+          "Version": "v1",
+          "Url": "https://localhost:5003/swagger/v1/swagger.json"
+        }
+      ]
     }
   ],
   "GlobalConfiguration": {
