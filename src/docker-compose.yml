@@ -1,37 +1,51 @@
 ﻿version: '3.8'
 
-networks:
-  dev:
-    driver: bridge
 services:
+  authentication_service:
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: Services/Authentication/Authentication.API/Dockerfile
+    restart: unless-stopped
+  
   profile_service:
     container_name: profile-service
-    image: profile
     build:
       context: .
       dockerfile: Services/Profile/Profile.Presentation/Dockerfile
-    ports:
-      - "5002:8080"
-      - "5012:443"
-    environment:
-      - ASPNETCORE_HTTP_PORTS=5012
-      - ASPNETCORE_HTTPS_PORTS=5002
-      - ASPNETCORE_ENVIRONMENT=Docker
-      - ASPNETCORE_URLS=http://+:443
-      - ConnectionStrings__DefaultConnection=User ID =postgres;Password=postgres;Server=dockerPostgres;Port=5432;Database=ProfileDb;Pooling=true;
-    depends_on:
-      - postgres
-    networks:
-      - dev
+    restart: unless-stopped
 
   postgres:
     container_name: postgres-db
     image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: AuthDb
-    ports:
-      - "5432:5432"
-    networks:
-      - dev
+    restart: unless-stopped
+    
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper
+    restart: unless-stopped
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka
+    restart: unless-stopped
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui
+    restart: unless-stopped
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    container_name: elasticsearch
+    restart: unless-stopped
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.14.0
+    container_name: logstash
+    restart: unless-stopped
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.0
+    container_name: kibana
+    restart: unless-stopped

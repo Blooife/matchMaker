@@ -27,6 +27,6 @@ app.UseCors("MyCorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-//app.ApplyMigrations(app.Services);
+app.ApplyMigrations(app.Services);
 
 app.Run();
