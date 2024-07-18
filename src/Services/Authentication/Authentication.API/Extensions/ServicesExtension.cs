@@ -91,7 +91,7 @@ public static class ServicesExtension
         });
     }
     
-    /*public static void ApplyMigrations(this IApplicationBuilder app, IServiceProvider services)
+    public static void ApplyMigrations(this IApplicationBuilder app, IServiceProvider services)
     {
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AuthContext>();
@@ -100,5 +100,5 @@ public static class ServicesExtension
         {
             db.Database.Migrate();
         }
-    }*/
+    }
 }
