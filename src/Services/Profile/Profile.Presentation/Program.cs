@@ -23,10 +23,10 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
+app.UseCors("MyCorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseCors("MyCorsPolicy");
-app.ApplyMigrations(app.Services);
+//app.ApplyMigrations(app.Services);
 
 app.Run();
