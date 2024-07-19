@@ -11,10 +11,9 @@ COPY ["Services/Authentication/Authentication.API/Authentication.API.csproj", "S
 COPY ["Services/Authentication/Authentication.DataLayer/Authentication.DataLayer.csproj", "Services/Authentication/Authentication.DataLayer/"]
 COPY ["Shared/Shared.csproj", "Shared/"]
 COPY ["Services/Authentication/Authentication.BusinessLogic/Authentication.BusinessLogic.csproj", "Services/Authentication/Authentication.BusinessLogic/"]
-RUN dotnet restore "Services/Authentication/Authentication.API/Authentication.API.csproj"
-COPY ./Services/Authentication/ ./Services/Authentication
-COPY ./Shared/ ./Shared
-WORKDIR "/src/Services/Authentication/Authentication.API"
+RUN dotnet restore "src/Services/Authentication/Authentication.API/Authentication.API.csproj"
+COPY . .
+WORKDIR "/src/src/Services/Authentication/Authentication.API"
 RUN dotnet build "Authentication.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
