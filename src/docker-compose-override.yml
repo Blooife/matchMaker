@@ -70,12 +70,13 @@ services:
     volumes:
       - ~/.aspnet/https:/https:ro
     depends_on:
-      - mongo
+      - mongodb
       - elasticsearch
       - zookeeper
     networks:
       - postgres-network
       - elk-network
+      - mongo-network
 
   postgres:
     container_name: postgres-db
@@ -90,8 +91,8 @@ services:
     networks:
       - postgres-network
   
-  mongo:
-    container_name: mongo-db
+  mongodb:
+    container_name: mongodb
     image: mongo:latest
     ports:
       - "27017:27017"
