@@ -23,4 +23,4 @@ RUN dotnet publish "Authentication.API.csproj" -c $BUILD_CONFIGURATION -o /app/p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Authentication.API.dll"]
+ENTRYPOINT ["dotnet", "Authentication.API.dll", "--launch-profile Docker"]

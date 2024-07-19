@@ -18,7 +18,7 @@ builder.Services.ConfigureApi(builder.Configuration);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -31,7 +31,6 @@ app.MapControllers();
 app.UseCors("MyCorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.ApplyMigrations(app.Services);
 
 app.Run();
