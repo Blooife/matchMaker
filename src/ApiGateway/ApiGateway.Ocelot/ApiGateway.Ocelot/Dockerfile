@@ -7,10 +7,10 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/ApiGateway/ApiGateway.Ocelot/ApiGateway.Ocelot/ApiGateway.Ocelot.csproj", "src/ApiGateway/ApiGateway.Ocelot/ApiGateway.Ocelot/"]
-RUN dotnet restore "src/ApiGateway/ApiGateway.Ocelot/ApiGateway.Ocelot/ApiGateway.Ocelot.csproj"
+COPY ["ApiGateway.Ocelot/ApiGateway.Ocelot.csproj", "ApiGateway.Ocelot/"]
+RUN dotnet restore "ApiGateway.Ocelot/ApiGateway.Ocelot.csproj"
 COPY . .
-WORKDIR "/src/src/ApiGateway/ApiGateway.Ocelot/ApiGateway.Ocelot"
+WORKDIR "/src/ApiGateway.Ocelot"
 RUN dotnet build "ApiGateway.Ocelot.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

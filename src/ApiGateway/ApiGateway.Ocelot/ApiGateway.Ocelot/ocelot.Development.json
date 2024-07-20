@@ -5,8 +5,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/auth/register",
@@ -19,8 +19,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/auth/login",
@@ -33,8 +33,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/auth/refresh",
@@ -50,8 +50,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/roles",
@@ -70,8 +70,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/roles/assignment",
@@ -90,8 +90,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/roles/removal",
@@ -110,8 +110,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/users/{userId}",
@@ -130,8 +130,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/users/email/{email}",
@@ -150,8 +150,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/users/{userId}/roles",
@@ -170,8 +170,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/users",
@@ -190,8 +190,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/users/paginated",
@@ -210,8 +210,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/users/{userId}",
@@ -230,8 +230,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "profile-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5002
         }
       ],
       "UpstreamPathTemplate": "/{everything}",
@@ -250,8 +250,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "profile-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5002
         }
       ],
       "UpstreamPathTemplate": "/{everything}",
@@ -270,8 +270,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/chats/profiles/{id}",
@@ -290,8 +290,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/chats/paged/profiles/{profileId}",
@@ -310,8 +310,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/chats",
@@ -330,8 +330,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/likes",
@@ -350,8 +350,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/matches/profiles/{id}",
@@ -370,8 +370,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/matches/paged/profiles/{profileId}",
@@ -390,8 +390,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/messages/paged/{chatId}",
@@ -410,8 +410,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/profiles/{profileId}/recommendations",
@@ -430,8 +430,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/profiles/{profileId}/paged/recommendations",
@@ -442,7 +442,7 @@
       "RouteClaimsRequirement": {
         "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
       },
-      "SwaggerKey": "match-service",
+      "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -450,8 +450,8 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "match-service",
-          "Port": 443
+          "Host": "localhost",
+          "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/profiles/location",
@@ -473,7 +473,7 @@
         {
           "Name": "Authentication.API",
           "Version": "v1",
-          "Url": "https://auth-service:443/swagger/v1/swagger.json"
+          "Url": "https://localhost:5001/swagger/v1/swagger.json"
         }
       ]
     },
@@ -483,7 +483,7 @@
         {
           "Name": "Profile.API",
           "Version": "v1",
-          "Url": "https://profile-service:443/swagger/v1/swagger.json"
+          "Url": "https://localhost:5002/swagger/v1/swagger.json"
         }
       ]
     },
@@ -493,7 +493,7 @@
         {
           "Name": "Match.API",
           "Version": "v1",
-          "Url": "https://match-service:443/swagger/v1/swagger.json"
+          "Url": "https://localhost:5003/swagger/v1/swagger.json"
         }
       ]
     }
