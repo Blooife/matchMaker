@@ -14,6 +14,7 @@ app.UseSwaggerForOcelotUI(options =>
     options.PathToSwaggerGenerator = app.Configuration.GetSection("OcelotOptions:PathToSwaggerGenerator").Value;
 });
 
+app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();
 

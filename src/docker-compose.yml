@@ -1,0 +1,70 @@
+﻿version: '3.8'
+
+services:  
+  authentication_service:
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: Services/Authentication/Authentication.API/Dockerfile
+    restart: unless-stopped
+
+  profile_service:
+    container_name: profile-service
+    build:
+      context: .
+      dockerfile: Services/Profile/Profile.Presentation/Dockerfile
+    restart: unless-stopped
+
+  match_service:
+    container_name: match-service
+    build:
+      context: .
+      dockerfile: Services/Match/Match.Presentation/Dockerfile
+    restart: unless-stopped
+    
+  api-gateway-ocelot:
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: ApiGateway/ApiGateway.Ocelot/ApiGateway.Ocelot/Dockerfile
+    restart: unless-stopped
+
+  postgres:
+    container_name: postgres-db
+    image: postgres:latest
+    restart: unless-stopped
+
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper
+    restart: unless-stopped
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka
+    restart: unless-stopped
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui
+    restart: unless-stopped
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    container_name: elasticsearch
+    restart: unless-stopped
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.14.0
+    container_name: logstash
+    restart: unless-stopped
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.0
+    container_name: kibana
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: unless-stopped
