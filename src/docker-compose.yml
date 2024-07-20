@@ -56,3 +56,8 @@ services:
     image: docker.elastic.co/kibana/kibana:7.14.0
     container_name: kibana
     restart: unless-stopped
+  
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: unless-stopped

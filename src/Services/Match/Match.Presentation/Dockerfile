@@ -12,10 +12,10 @@ COPY ["Shared/Shared.csproj", "Shared/"]
 COPY ["Services/Match/Match.Domain/Match.Domain.csproj", "Services/Match/Match.Domain/"]
 COPY ["Services/Match/Match.Application/Match.Application.csproj", "Services/Match/Match.Application/"]
 COPY ["Services/Match/Match.Infrastructure/Match.Infrastructure.csproj", "Services/Match/Match.Infrastructure/"]
-RUN dotnet restore "Services/Match/Match.Presentation/Match.Presentation.csproj"
+RUN dotnet restore "src/Services/Match/Match.Presentation/Match.Presentation.csproj"
 COPY ./Services/Match/ ./Services/Match
 COPY ./Shared/ ./Shared
-WORKDIR "/src/Services/Match/Match.Presentation"
+WORKDIR "/src/src/Services/Match/Match.Presentation"
 RUN dotnet build "Match.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
@@ -25,4 +25,4 @@ RUN dotnet publish "Match.Presentation.csproj" -c $BUILD_CONFIGURATION -o /app/p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Match.Presentation.dll"]
+ENTRYPOINT ["dotnet", "Match.Presentation.dll", "--launch-profile Docker"]
