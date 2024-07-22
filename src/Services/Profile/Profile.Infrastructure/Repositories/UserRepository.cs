@@ -5,15 +5,9 @@ using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class UserRepository(ProfileDbContext _dbContext) : GenericRepository<User, string>(_dbContext), IUserRepository
+public class UserRepository(ProfileDbContext _dbContext)
+    : GenericRepository<User, string>(_dbContext), IUserRepository
 {
-    public async Task<User> UpdateUserAsync(User user, CancellationToken cancellationToken)
-    {
-        _dbContext.Update(user);
-        
-        return user;
-    }
-
     public async Task DeleteUserAsync(User user, CancellationToken cancellationToken)
     {
         user.DeletedAt = DateTime.UtcNow;

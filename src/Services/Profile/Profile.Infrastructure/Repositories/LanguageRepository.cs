@@ -6,20 +6,15 @@ using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class LanguageRepository : GenericRepository<Language, int>, ILanguageRepository
+public class LanguageRepository(ProfileDbContext _dbContext)
+    : GenericRepository<Language, int>(_dbContext), ILanguageRepository
 {
-    private readonly ProfileDbContext _dbContext;
-    public LanguageRepository(ProfileDbContext dbContext) : base(dbContext)
-    {
-        _dbContext = dbContext;
-    }
-    
     public async Task AddLanguageToProfile(UserProfile profile, Language language)
     {
         profile.Languages.Add(language);
     }
     
-    public async Task RemoveLanguageFromProfile(UserProfile profile, Language language)
+    public async Task RemoveLanguageFromProfile(UserProfile profile, Language language, CancellationToken cancellationToken)
     {
         profile.Languages.Remove(language);
     }

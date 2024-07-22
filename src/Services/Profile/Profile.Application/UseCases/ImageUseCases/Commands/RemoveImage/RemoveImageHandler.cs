@@ -3,13 +3,16 @@ using MediatR;
 using Profile.Application.DTOs.Image.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Services.Interfaces;
+using Profile.Application.Services.Interfaces;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 
 namespace Profile.Application.UseCases.ImageUseCases.Commands.RemoveImage;
 
-public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService) : IRequestHandler<RemoveImageCommand, ImageResponseDto>
+public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService, ICacheService _cacheService) : IRequestHandler<RemoveImageCommand, ImageResponseDto>
 {
+    private readonly string _cacheKeyPrefix = "image";
+    
     public async Task<ImageResponseDto> Handle(RemoveImageCommand request, CancellationToken cancellationToken)
     {
         var image = await _unitOfWork.ImageRepository.FirstOrDefaultAsync(request.Dto.ImageId, cancellationToken);
@@ -20,11 +23,15 @@ public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinio
         }
         
         var imageEntity = _mapper.Map<Image>(image);
-        await _unitOfWork.ImageRepository.RemoveImageFromProfile(imageEntity);
+        await _unitOfWork.ImageRepository.RemoveImageFromProfile(imageEntity, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _minioService.DeleteFileAsync(image.ImageUrl);
         
-        return _mapper.Map<ImageResponseDto>(imageEntity);
+        var cacheKey = $"{_cacheKeyPrefix}:{imageEntity.Id}";
+        var mappedImage = _mapper.Map<ImageResponseDto>(imageEntity);
+        await _cacheService.RemoveAsync(cacheKey, cancellationToken:cancellationToken);
+        
+        return mappedImage;
     }
 }

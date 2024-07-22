@@ -1,15 +1,19 @@
+using AutoMapper;
 using MediatR;
+using Profile.Application.DTOs.Interest.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
+using Profile.Application.Services.Interfaces;
 using Profile.Domain.Repositories;
 using Profile.Domain.Specifications.ProfileSpecifications;
-using Shared.Models;
 
 namespace Profile.Application.UseCases.InterestUseCases.Commands.AddInterestToProfile;
 
-public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<AddInterestToProfileCommand, GeneralResponseDto>
+public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<AddInterestToProfileCommand, List<InterestResponseDto>>
 {
-    public async Task<GeneralResponseDto> Handle(AddInterestToProfileCommand request, CancellationToken cancellationToken)
+    private readonly string _cacheKeyPrefix = "interest";
+    
+    public async Task<List<InterestResponseDto>> Handle(AddInterestToProfileCommand request, CancellationToken cancellationToken)
     {
         var profileWithInterests = await _unitOfWork.InterestRepository.GetProfileWithInterests(request.Dto.ProfileId, cancellationToken);
         
@@ -42,6 +46,11 @@ public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHand
         await _unitOfWork.InterestRepository.AddInterestToProfile(profileWithInterests, interest);
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        return new GeneralResponseDto();
+        var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";
+        var mappedInterest= _mapper.Map<List<InterestResponseDto>>(profileWithInterests.Interests);
+        await _cacheService.SetAsync(cacheKey, mappedInterest,
+            cancellationToken: cancellationToken);
+        
+        return mappedInterest;
     }
 }

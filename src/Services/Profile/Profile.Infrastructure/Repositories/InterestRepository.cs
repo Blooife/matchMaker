@@ -2,24 +2,20 @@ using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
+
 using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class InterestRepository : GenericRepository<Interest, int>, IInterestRepository
+public class InterestRepository(ProfileDbContext _dbContext)
+    : GenericRepository<Interest, int>(_dbContext), IInterestRepository
 {
-    private readonly ProfileDbContext _dbContext;
-    public InterestRepository(ProfileDbContext dbContext) : base(dbContext)
-    {
-        _dbContext = dbContext;
-    }
-    
     public async Task AddInterestToProfile(UserProfile profile, Interest interest)
     {
         profile.Interests.Add(interest);
     }
     
-    public async Task RemoveInterestFromProfile(UserProfile profile, Interest interest)
+    public async Task RemoveInterestFromProfile(UserProfile profile, Interest interest, CancellationToken cancellationToken)
     {
         profile.Interests.Remove(interest);
     }

@@ -1,15 +1,19 @@
+using AutoMapper;
 using MediatR;
+using Profile.Application.DTOs.Language.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
+using Profile.Application.Services.Interfaces;
 using Profile.Domain.Repositories;
 using Profile.Domain.Specifications.ProfileSpecifications;
-using Shared.Models;
 
 namespace Profile.Application.UseCases.LanguageUseCases.Commands.AddLanguageToProfile;
 
-public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<AddLanguageToProfileCommand, GeneralResponseDto>
+public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<AddLanguageToProfileCommand, List<LanguageResponseDto>>
 {
-    public async Task<GeneralResponseDto> Handle(AddLanguageToProfileCommand request, CancellationToken cancellationToken)
+    private readonly string _cacheKeyPrefix = "language";
+    
+    public async Task<List<LanguageResponseDto>> Handle(AddLanguageToProfileCommand request, CancellationToken cancellationToken)
     {
         var profileWithLanguages = await _unitOfWork.LanguageRepository.GetProfileWithLanguages(request.Dto.ProfileId, cancellationToken);
         
@@ -35,6 +39,11 @@ public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork) : IRequestHand
         await _unitOfWork.LanguageRepository.AddLanguageToProfile(profileWithLanguages, language);
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        return new GeneralResponseDto();
+        var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";
+        var mappedLanguages = _mapper.Map<List<LanguageResponseDto>>(profileWithLanguages.Languages);
+        await _cacheService.SetAsync(cacheKey, mappedLanguages,
+            cancellationToken: cancellationToken);
+        
+        return mappedLanguages;
     }
 }

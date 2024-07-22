@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Profile.Domain.Repositories;
 using Profile.Infrastructure.Contexts;
+
 using Profile.Infrastructure.Repositories;
 
 namespace Profile.Infrastructure.Extensions;

@@ -3,13 +3,16 @@ using MediatR;
 using Profile.Application.DTOs.Image.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Services.Interfaces;
+using Profile.Application.Services.Interfaces;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 
 namespace Profile.Application.UseCases.ImageUseCases.Commands.AddImage;
 
-public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService) : IRequestHandler<AddImageCommand, ImageResponseDto>
+public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService, ICacheService _cacheService) : IRequestHandler<AddImageCommand, ImageResponseDto>
 {
+    private readonly string _cacheKeyPrefix = "image";
+    
     public async Task<ImageResponseDto> Handle(AddImageCommand request, CancellationToken cancellationToken)
     {
         var profile = await _unitOfWork.ProfileRepository.FirstOrDefaultAsync(request.Dto.ProfileId, cancellationToken);
@@ -46,6 +49,10 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
         var result = await _unitOfWork.ImageRepository.AddImageToProfile(imageEntity, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        return _mapper.Map<ImageResponseDto>(result);
+        var cacheKey = $"{_cacheKeyPrefix}:{result.Id}";
+        var mappedImage = _mapper.Map<ImageResponseDto>(result);
+        await _cacheService.SetAsync(cacheKey, mappedImage, cancellationToken:cancellationToken);
+        
+        return mappedImage;
     }
 }

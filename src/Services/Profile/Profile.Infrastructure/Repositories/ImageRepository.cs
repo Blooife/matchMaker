@@ -6,15 +6,9 @@ using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class ImageRepository : GenericRepository<Image, int>, IImageRepository
+public class ImageRepository(ProfileDbContext _dbContext)
+    : GenericRepository<Image, int>(_dbContext), IImageRepository
 {
-    private readonly ProfileDbContext _dbContext;
-    
-    public ImageRepository(ProfileDbContext dbContext) : base(dbContext)
-    {
-        _dbContext = dbContext;
-    }
-    
     public async Task<Image> AddImageToProfile(Image image, CancellationToken cancellationToken)
     {
         await _dbContext.Images.AddAsync(image, cancellationToken);
@@ -22,7 +16,7 @@ public class ImageRepository : GenericRepository<Image, int>, IImageRepository
         return image;
     }
     
-    public async Task RemoveImageFromProfile(Image image)
+    public async Task RemoveImageFromProfile(Image image, CancellationToken cancellationToken)
     {
         _dbContext.Images.Remove(image);
     }

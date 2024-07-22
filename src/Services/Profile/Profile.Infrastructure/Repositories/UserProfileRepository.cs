@@ -6,14 +6,9 @@ using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class UserProfileRepository : GenericRepository<UserProfile, string>, IUserProfileRepository
+public class UserProfileRepository(ProfileDbContext _dbContext)
+    : GenericRepository<UserProfile, string>(_dbContext), IUserProfileRepository
 {
-    private readonly ProfileDbContext _dbContext;
-    public UserProfileRepository(ProfileDbContext dbContext) : base(dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<UserProfile> UpdateProfileAsync(UserProfile profile, CancellationToken cancellationToken)
     {
         _dbContext.Update(profile);

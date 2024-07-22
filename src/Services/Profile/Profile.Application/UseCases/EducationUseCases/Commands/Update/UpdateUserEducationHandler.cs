@@ -1,6 +1,9 @@
+using AutoMapper;
 using MediatR;
+using Profile.Application.DTOs.Education.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
+using Profile.Application.Services.Interfaces;
 using Profile.Domain.Models;
 using Profile.Domain.Repositories;
 using Profile.Domain.Specifications.ProfileSpecifications;
@@ -8,8 +11,10 @@ using Shared.Models;
 
 namespace Profile.Application.UseCases.EducationUseCases.Commands.Update;
 
-public class UpdateProfileEducationHandler(IUnitOfWork _unitOfWork) : IRequestHandler<UpdateProfileEducationCommand, GeneralResponseDto>
+public class UpdateProfileEducationHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<UpdateProfileEducationCommand, GeneralResponseDto>
 {
+    private readonly string _cacheKeyPrefix = "education";
+    
     public async Task<GeneralResponseDto> Handle(UpdateProfileEducationCommand request, CancellationToken cancellationToken)
     {
         var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducation(request.Dto.ProfileId, cancellationToken);
@@ -37,6 +42,11 @@ public class UpdateProfileEducationHandler(IUnitOfWork _unitOfWork) : IRequestHa
         
         await _unitOfWork.EducationRepository.UpdateProfilesEducation(userEducation, request.Dto.Description);
         await _unitOfWork.SaveAsync(cancellationToken);
+        
+        var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";
+        var mappedEducations = _mapper.Map<List<ProfileEducationResponseDto>>(profileWithEducation.ProfileEducations);
+        await _cacheService.SetAsync(cacheKey, mappedEducations, cancellationToken:cancellationToken);
+        
         
         return new GeneralResponseDto();
     }

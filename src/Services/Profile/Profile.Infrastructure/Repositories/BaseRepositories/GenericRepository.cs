@@ -4,6 +4,7 @@ using Profile.Domain.Repositories.BaseRepositories;
 using Profile.Domain.Specifications;
 using Profile.Infrastructure.Contexts;
 
+
 namespace Profile.Infrastructure.Repositories.BaseRepositories;
 
 public class GenericRepository<T, TKey>(ProfileDbContext _dbContext) : IGenericRepository<T, TKey> where T : class
@@ -23,8 +24,8 @@ public class GenericRepository<T, TKey>(ProfileDbContext _dbContext) : IGenericR
         return _dbContext.Set<T>().WhereNotDeleted().AsNoTracking();
     }
     
-    public Task<List<T>> GetAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
+    public async Task<List<T>> GetAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
     {
-        return FindAll().WhereNotDeleted().Where(expression).AsNoTracking().ToListAsync(cancellationToken);
+        return await FindAll().WhereNotDeleted().Where(expression).AsNoTracking().ToListAsync(cancellationToken);
     }
 }

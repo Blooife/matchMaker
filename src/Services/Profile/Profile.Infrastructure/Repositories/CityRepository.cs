@@ -6,14 +6,9 @@ using Profile.Infrastructure.Repositories.BaseRepositories;
 
 namespace Profile.Infrastructure.Repositories;
 
-public class CityRepository : GenericRepository<City, int>, ICityRepository
+public class CityRepository(ProfileDbContext _dbContext)
+    : GenericRepository<City, int>(_dbContext), ICityRepository
 {
-    private readonly ProfileDbContext _dbContext;
-    public CityRepository(ProfileDbContext dbContext) : base(dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<City?> GetCityWithCountryById(int cityId, CancellationToken cancellationToken)
     {
         var city = await _dbContext.Cities.Include(c => c.Country)
