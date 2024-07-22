@@ -6,14 +6,6 @@ public class CreateProfileValidator : AbstractValidator<CreateProfileCommand>
 {
     public CreateProfileValidator()
     {
-        RuleFor(command => command.Dto.Name)
-            .MinimumLength(2)
-            .MaximumLength(50)
-            .WithMessage("Name must be greater than 2 and less than 50 characters");
-        RuleFor(command => command.Dto.LastName)
-            .MinimumLength(2)
-            .MaximumLength(50)
-            .WithMessage("Lastname must be greater than 2 and less than 50 characters");
         RuleFor(command => command.Dto.BirthDate)
             .LessThanOrEqualTo(DateTime.Today.AddYears(-16))
             .WithMessage("Age must be at least 16 years.");

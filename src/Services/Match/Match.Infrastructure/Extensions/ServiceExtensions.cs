@@ -18,7 +18,6 @@ public static class ServiceExtensions
         services.ConfigureDbContext(configuration);
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.ConfigureGrpcClient();
-       // services.AddScoped<IProfileGrpcClient, ProfileGrpcClient>();
     }
     
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
@@ -34,13 +33,12 @@ public static class ServiceExtensions
     {
         services.AddAutoMapper(typeof(ProfileMapping));
 
-        // Регистрация ProfileGrpcClient с DI
         services.AddScoped<IProfileGrpcClient>((sp) =>
         {
             var configuration = sp.GetRequiredService<IConfiguration>();
-            var grpcServiceUrl = configuration["GrpcServiceUrl"]; // Настройте URL gRPC сервиса
-
+            var grpcServiceUrl = configuration["GrpcServiceUrl"];
             var mapper = sp.GetRequiredService<IMapper>();
+            
             return new ProfileGrpcClient(grpcServiceUrl, mapper);
         });
     }
