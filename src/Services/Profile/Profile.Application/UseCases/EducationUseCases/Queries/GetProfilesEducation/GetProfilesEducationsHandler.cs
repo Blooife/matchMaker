@@ -28,7 +28,7 @@ public class GetProfilesEducationsHandler(IUnitOfWork _unitOfWork, IMapper _mapp
             throw new NotFoundException("Profile", request.ProfileId);
         }
         
-        var education = await _unitOfWork.EducationRepository.GetProfilesEducation(profile, cancellationToken);
+        var education = await _unitOfWork.EducationRepository.GetProfilesEducationAsync(profile, cancellationToken);
         
         var mappedEducation = _mapper.Map<List<ProfileEducationResponseDto>>(education);
         await _cacheService.SetAsync(cacheKey, mappedEducation, cancellationToken: cancellationToken);

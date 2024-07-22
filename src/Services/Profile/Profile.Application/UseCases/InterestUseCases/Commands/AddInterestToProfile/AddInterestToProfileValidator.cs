@@ -7,6 +7,7 @@ public class AddInterestToProfileValidator : AbstractValidator<AddInterestToProf
     public AddInterestToProfileValidator()
     {
         RuleFor(command => command.Dto.ProfileId).NotEmpty().WithMessage("Profile id cant be empty");
+        
         RuleFor(command => command.Dto.InterestId).NotEmpty().WithMessage("Interest id cant be empty");
     }
 }

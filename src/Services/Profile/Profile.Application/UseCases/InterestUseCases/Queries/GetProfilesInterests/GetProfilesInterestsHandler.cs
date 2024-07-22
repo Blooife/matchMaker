@@ -28,7 +28,7 @@ public class GetProfilesInterestsHandler(IUnitOfWork _unitOfWork, IMapper _mappe
             throw new NotFoundException("Profile", request.ProfileId);
         }
         
-        var interests = await _unitOfWork.InterestRepository.GetProfilesInterests(request.ProfileId, cancellationToken);
+        var interests = await _unitOfWork.InterestRepository.GetProfilesInterestsAsync(request.ProfileId, cancellationToken);
         var mappedInterests = _mapper.Map<List<InterestResponseDto>>(interests);
         await _cacheService.SetAsync(cacheKey, mappedInterests, cancellationToken: cancellationToken);
         

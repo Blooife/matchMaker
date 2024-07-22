@@ -72,6 +72,4 @@ public class ProfilesController : ControllerBase
         
         return Ok(profile);
     }
-    
-    
 }

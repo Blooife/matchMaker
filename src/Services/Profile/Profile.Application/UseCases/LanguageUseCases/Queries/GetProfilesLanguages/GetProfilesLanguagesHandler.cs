@@ -28,7 +28,7 @@ public class GetProfilesLanguagesHandler(IUnitOfWork _unitOfWork, IMapper _mappe
             throw new NotFoundException("Profile", request.ProfileId);
         }
         
-        var languages = await _unitOfWork.LanguageRepository.GetProfilesLanguages(request.ProfileId, cancellationToken);
+        var languages = await _unitOfWork.LanguageRepository.GetProfilesLanguagesAsync(request.ProfileId, cancellationToken);
         var mappedLanguages = _mapper.Map<List<LanguageResponseDto>>(languages);
         await _cacheService.SetAsync(cacheKey, mappedLanguages, cancellationToken: cancellationToken);
         

@@ -39,7 +39,7 @@ public class CitiesController : ControllerBase
         return Ok(city);
     }
     
-    [HttpGet("{id}/with/country")]
+    [HttpGet("{id}/country")]
     public async Task<IActionResult> GetCityWithCountryById([FromRoute] int id, CancellationToken cancellationToken)
     {
         var query = new GetCityWithCountryByIdQuery(id);

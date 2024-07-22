@@ -17,7 +17,7 @@ public class GetProfilesImagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) 
             throw new NotFoundException("Profile", request.ProfileId);
         }
         
-        var images = await _unitOfWork.ImageRepository.GetProfilesImages(request.ProfileId, cancellationToken);
+        var images = await _unitOfWork.ImageRepository.GetProfilesImagesAsync(request.ProfileId, cancellationToken);
 
         return _mapper.Map<IEnumerable<ImageResponseDto>>(images);
     }

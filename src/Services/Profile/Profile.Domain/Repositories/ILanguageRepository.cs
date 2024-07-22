@@ -5,8 +5,8 @@ namespace Profile.Domain.Repositories;
 
 public interface ILanguageRepository : IGenericRepository<Language, int>
 {
-    Task AddLanguageToProfile(UserProfile profile, Language language);
-    Task RemoveLanguageFromProfile(UserProfile profile, Language language, CancellationToken cancellationToken);
-    Task<List<Language>> GetProfilesLanguages(string profileId, CancellationToken cancellationToken);
-    Task<UserProfile?> GetProfileWithLanguages(string profileId, CancellationToken cancellationToken);
+    Task AddLanguageToProfileAsync(UserProfile profile, Language language);
+    Task RemoveLanguageFromProfileAsync(UserProfile profile, Language language, CancellationToken cancellationToken);
+    Task<List<Language>> GetProfilesLanguagesAsync(string profileId, CancellationToken cancellationToken);
+    Task<UserProfile?> GetProfileWithLanguagesAsync(string profileId, CancellationToken cancellationToken);
 }

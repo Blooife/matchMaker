@@ -16,7 +16,7 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork, IMapper 
     
     public async Task<List<ProfileEducationResponseDto>> Handle(RemoveEducationFromProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducation(request.Dto.ProfileId, cancellationToken);
+        var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducationAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithEducation is null)
         {
@@ -30,16 +30,16 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork, IMapper 
             throw new NotFoundException("Education", request.Dto.EducationId);
         }
         
-        var isContains = profileWithEducation.ContainsEducation(request.Dto.EducationId);
+        var isProfileContainsEducation = profileWithEducation.ContainsEducation(request.Dto.EducationId);
 
-        if (!isContains)
+        if (!isProfileContainsEducation)
         {
             throw new NotContainsException(ExceptionMessages.ProfileNotContainsEducation);
         }
 
         ProfileEducation userEducation = profileWithEducation.ProfileEducations.First(userEducation=>userEducation.EducationId == request.Dto.EducationId);
         
-        await _unitOfWork.EducationRepository.RemoveEducationFromProfile(profileWithEducation, userEducation);
+        await _unitOfWork.EducationRepository.RemoveEducationFromProfileAsync(profileWithEducation, userEducation);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";

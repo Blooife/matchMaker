@@ -5,5 +5,5 @@ namespace Profile.Domain.Repositories;
 
 public interface ICityRepository : IGenericRepository<City, int>
 {
-    Task<City?> GetCityWithCountryById(int cityId, CancellationToken cancellationToken);
+    Task<City?> GetCityWithCountryByIdAsync(int cityId, CancellationToken cancellationToken);
 }

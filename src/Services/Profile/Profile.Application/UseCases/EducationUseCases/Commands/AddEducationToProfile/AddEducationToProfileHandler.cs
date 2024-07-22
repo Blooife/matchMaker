@@ -16,7 +16,7 @@ public class AddEducationToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapp
     
     public async Task<List<ProfileEducationResponseDto>> Handle(AddEducationToProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducation(request.Dto.ProfileId, cancellationToken);
+        var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducationAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithEducation is null)
         {
@@ -30,15 +30,15 @@ public class AddEducationToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapp
             throw new NotFoundException("Education", request.Dto.EducationId);
         }
         
-        var isContains = profileWithEducation.ContainsEducation(request.Dto.EducationId);
+        var isProfileContainsEducation = profileWithEducation.ContainsEducation(request.Dto.EducationId);
 
-        if (isContains)
+        if (isProfileContainsEducation)
         {
             throw new AlreadyContainsException(ExceptionMessages.ProfileContainsEducation);
         }
 
-        ProfileEducation profileEducation = _mapper.Map<ProfileEducation>(request.Dto);
-        await _unitOfWork.EducationRepository.AddEducationToProfile(profileWithEducation, profileEducation);
+        var profileEducation = _mapper.Map<ProfileEducation>(request.Dto);
+        await _unitOfWork.EducationRepository.AddEducationToProfileAsync(profileWithEducation, profileEducation);
         await _unitOfWork.SaveAsync(cancellationToken);
 
         profileEducation.Education = education;

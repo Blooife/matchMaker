@@ -23,7 +23,7 @@ public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinio
         }
         
         var imageEntity = _mapper.Map<Image>(image);
-        await _unitOfWork.ImageRepository.RemoveImageFromProfile(imageEntity, cancellationToken);
+        await _unitOfWork.ImageRepository.RemoveImageFromProfileAsync(imageEntity, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _minioService.DeleteFileAsync(image.ImageUrl);

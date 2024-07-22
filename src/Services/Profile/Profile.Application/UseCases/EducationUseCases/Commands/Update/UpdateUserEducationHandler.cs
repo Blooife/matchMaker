@@ -17,7 +17,7 @@ public class UpdateProfileEducationHandler(IUnitOfWork _unitOfWork, IMapper _map
     
     public async Task<GeneralResponseDto> Handle(UpdateProfileEducationCommand request, CancellationToken cancellationToken)
     {
-        var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducation(request.Dto.ProfileId, cancellationToken);
+        var profileWithEducation = await _unitOfWork.EducationRepository.GetProfileWithEducationAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithEducation is null)
         {
@@ -40,7 +40,7 @@ public class UpdateProfileEducationHandler(IUnitOfWork _unitOfWork, IMapper _map
 
         ProfileEducation userEducation = profileWithEducation.ProfileEducations.First(userEducation=>userEducation.EducationId == request.Dto.EducationId);
         
-        await _unitOfWork.EducationRepository.UpdateProfilesEducation(userEducation, request.Dto.Description);
+        await _unitOfWork.EducationRepository.UpdateProfilesEducationAsync(userEducation, request.Dto.Description);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";

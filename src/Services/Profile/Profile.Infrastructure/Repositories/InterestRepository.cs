@@ -10,17 +10,17 @@ namespace Profile.Infrastructure.Repositories;
 public class InterestRepository(ProfileDbContext _dbContext)
     : GenericRepository<Interest, int>(_dbContext), IInterestRepository
 {
-    public async Task AddInterestToProfile(UserProfile profile, Interest interest)
+    public async Task AddInterestToProfileAsync(UserProfile profile, Interest interest)
     {
         profile.Interests.Add(interest);
     }
     
-    public async Task RemoveInterestFromProfile(UserProfile profile, Interest interest, CancellationToken cancellationToken)
+    public async Task RemoveInterestFromProfileAsync(UserProfile profile, Interest interest, CancellationToken cancellationToken)
     {
         profile.Interests.Remove(interest);
     }
 
-    public async Task<List<Interest>> GetProfilesInterests(string profileId, CancellationToken cancellationToken)
+    public async Task<List<Interest>> GetProfilesInterestsAsync(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Interests).AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
@@ -28,7 +28,7 @@ public class InterestRepository(ProfileDbContext _dbContext)
         return userProfile!.Interests;
     }
     
-    public async Task<UserProfile?> GetProfileWithInterests(string profileId, CancellationToken cancellationToken)
+    public async Task<UserProfile?> GetProfileWithInterestsAsync(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Interests)
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);

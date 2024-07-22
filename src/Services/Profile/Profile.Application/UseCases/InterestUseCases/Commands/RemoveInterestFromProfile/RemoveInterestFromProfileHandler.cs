@@ -15,7 +15,7 @@ public class RemoveInterestFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
     
     public async Task<List<InterestResponseDto>> Handle(RemoveInterestFromProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithInterests = await _unitOfWork.InterestRepository.GetProfileWithInterests(request.Dto.ProfileId, cancellationToken);
+        var profileWithInterests = await _unitOfWork.InterestRepository.GetProfileWithInterestsAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithInterests is null)
         {
@@ -29,15 +29,15 @@ public class RemoveInterestFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
             throw new NotFoundException("Interest", request.Dto.InterestId);
         }
 
-        var isContains = profileWithInterests.ContainsInterest(request.Dto.InterestId);
+        var isProfileContainsInterest = profileWithInterests.ContainsInterest(request.Dto.InterestId);
 
-        if (!isContains)
+        if (!isProfileContainsInterest)
         {
             throw new NotContainsException(ExceptionMessages.ProfileNotContainsInterest);
         }
         
         var interestToRemove = profileWithInterests.Interests.First(i=>i.Id == request.Dto.InterestId);
-        await _unitOfWork.InterestRepository.RemoveInterestFromProfile(profileWithInterests, interestToRemove, cancellationToken);
+        await _unitOfWork.InterestRepository.RemoveInterestFromProfileAsync(profileWithInterests, interestToRemove, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";

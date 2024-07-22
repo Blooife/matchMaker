@@ -21,7 +21,7 @@ public class GetCityWithCountryByIdHandler(IUnitOfWork _unitOfWork, IMapper _map
             return cachedData;
         }
 
-        var city = await _unitOfWork.CityRepository.GetCityWithCountryById(request.CityId, cancellationToken);
+        var city = await _unitOfWork.CityRepository.GetCityWithCountryByIdAsync(request.CityId, cancellationToken);
         
         if (city is null)
         {

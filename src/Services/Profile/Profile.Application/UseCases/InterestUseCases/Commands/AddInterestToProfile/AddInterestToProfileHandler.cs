@@ -15,7 +15,7 @@ public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
     
     public async Task<List<InterestResponseDto>> Handle(AddInterestToProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithInterests = await _unitOfWork.InterestRepository.GetProfileWithInterests(request.Dto.ProfileId, cancellationToken);
+        var profileWithInterests = await _unitOfWork.InterestRepository.GetProfileWithInterestsAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithInterests is null)
         {
@@ -29,9 +29,9 @@ public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
             throw new NotFoundException("Interest", request.Dto.InterestId);
         }
 
-        var isContains = profileWithInterests.ContainsInterest(request.Dto.InterestId);
+        var isProfileContainsInterest = profileWithInterests.ContainsInterest(request.Dto.InterestId);
 
-        if (isContains)
+        if (isProfileContainsInterest)
         {
             throw new AlreadyContainsException(ExceptionMessages.ProfileContainsInterest);
         }
@@ -43,7 +43,7 @@ public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
             throw new Exception("You exceeded maximum amount of interests");
         }
         
-        await _unitOfWork.InterestRepository.AddInterestToProfile(profileWithInterests, interest);
+        await _unitOfWork.InterestRepository.AddInterestToProfileAsync(profileWithInterests, interest);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";

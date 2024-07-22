@@ -15,7 +15,7 @@ public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
     
     public async Task<List<LanguageResponseDto>> Handle(RemoveLanguageFromProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetProfileWithLanguages(request.Dto.ProfileId, cancellationToken);
+        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetProfileWithLanguagesAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithLanguages is null)
         {
@@ -29,15 +29,15 @@ public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
             throw new NotFoundException("Language", request.Dto.LanguageId);
         }
 
-        var isContains = profileWithLanguages.ContainsLanguage(request.Dto.LanguageId);
+        var isProfileContainsLanguage = profileWithLanguages.ContainsLanguage(request.Dto.LanguageId);
 
-        if (!isContains)
+        if (!isProfileContainsLanguage)
         {
             throw new NotContainsException(ExceptionMessages.ProfileNotContainsLanguage);
         }
 
         var languageToRemove = profileWithLanguages.Languages.First(l=>l.Id == request.Dto.LanguageId);
-        await _unitOfWork.LanguageRepository.RemoveLanguageFromProfile(profileWithLanguages, languageToRemove, cancellationToken);
+        await _unitOfWork.LanguageRepository.RemoveLanguageFromProfileAsync(profileWithLanguages, languageToRemove, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";

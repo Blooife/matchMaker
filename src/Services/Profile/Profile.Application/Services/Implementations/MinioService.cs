@@ -68,6 +68,5 @@ public class MinioService : IMinioService
         await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
             .WithBucket(_bucketName)
             .WithObject(objectName));
-        
     }
 }

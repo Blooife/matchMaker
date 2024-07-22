@@ -9,19 +9,19 @@ namespace Profile.Infrastructure.Repositories;
 public class ImageRepository(ProfileDbContext _dbContext)
     : GenericRepository<Image, int>(_dbContext), IImageRepository
 {
-    public async Task<Image> AddImageToProfile(Image image, CancellationToken cancellationToken)
+    public async Task<Image> AddImageToProfileAsync(Image image, CancellationToken cancellationToken)
     {
         await _dbContext.Images.AddAsync(image, cancellationToken);
         
         return image;
     }
     
-    public async Task RemoveImageFromProfile(Image image, CancellationToken cancellationToken)
+    public async Task RemoveImageFromProfileAsync(Image image, CancellationToken cancellationToken)
     {
         _dbContext.Images.Remove(image);
     }
 
-    public async Task<List<Image>> GetProfilesImages(string profileId, CancellationToken cancellationToken)
+    public async Task<List<Image>> GetProfilesImagesAsync(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Images).AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
@@ -29,7 +29,7 @@ public class ImageRepository(ProfileDbContext _dbContext)
         return userProfile!.Images;
     }
     
-    public async Task<UserProfile?> GetProfileWithImages(string profileId, CancellationToken cancellationToken)
+    public async Task<UserProfile?> GetProfileWithImagesAsync(string profileId, CancellationToken cancellationToken)
     {
         var userProfile = await _dbContext.Profiles.Include(p => p.Images)
             .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);

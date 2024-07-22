@@ -9,7 +9,7 @@ namespace Profile.Infrastructure.Repositories;
 public class CityRepository(ProfileDbContext _dbContext)
     : GenericRepository<City, int>(_dbContext), ICityRepository
 {
-    public async Task<City?> GetCityWithCountryById(int cityId, CancellationToken cancellationToken)
+    public async Task<City?> GetCityWithCountryByIdAsync(int cityId, CancellationToken cancellationToken)
     {
         var city = await _dbContext.Cities.Include(c => c.Country)
             .FirstOrDefaultAsync(c => c.Id == cityId, cancellationToken);

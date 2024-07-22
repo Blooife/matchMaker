@@ -5,9 +5,9 @@ namespace Profile.Domain.Repositories;
 
 public interface IEducationRepository : IGenericRepository<Education, int>
 {
-    Task AddEducationToProfile(UserProfile profile, ProfileEducation userEducation);
-    Task RemoveEducationFromProfile(UserProfile profile, ProfileEducation userEducation);
-    Task UpdateProfilesEducation(ProfileEducation userEducation, string description);
-    Task<List<ProfileEducation>> GetProfilesEducation(UserProfile profile, CancellationToken cancellationToken);
-    Task<UserProfile?> GetProfileWithEducation(string profileId, CancellationToken cancellationToken);
+    Task AddEducationToProfileAsync(UserProfile profile, ProfileEducation userEducation);
+    Task RemoveEducationFromProfileAsync(UserProfile profile, ProfileEducation userEducation);
+    Task UpdateProfilesEducationAsync(ProfileEducation userEducation, string description);
+    Task<List<ProfileEducation>> GetProfilesEducationAsync(UserProfile profile, CancellationToken cancellationToken);
+    Task<UserProfile?> GetProfileWithEducationAsync(string profileId, CancellationToken cancellationToken);
 }

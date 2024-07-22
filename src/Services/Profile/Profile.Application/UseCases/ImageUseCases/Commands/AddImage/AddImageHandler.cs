@@ -46,7 +46,7 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
             ImageUrl = objectName 
         };
 
-        var result = await _unitOfWork.ImageRepository.AddImageToProfile(imageEntity, cancellationToken);
+        var result = await _unitOfWork.ImageRepository.AddImageToProfileAsync(imageEntity, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var cacheKey = $"{_cacheKeyPrefix}:{result.Id}";

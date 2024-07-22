@@ -58,7 +58,7 @@ public class ImagesController : ControllerBase
         return File(stream, GetMimeType(image.ImageUrl));
     }
 
-    [HttpPost("to/profile")]
+    [HttpPost]
     public async Task<IActionResult> AddImageToProfile(AddImageDto dto, CancellationToken cancellationToken)
     {
         var command = new AddImageCommand(dto);
@@ -68,7 +68,7 @@ public class ImagesController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("from/profile")]
+    [HttpDelete]
     public async Task<IActionResult> RemoveImageFromProfile([FromBody] RemoveImageDto dto, CancellationToken cancellationToken)
     {
         var command = new RemoveImageCommand(dto);
@@ -88,6 +88,7 @@ public class ImagesController : ControllerBase
         };
 
         var extension = Path.GetExtension(fileName).ToLowerInvariant();
+        
         return mimeTypes.ContainsKey(extension) ? mimeTypes[extension] : "application/octet-stream";
     }
 }

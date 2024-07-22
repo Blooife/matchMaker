@@ -15,7 +15,7 @@ public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
     
     public async Task<List<LanguageResponseDto>> Handle(AddLanguageToProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetProfileWithLanguages(request.Dto.ProfileId, cancellationToken);
+        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetProfileWithLanguagesAsync(request.Dto.ProfileId, cancellationToken);
         
         if (profileWithLanguages is null)
         {
@@ -29,14 +29,14 @@ public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
             throw new NotFoundException("Language", request.Dto.LanguageId);
         }
 
-        var isContains = profileWithLanguages.ContainsLanguage(request.Dto.LanguageId);
+        var isProfileContainsLanguage = profileWithLanguages.ContainsLanguage(request.Dto.LanguageId);
 
-        if (isContains)
+        if (isProfileContainsLanguage)
         {
             throw new AlreadyContainsException(ExceptionMessages.ProfileContainsLanguage);
         }
         
-        await _unitOfWork.LanguageRepository.AddLanguageToProfile(profileWithLanguages, language);
+        await _unitOfWork.LanguageRepository.AddLanguageToProfileAsync(profileWithLanguages, language);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";
