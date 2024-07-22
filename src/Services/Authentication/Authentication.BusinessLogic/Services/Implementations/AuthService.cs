@@ -1,16 +1,18 @@
 using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.DTOs.Response;
 using Authentication.BusinessLogic.Exceptions;
+using Authentication.BusinessLogic.Producers;
 using Authentication.BusinessLogic.Providers.Interfaces;
 using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
 using Shared.Constants;
+using Shared.Messages.Authentication;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
-public class AuthService(IUserRepository _userRepository, IMapper _mapper,
+public class AuthService(IUserRepository _userRepository, IMapper _mapper, ProducerService _producerService,
     IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider) : IAuthService
 {
     public async Task<GeneralResponseDto> RegisterAsync(UserRequestDto registrationRequestDto)
@@ -24,6 +26,9 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper,
             throw new RegisterException(result.Errors.First().Description);
         }
         await _userRepository.AddToRoleAsync(user, Roles.User);
+        
+        var message = _mapper.Map<UserCreatedMessage>(user);
+        await _producerService.ProduceAsync(message);
         
         return new  GeneralResponseDto() { Message = "User registered successfully"};
     }
