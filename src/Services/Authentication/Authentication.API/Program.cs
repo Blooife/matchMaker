@@ -31,6 +31,9 @@ app.MapControllers();
 app.UseCors("MyCorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
+app.AppendHangfireDashboard(builder.Configuration);
+app.ConfigureAndScheduleHangfireJobs();
+
 app.ApplyMigrations(app.Services);
 
 app.Run();
