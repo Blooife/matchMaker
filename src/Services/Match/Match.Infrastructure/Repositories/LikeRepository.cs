@@ -11,6 +11,7 @@ public class LikeRepository(IMongoCollection<Like> _collection) : GenericReposit
     {
         var getResult = await GetAsync(like =>
             like.IsLike && like.ProfileId == likeParam.TargetProfileId && like.TargetProfileId == likeParam.ProfileId, cancellationToken);
+        
         return getResult.FirstOrDefault();
     }
 }

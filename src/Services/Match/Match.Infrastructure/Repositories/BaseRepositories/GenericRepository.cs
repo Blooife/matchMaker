@@ -62,6 +62,7 @@ public class GenericRepository<T, TKey>(IMongoCollection<T> _collection) : IGene
     {
         var baseFilter = Builders<T>.Filter.Where(condition);
         var filter = ApplySoftDeleteFilter(baseFilter);
+        
         return await _collection.Find(filter).ToListAsync(cancellationToken);
     }
 
@@ -69,6 +70,7 @@ public class GenericRepository<T, TKey>(IMongoCollection<T> _collection) : IGene
     {
         var baseFilter = Builders<T>.Filter.Eq("Id", id);
         var filter = ApplySoftDeleteFilter(baseFilter);
+        
         return await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
