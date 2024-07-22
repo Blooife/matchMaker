@@ -30,5 +30,4 @@ public class UserProfile : ISoftDeletable
     public List<Interest> Interests { get; set; } = new List<Interest>();
     public List<ProfileEducation> ProfileEducations { get; set; } = new List<ProfileEducation>();
     public List<Image> Images { get; set; } = new List<Image>();
-
 }

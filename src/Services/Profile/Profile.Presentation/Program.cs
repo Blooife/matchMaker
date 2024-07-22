@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Profile.Application.Extensions;
 using Profile.Infrastructure.Extensions;
+using Profile.Infrastructure.Services;
 using Profile.Presentation.Extensions;
 using Profile.Presentation.MiddlewareHandlers;
 
@@ -24,9 +26,12 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseCors("MyCorsPolicy");
+app.MapControllers();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+app.MapGrpcService<ProfileGrpcService>();
+
 app.ApplyMigrations(app.Services);
 
 app.Run();
