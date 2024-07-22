@@ -3,6 +3,7 @@ using Authentication.BusinessLogic.Exceptions;
 using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
+using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 

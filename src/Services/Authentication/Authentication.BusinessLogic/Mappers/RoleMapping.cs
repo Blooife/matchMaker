@@ -11,6 +11,7 @@ public class RoleMapping : Profile
         CreateMap<string, Role>()
             .ForMember(dest => dest.Name, act=> act.MapFrom(src => src))
             .ForMember(dest => dest.NormalizedName, act=> act.MapFrom(src => src.ToUpper()));
+        
         CreateMap<Role, RoleResponseDto>();
     }
 }

@@ -13,9 +13,11 @@ public class UserMapping : Profile
         CreateMap<UserRequestDto, User>()
             .ForMember(dest => dest.UserName, act => act.MapFrom(src => src.Email))
             .ForMember(dest => dest.NormalizedEmail, act => act.MapFrom(src => src.Email.ToUpper()));
+        
         CreateMap<User, UserResponseDto>().ReverseMap();
 
         CreateMap<User, UserCreatedMessage>();
+        
         CreateMap<User, UserDeletedMessage>();
     }
 }

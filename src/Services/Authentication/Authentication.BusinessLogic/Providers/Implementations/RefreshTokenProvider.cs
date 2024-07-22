@@ -11,6 +11,7 @@ public class RefreshTokenProvider : IRefreshTokenProvider
         using (RandomNumberGenerator random = RandomNumberGenerator.Create())
         {
             random.GetBytes(number);
+            
             return Convert.ToBase64String(number);
         }
     }

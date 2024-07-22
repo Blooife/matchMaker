@@ -1,4 +1,5 @@
 using Authentication.BusinessLogic.DTOs.Response;
+using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Interfaces;
 

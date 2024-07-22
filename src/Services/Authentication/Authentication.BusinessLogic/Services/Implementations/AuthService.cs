@@ -9,6 +9,7 @@ using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
 using Shared.Constants;
 using Shared.Messages.Authentication;
+using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
@@ -25,6 +26,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, Produ
         {
             throw new RegisterException(result.Errors.First().Description);
         }
+        
         await _userRepository.AddToRoleAsync(user, Roles.User);
         
         var message = _mapper.Map<UserCreatedMessage>(user);
