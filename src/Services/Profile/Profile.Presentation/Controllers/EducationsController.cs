@@ -64,7 +64,7 @@ public class EducationsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("to/profile")]
+    [HttpPost("profile")]
     public async Task<IActionResult> AddEducationToProfile([FromBody] AddEducationToProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new AddEducationToProfileCommand(dto);
@@ -74,7 +74,7 @@ public class EducationsController : ControllerBase
         return Ok(result);
     }
     
-    [HttpDelete("from/profile")]
+    [HttpDelete("profile")]
     public async Task<IActionResult> RemoveEducationFromProfile([FromBody] RemoveEducationFromProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new RemoveEducationFromProfileCommand(dto);
