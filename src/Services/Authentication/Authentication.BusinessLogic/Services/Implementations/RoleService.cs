@@ -22,7 +22,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (user is null)
         {
-            _logger.LogError($"User with email = {email} was not found");
+            _logger.LogError("Assign role failed: User with email = {email} was not found", email);
             throw new NotFoundException(email);
         }
 
@@ -30,7 +30,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (!isRoleExist)
         {
-            _logger.LogError($"{roleName} role does not exist");
+            _logger.LogError("Assign role failed: role with name = {name} does not exist", roleName);
             throw new AssignRoleException(ExceptionMessages.RoleNotExists);
         }
         
@@ -38,7 +38,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (!result.Succeeded)
         {
-            _logger.LogError(result.Errors.First().Description);
+            _logger.LogError("Assign role failed with errors: {errors}", result.Errors.Select(e => e.Description).ToArray());
             throw new AssignRoleException(result.Errors.First().Description);
         }
         
@@ -51,7 +51,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (user is null)
         {
-            _logger.LogError($"User with email = {email} was not found");
+            _logger.LogError("Remove user from role failed: User with email = {email} was not found", email);
             throw new NotFoundException(email);
         }
 
@@ -59,7 +59,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (roles.Count == 1)
         {
-            _logger.LogError($"User can't have less than 1 role");
+            _logger.LogError("Remove user from role failed: User can't have less than 1 role");
             throw new RemoveRoleException("User can't have less than 1 role");
         }
         
@@ -67,7 +67,7 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
         
         if (!result.Succeeded)
         {
-            _logger.LogError(result.Errors.First().Description);
+            _logger.LogError("Remove user from role failed with errors: {errors}", result.Errors.Select(e => e.Description).ToArray());
             throw new RemoveRoleException(result.Errors.First().Description);
         }
         

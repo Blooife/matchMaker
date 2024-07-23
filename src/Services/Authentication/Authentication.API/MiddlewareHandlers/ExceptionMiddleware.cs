@@ -42,7 +42,7 @@ namespace Authentication.API.MiddlewareHandlers
                 case ValidationException validationException:
                     statusCode = HttpStatusCode.BadRequest;
                     result = CreateErrorResponse(validationException.Message, "ValidationError");
-                    _logger.LogError(validationException.Message);
+                    _logger.LogError(validationException, validationException.Message);
                     break;
                 case NotFoundException notFoundException:
                     statusCode = HttpStatusCode.NotFound;
@@ -75,7 +75,7 @@ namespace Authentication.API.MiddlewareHandlers
                 default:
                     statusCode = HttpStatusCode.InternalServerError;
                     result = CreateErrorResponse(exception.Message, "Failure");
-                    _logger.LogError(exception.Message);
+                    _logger.LogError(exception, exception.Message);
                     break;
             }
 
@@ -99,7 +99,7 @@ namespace Authentication.API.MiddlewareHandlers
             {
                 errorMessage += $" | Inner Exception: {dbException.InnerException.Message}";
             }
-            _logger.LogError(errorMessage);
+            _logger.LogError(dbException, errorMessage);
             
             return CreateErrorResponse(errorMessage, "DatabaseError");
         }
@@ -117,7 +117,7 @@ namespace Authentication.API.MiddlewareHandlers
                 errorMessage += $" | Entity: {entry.Entity.GetType().Name}, State: {entry.State}";
             }
             
-            _logger.LogError(errorMessage);
+            _logger.LogError(dbUpdateException, errorMessage);
             
             return CreateErrorResponse(errorMessage, "DatabaseUpdateError");
         }

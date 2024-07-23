@@ -17,7 +17,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogg
         
         if (user is null)
         {
-            _logger.LogError($"User with id = {userId} was not found");
+            _logger.LogError("Delete user by id failed: User with id = {userId} was not found", userId);
             throw new NotFoundException(userId);
         }
 
@@ -25,7 +25,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogg
         
         if (!result.Succeeded)
         {
-            _logger.LogError(ExceptionMessages.DeleteUserFailed);
+            _logger.LogError("Delete user by id failed with errors: {errors}", result.Errors.Select(e => e.Description).ToArray());
             throw new DeleteUserException(ExceptionMessages.DeleteUserFailed);
         }
         
@@ -52,6 +52,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogg
 
         if (user is null)
         {
+            _logger.LogError("Get user by id failed: User with id = {userId} was not found", userId);
             throw new NotFoundException(userId);
         }
         
@@ -64,7 +65,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogg
         
         if (user is null)
         {
-            _logger.LogError($"User with email = {email} was not found");
+            _logger.LogError("Get user by email failed: User with email = {email} was not found", email);
             throw new NotFoundException(email);
         }
         
@@ -77,7 +78,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogg
         
         if (user is null)
         {
-            _logger.LogError($"User with id = {userId} was not found");
+            _logger.LogError("Get user's roles failed: User with id = {userId} was not found", userId);
             throw new NotFoundException(userId);
         }
 
