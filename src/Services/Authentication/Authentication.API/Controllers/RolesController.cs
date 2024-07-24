@@ -28,7 +28,7 @@ public class RolesController(IRoleService _roleService): ControllerBase
         return Ok(response);
     }
     
-    [HttpDelete("removal")]
+    [HttpPost("removal")]
     [Authorize(Roles = Roles.Admin)]
     public async Task<IActionResult> RemoveFromRole([FromBody] AssignRoleRequestDto model, CancellationToken cancellationToken)
     {

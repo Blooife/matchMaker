@@ -1,9 +1,7 @@
-using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.DTOs.Response;
 using Authentication.BusinessLogic.Exceptions;
 using Authentication.BusinessLogic.Producers;
 using Authentication.BusinessLogic.Services.Interfaces;
-using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
 using Shared.Messages.Authentication;
@@ -35,18 +33,36 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, Produ
         return new GeneralResponseDto() { Message = "User deleted successfully" };
     }
 
-    public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync(CancellationToken cancellationToken)
+    public async Task<List<UserResponseDto>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
         var users = await _userRepository.GetAllUsersAsync(cancellationToken);
         
-        return _mapper.Map<IEnumerable<UserResponseDto>>(users);
+        var mappedUsers = _mapper.Map<List<UserResponseDto>>(users);
+        
+        for (var i = 0; i < mappedUsers.Count; i++)
+        {
+            mappedUsers[i].Roles = await _userRepository.GetRolesAsync(users[i]);
+        }
+        
+        return mappedUsers;
     }
     
-    public async Task<PagedList<User>> GetPaginatedUsersAsync(int pageSize, int pageNumber)
+    public async Task<PagedList<UserResponseDto>> GetPaginatedUsersAsync(int pageSize, int pageNumber)
     {
-        var result = await _userRepository.GetPaginatedUsersAsync(pageNumber, pageSize);
+        var (users, totalCount) = await _userRepository.GetPagedUsersAsync(pageNumber, pageSize);
+
+        var userResponseDtos = users.Select(user => new UserResponseDto
+        {
+            Id = user.Id,
+            Email = user.Email,
+        }).ToList();
+
+        for (int i = 0; i < userResponseDtos.Count; i++)
+        {
+            userResponseDtos[i].Roles = await _userRepository.GetRolesAsync(users[i]);
+        }
         
-        return result;
+        return new PagedList<UserResponseDto>(userResponseDtos, totalCount, pageNumber, pageSize);
     }
 
     public async Task<UserResponseDto> GetUserByIdAsync(string userId, CancellationToken cancellationToken)
