@@ -14,7 +14,9 @@ public class UserMapping : Profile
             .ForMember(dest => dest.UserName, act => act.MapFrom(src => src.Email))
             .ForMember(dest => dest.NormalizedEmail, act => act.MapFrom(src => src.Email.ToUpper()));
         
-        CreateMap<User, UserResponseDto>().ReverseMap();
+        CreateMap<User, UserResponseDto>();
+
+        CreateMap<User, LoginResponseDto>();
 
         CreateMap<User, UserCreatedMessage>();
         

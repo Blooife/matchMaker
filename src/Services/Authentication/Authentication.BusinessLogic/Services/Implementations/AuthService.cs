@@ -60,12 +60,8 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, Produ
 
         await _userRepository.UpdateUserAsync(user);
             
-        var userDto = _mapper.Map<UserResponseDto>(user);
-        var loginResponseDto = new LoginResponseDto()
-        {
-            userDto = userDto,
-            JwtToken = token,
-        };
+        var loginResponseDto = _mapper.Map<LoginResponseDto>(user);
+        loginResponseDto.JwtToken = token;
 
         return loginResponseDto;
     }
@@ -93,12 +89,8 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, Produ
 
         await _userRepository.UpdateUserAsync(user);
             
-        var userDto = _mapper.Map<UserResponseDto>(user);
-        var loginResponseDto = new LoginResponseDto()
-        {
-            userDto = userDto,
-            JwtToken = token,
-        };
+        var loginResponseDto = _mapper.Map<LoginResponseDto>(user);
+        loginResponseDto.JwtToken = token;
 
         return loginResponseDto;
     }

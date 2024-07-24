@@ -1,5 +1,3 @@
-using Shared.Messages.Authentication;
-
 namespace Shared.Messages.Authentication;
 
 public class ManyUsersDeletedMessage : BaseMessage

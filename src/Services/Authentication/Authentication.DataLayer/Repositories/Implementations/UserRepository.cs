@@ -3,7 +3,6 @@ using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Shared.Models;
 
 namespace Authentication.DataLayer.Repositories.Implementations;
 
@@ -60,17 +59,22 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
         return await _userManager.UpdateAsync(user);
     }
 
-    public async Task<IEnumerable<User>> GetAllUsersAsync(CancellationToken cancellationToken)
+    public async Task<List<User>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
         return await _userManager.Users.Where(u => u.DeletedAt == null).AsNoTracking().ToListAsync(cancellationToken);
     }
     
-    public async Task<PagedList<User>> GetPaginatedUsersAsync(int pageNumber, int pageSize)
+    public async Task<(List<User> Users, int TotalCount)> GetPagedUsersAsync(int pageNumber, int pageSize)
     {
         var query = _dbContext.Set<User>().Where(u => u.DeletedAt == null);
-        
-        return PagedList<User>.ToPagedList(query.OrderBy(e=>e.Email),
-            pageNumber,
-            pageSize);
+        var totalCount = query.Count();
+
+        var users = await query
+            .OrderBy(e => e.Email)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (users, totalCount);
     }
 }
