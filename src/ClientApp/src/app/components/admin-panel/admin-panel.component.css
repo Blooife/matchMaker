@@ -1,0 +1,30 @@
+.admin-panel {
+  padding: 20px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+button {
+  margin-right: 10px;
+}
+
+select {
+  padding: 5px;
+}

@@ -1,0 +1,16 @@
+<div class="register-container">
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <div>
+      <label for="email">Email:</label>
+      <input id="email" formControlName="email" type="email">
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input id="password" formControlName="password" type="password">
+    </div>
+    <button type="submit" [disabled]="!registerForm.valid">Register</button>
+  </form>
+  <div *ngIf="errorMessage != ''" class="error-message">
+    {{ errorMessage }}
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<header>
+  <nav>
+    <button [routerLink]="['']">Home</button>
+    <button *ngIf="!isLoggedIn()" [routerLink]="['/login']">Login</button>
+    <button *ngIf="!isLoggedIn()" [routerLink]="['/register']">Register</button>
+    <button *ngIf="isLoggedIn()" (click)="logOut()">LogOut</button>
+  </nav>
+</header>

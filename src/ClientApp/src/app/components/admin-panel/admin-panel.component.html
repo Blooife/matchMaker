@@ -1,0 +1,40 @@
+<div class="admin-panel">
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>User ID</th>
+      <th>Username</th>
+      <th>Roles</th>
+      <th *ngIf="isAdmin()">Assign/Remove Role</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.email }}</td>
+      <td>
+        <span *ngFor="let role of user.roles">{{ role }} </span>
+      </td>
+      <td *ngIf="isAdmin()">
+        <select [(ngModel)]="selectedRole">
+          <option value="" disabled selected>Select Role</option>
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+        <button (click)="assignRole(user.id, selectedRole)">Assign</button>
+        <button (click)="removeRole(user.id, selectedRole)">Remove</button>
+      </td>
+      <td>
+        <button (click)="deleteUser(user.id)">Delete User</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="pagination">
+    <button (click)="previousPage()" [disabled]="pageNumber === 1">Previous</button>
+    <span>Page {{ pageNumber }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="pageNumber === totalPages">Next</button>
+  </div>
+</div>

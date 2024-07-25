@@ -1,0 +1,10 @@
+<body>
+  <div *ngIf="isLoggedIn()">
+    <button *ngIf="isAdmin() || isModerator()" [routerLink]="['/admin-panel']">
+      admin panel
+    </button>
+  </div>
+  <div *ngIf="!isLoggedIn()">
+    You are not logged in
+  </div>
+</body>
