@@ -1,0 +1,4 @@
+<mat-slider [min]="min" [max]="max" [step]="step" [ngModel]="value"
+            ngDefaultControl (ngModelChange)="handleSliderChange($event)">
+  <input matSliderThumb value="1.5">
+</mat-slider>

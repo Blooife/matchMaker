@@ -1,0 +1,21 @@
+<div *ngIf="loading; else loadedContent" class="content-container">
+  <div class="loader">Loading...</div>
+</div>
+
+<ng-template #loadedContent>
+  <div *ngIf="profile; else noProfile" class="content-container">
+    <app-profile-card [profile]="profile"></app-profile-card>
+    <button [routerLink]="['/update-profile', profile.id]" class="update-profile-button">
+      Update profile
+    </button>
+  </div>
+
+  <ng-template #noProfile>
+    <div class="content-container">
+      <p class="no-profile-message">You have not created a profile yet</p>
+      <button [routerLink]="['/create-profile', this.userId]">
+        Create profile
+      </button>
+    </div>
+  </ng-template>
+</ng-template>

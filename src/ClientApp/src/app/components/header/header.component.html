@@ -1,8 +1,29 @@
-<header>
-  <nav>
-    <button [routerLink]="['']">Home</button>
-    <button *ngIf="!isLoggedIn()" [routerLink]="['/login']">Login</button>
-    <button *ngIf="!isLoggedIn()" [routerLink]="['/register']">Register</button>
-    <button *ngIf="isLoggedIn()" (click)="logOut()">LogOut</button>
+<header class="header">
+  <div class="toggle-btn" (click)="toggleMenu()">
+    <span *ngIf="isMenuVisible" class="icon-close">✖</span>
+    <span *ngIf="!isMenuVisible" class="icon-menu">☰</span>
+  </div>
+  <nav *ngIf="isMenuVisible">
+    <button *ngIf="(isLoggedIn$)" (click)="logOut()">LogOut</button>
+    <div *ngIf="isLoggedIn$">
+      <button *ngIf="isAdmin() || isModerator()" [routerLink]="['/admin-panel']">
+        Admin Panel
+      </button>
+      <button *ngIf="isUser()" [routerLink]="['/profile']">
+        Profile
+      </button>
+      <button *ngIf="isUser()" [routerLink]="['/find-match']">
+        Find match
+      </button>
+      <button *ngIf="isUser()" [routerLink]="['/matches']">
+        Matches
+      </button>
+      <button *ngIf="isUser()" [routerLink]="['/chats']">
+        Chats
+      </button>
+      <button (click)="deleteUserById()">
+        Delete account
+      </button>
+    </div>
   </nav>
 </header>

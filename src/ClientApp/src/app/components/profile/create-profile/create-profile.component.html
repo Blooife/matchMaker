@@ -1,0 +1,46 @@
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
+  <label for="name">Name:</label>
+  <input id="name" formControlName="name" type="text" >
+
+  <label for="lastName">Last Name:</label>
+  <input id="lastName" formControlName="lastName" type="text">
+
+  <label for="birthDate">Birth Date:</label>
+  <input id="birthDate" formControlName="birthDate" type="date">
+
+  <label for="gender">Gender:</label>
+  <select id="gender" formControlName="gender" class="select-input">
+    <option *ngFor="let gender of genders" [value]="gender.value">{{ gender.key }}</option>
+  </select>
+
+  <label for="bio">Bio:</label>
+  <textarea id="bio" formControlName="bio"></textarea>
+
+  <label for="height">Height:</label>
+  <input id="height" formControlName="height" type="number">
+
+  <label for="showAge">Show Age:</label>
+  <input id="showAge" formControlName="showAge" type="checkbox">
+
+  <label for="ageFrom">Age From:</label>
+  <input id="ageFrom" formControlName="ageFrom" type="number" min="16" max="100">
+
+  <label for="ageTo">Age To:</label>
+  <input id="ageTo" formControlName="ageTo" type="number" min="16" max="100">
+
+  <label for="maxDistance">Max Distance:</label>
+  <input id="maxDistance" formControlName="maxDistance" type="number" min="0" max="1000">
+
+  <label for="preferredGender">Preferred Gender:</label>
+  <select id="preferredGender" formControlName="preferredGender" class="select-input">
+    <option *ngFor="let gender of genders" [value]="gender.value">{{ gender.key }}</option>
+  </select>
+
+  <app-goal-select (goalSelected)="onGoalSelected($event)"></app-goal-select>
+
+  <app-country-select (countrySelected)="onCountrySelected($event)"></app-country-select>
+
+  <app-city-select [countryId]="selectedCountryId" (citySelected)="onCitySelected($event)"></app-city-select>
+
+  <button type="submit" mat-raised-button color="primary">Create Profile</button>
+</form>

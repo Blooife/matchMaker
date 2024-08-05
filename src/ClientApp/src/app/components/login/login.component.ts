@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import { AuthService } from '../../services/auth-service.service';
 import { Router } from '@angular/router';
 import {NgIf} from "@angular/common";
-import {roles} from "../../constants/roles";
 
 @Component({
   selector: 'app-login',
@@ -17,7 +16,6 @@ import {roles} from "../../constants/roles";
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -32,13 +30,13 @@ export class LoginComponent {
 
   async login() {
     if (this.loginForm.valid) {
-      let response = await this.authService.login(this.loginForm.value).catch(
-        error => {
-          this.errorMessage = error;
-        });
-      if(response){
-        await this.router.navigate(['']);
-      }
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (isLoggedIn) => {
+          if (isLoggedIn) {
+            this.router.navigate(['']);
+          }
+        },
+      });
     }
   }
 }

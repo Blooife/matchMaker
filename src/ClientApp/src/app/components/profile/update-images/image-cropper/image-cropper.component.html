@@ -1,0 +1,10 @@
+<div class="cropper-container">
+  <image-cropper
+    [imageChangedEvent]="imageChangedEvent"
+    [resizeToWidth]="800"
+    [resizeToHeight]="600"
+    (imageCropped)="imageCropped($event)"
+    (cropperReady)="cropperReady()"
+    (loadImageFailed)="loadImageFailed()">
+  </image-cropper>
+</div>

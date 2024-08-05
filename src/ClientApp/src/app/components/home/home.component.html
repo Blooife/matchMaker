@@ -1,10 +1,22 @@
 <body>
-  <div *ngIf="isLoggedIn()">
-    <button *ngIf="isAdmin() || isModerator()" [routerLink]="['/admin-panel']">
-      admin panel
-    </button>
+<div class="home-container">
+  <div class="welcome-message">
+    <h1>Welcome to Our Dating App!</h1>
+    <p>Your perfect match is just a click away. Please log in or register to start connecting with others.</p>
   </div>
-  <div *ngIf="!isLoggedIn()">
-    You are not logged in
+
+  <div class="auth-buttons">
+    <button *ngIf="!isLoggedIn()" [routerLink]="['/login']">Login</button>
+    <button *ngIf="!isLoggedIn()" [routerLink]="['/register']">Register</button>
+
+    <div *ngIf="isLoggedIn()">
+      <button *ngIf="isAdmin() || isModerator()" [routerLink]="['/admin-panel']">
+        Admin Panel
+      </button>
+      <button [routerLink]="['/profile']">
+        Profile
+      </button>
+    </div>
   </div>
+</div>
 </body>

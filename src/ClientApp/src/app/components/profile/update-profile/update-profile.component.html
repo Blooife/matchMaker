@@ -1,0 +1,50 @@
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <label for="name">Name:</label>
+  <input id="name" formControlName="name" type="text">
+
+  <label for="lastName">Last Name:</label>
+  <input id="lastName" formControlName="lastName" type="text">
+
+  <label for="birthDate">Birth Date:</label>
+  <input id="birthDate" formControlName="birthDate" type="date">
+
+  <label for="gender">Gender:</label>
+  <select id="gender" formControlName="gender">
+    <option *ngFor="let gender of genders" [value]="gender.value">{{ gender.key }}</option>
+  </select>
+
+  <label for="bio">Bio:</label>
+  <textarea id="bio" formControlName="bio"></textarea>
+
+  <label for="height">Height:</label>
+  <input id="height" formControlName="height" type="number">
+
+  <label for="showAge">Show Age:</label>
+  <input id="showAge" formControlName="showAge" type="checkbox">
+
+  <label for="ageFrom">Age From:</label>
+  <input id="ageFrom" formControlName="ageFrom" type="number">
+
+  <label for="ageTo">Age To:</label>
+  <input id="ageTo" formControlName="ageTo" type="number">
+
+  <label for="maxDistance">Max Distance:</label>
+  <input id="maxDistance" formControlName="maxDistance" type="number">
+
+  <label for="preferredGender">Preferred Gender:</label>
+  <select id="preferredGender" formControlName="preferredGender">
+    <option *ngFor="let gender of genders" [value]="gender.value">{{ gender.key }}</option>
+  </select>
+
+  <app-goal-select [selectedGoalId]="selectedGoalId" (goalSelected)="onGoalSelected($event)"></app-goal-select>
+
+  <app-country-select [selectedCountryId]="selectedCountryId" (countrySelected)="onCountrySelected($event)"></app-country-select>
+
+  <app-city-select [selectedCityId]="selectedCityId" [countryId]="selectedCountryId" (citySelected)="onCitySelected($event)"></app-city-select>
+
+  <button type="submit">Update Profile</button>
+  <app-update-images></app-update-images>
+  <app-update-interests></app-update-interests>
+  <app-update-languages></app-update-languages>
+  <app-update-education></app-update-education>
+</form>

@@ -16,7 +16,6 @@ import {NgIf} from "@angular/common";
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -30,15 +29,14 @@ export class RegisterComponent {
   }
 
   async register() {
-    if (this.registerForm.valid) {
-      let response = await this.authService.register(this.registerForm.value).catch(
-        error => {
-          this.errorMessage = error
-        }
-      );
-      if(response){
-        await this.router.navigate(['/login']);
+    this.authService.register(this.registerForm.value).subscribe(
+      {
+        next: (result) => {
+          if (result) {
+            this.router.navigate(['/login']);
+          }
+        },
       }
-    }
+    )
   }
 }
