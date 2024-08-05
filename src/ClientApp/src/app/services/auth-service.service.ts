@@ -1,97 +1,102 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import {firstValueFrom, Observable, throwError} from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
-import {UserRequestDto} from "../dtos/auth/userRequestDto";
-import {GeneralResponseDto} from "../dtos/shared/generalResponseDto";
-import {LoginResponseDto} from "../dtos/auth/loginResponseDto";
-import {RefreshRequestDto} from "../dtos/auth/refreshRequestDto";
-import {jwtDecode} from "jwt-decode";
-import {ErrorDetails} from "../dtos/shared/ErrorDetails";
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { catchError, map, retry, tap } from 'rxjs/operators';
+import { UserRequestDto } from '../dtos/auth/userRequestDto';
+import { GeneralResponseDto } from '../dtos/shared/generalResponseDto';
+import { LoginResponseDto } from '../dtos/auth/loginResponseDto';
+import { RefreshRequestDto } from '../dtos/auth/refreshRequestDto';
+import { jwtDecode } from 'jwt-decode';
+import { authEndpoints } from '../constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:5001/api/auth'; // Укажите ваш API URL
-
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLogged());
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
+
+  private currentUserIdSubject = new BehaviorSubject<string | null>(this.getCurrentUserId());
+  currentUserId$ = this.currentUserIdSubject.asObservable();
+
+  private currentUserRolesSubject = new BehaviorSubject<string[] | null>(this.getCurrentUserRoles());
+  currentUserRoles$ = this.currentUserRolesSubject.asObservable();
+
   constructor(private httpClient: HttpClient) { }
 
-  async register(model: UserRequestDto)  {
-    let response = await firstValueFrom(this.httpClient.post<GeneralResponseDto>(`${this.apiUrl}/register`, model, this.httpOptions)
+  register(model: UserRequestDto): Observable<GeneralResponseDto> {
+    return this.httpClient.post<GeneralResponseDto>(`${authEndpoints.register}`, model, this.httpOptions)
       .pipe(
-        retry(2),
-        catchError(this.handleError)
-      ));
-    return response;
+      );
   }
 
-  async login(model: UserRequestDto): Promise<boolean> {
-    let response = await firstValueFrom(this.httpClient.post<LoginResponseDto>(`${this.apiUrl}/login`, model, this.httpOptions)
+  login(model: UserRequestDto): Observable<boolean> {
+    return this.httpClient.post<LoginResponseDto>(`${authEndpoints.login}`, model, this.httpOptions)
       .pipe(
-        retry(2),
-        catchError(this.handleError)
-      )
-    );
-
-    if (response.refreshToken){
-      this.setTokens(response);
-
-      return true;
-    }
-
-    return false;
+        tap(response => {
+          if (response.refreshToken) {
+            this.setTokens(response);
+          } else {
+            this.isLoggedInSubject.next(false);
+            this.currentUserIdSubject.next(null);
+            this.currentUserRolesSubject.next(null);
+          }
+        }),
+        map(response => !!response.refreshToken),
+      );
   }
 
-  async refreshToken(): Promise<boolean> {
+  refreshToken(): Observable<boolean> {
+    const refreshToken = this.getRefreshToken();
 
-    let refreshToken = this.getRefreshToken();
-
-    if(!refreshToken){
-      return false;
+    if (!refreshToken) {
+      return of(false);
     }
 
-    let model: RefreshRequestDto = {
-      refreshToken: refreshToken
-    };
-    let response =  await firstValueFrom(this.httpClient.post<LoginResponseDto>(`${this.apiUrl}/refresh`, model, this.httpOptions)
+    const model: RefreshRequestDto = { refreshToken };
+
+    return this.httpClient.post<LoginResponseDto>(`${authEndpoints.refresh}`, model, this.httpOptions)
       .pipe(
         retry(2),
-        catchError(this.handleError)
-      ));
-
-    if (response.refreshToken){
-      this.setTokens(response);
-
-      return true;
-    }
-
-    return false;
+        tap(response => {
+          if (response.refreshToken) {
+            this.setTokens(response);
+          } else {
+            this.isLoggedInSubject.next(false);
+            this.currentUserIdSubject.next(null);
+            this.currentUserRolesSubject.next(null);
+          }
+        }),
+        map(response => !!response.refreshToken),
+      );
   }
 
   logOut() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('access_expires_at');
+    this.isLoggedInSubject.next(false);
+    this.currentUserIdSubject.next(null);
+    this.currentUserRolesSubject.next(null);
   }
 
-  getAccessToken() {
+  getAccessToken(): string | null {
     return localStorage.getItem('access_token');
   }
 
-  getRefreshToken() {
+  getRefreshToken(): string | null {
     return localStorage.getItem('refresh_token');
   }
 
-  getExpiresAt() {
+  getExpiresAt(): string | null {
     return localStorage.getItem('access_expires_at');
   }
 
-  isLogged() {
+  isLogged(): boolean {
     const expiration = this.getExpiresAt();
 
     if (expiration) {
@@ -104,72 +109,57 @@ export class AuthService {
     return false;
   }
 
-  getCurrentUserId(){
-    if(!this.isLogged()){
+  getCurrentUserId(): string | null {
+    if (!this.isLogged()) {
       return null;
     }
 
     const accessToken = this.getAccessToken();
 
-    if(accessToken){
-      const payload = jwtDecode(accessToken);
-
+    if (accessToken) {
+      const payload = jwtDecode<{ sub: string }>(accessToken);
       return payload.sub;
     }
 
     return null;
   }
 
-    getCurrentUserRoles(): Array<string> | null{
-      if(!this.isLogged()){
-        return null;
-      }
-
-      const accessToken = this.getAccessToken();
-
-      if(accessToken){
-        const payload = jwtDecode<{ [key: string]: any }>(accessToken);
-
-        return payload['role'];
-      }
-
+  getCurrentUserRoles(): string[] | null {
+    if (!this.isLogged()) {
       return null;
     }
+
+    const accessToken = this.getAccessToken();
+
+    if (accessToken) {
+      const payload = jwtDecode<{ role: string[] }>(accessToken);
+      return payload.role;
+    }
+
+    return null;
+  }
 
   checkRights(role: string): boolean {
     const userRoles = this.getCurrentUserRoles();
 
-    if(userRoles){
-      return userRoles?.includes(role);
+    if (userRoles) {
+      return userRoles.includes(role);
     }
 
     return false;
-
   }
 
-  setTokens(loginDto: LoginResponseDto){
-    const payload = jwtDecode(loginDto.jwtToken);
+  setTokens(loginDto: LoginResponseDto) {
+    const payload = jwtDecode<{ exp: number }>(loginDto.jwtToken);
 
-    if(payload.exp){
+    if (payload.exp) {
       localStorage.setItem('access_token', loginDto.jwtToken);
       localStorage.setItem('refresh_token', loginDto.refreshToken!);
       localStorage.setItem('access_expires_at', JSON.stringify(new Date(payload.exp * 1000)));
     }
-  }
 
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = error.error.message;
-    } else if (error.error) {
-      const errorDetails: ErrorDetails = error.error;
-      errorMessage = `${errorDetails.ErrorMessage}`;
-    } else {
-      errorMessage = error.message;
-    }
-
-    console.log(errorMessage);
-
-    return throwError(()=> errorMessage);
+    this.isLoggedInSubject.next(true);
+    this.currentUserIdSubject.next(this.getCurrentUserId());
+    this.currentUserRolesSubject.next(this.getCurrentUserRoles());
   }
 }

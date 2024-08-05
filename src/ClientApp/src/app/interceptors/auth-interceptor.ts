@@ -23,14 +23,14 @@ export class AuthInterceptor implements HttpInterceptor {
 
     if (accessToken) {
       if (!this.authService.isLogged()) {
-        return from(this.refresh(req, next)).pipe(
+        /*return from(this.refresh(req, next)).pipe(
           switchMap((newReq) => next.handle(newReq)),
           catchError((error) => {
             this.authService.logOut();
             this.goToLogIn();
             return throwError(() => error);
           })
-        );
+        );*/
       } else {
         req = this.setAuthorizationHeader(req, accessToken);
       }

@@ -1,67 +1,64 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpErrorResponse, HttpRequest} from '@angular/common/http';
-import {firstValueFrom, Observable, throwError} from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
-import { UserRequestDto } from "../dtos/auth/userRequestDto";
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import {catchError, map, retry, tap} from 'rxjs/operators';
 import { GeneralResponseDto } from "../dtos/shared/generalResponseDto";
-import { ErrorDetails } from "../dtos/shared/ErrorDetails";
-import {UserResponseDto} from "../dtos/auth/userResponseDto";
-import {AssignRoleRequestDto} from "../dtos/auth/assignRoleRequestDto"; // Импортируйте DTO для пагинированного списка
+import { UserResponseDto } from "../dtos/auth/userResponseDto";
+import { AssignRoleRequestDto } from "../dtos/auth/assignRoleRequestDto";
+import { rolesEndpoints, usersEndpoints } from "../constants/api-endpoints";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'https://localhost:5001/api/users'; // Укажите ваш API URL
-
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
+  private usersSubject = new BehaviorSubject<UserResponseDto[]>([]);
+  users$ = this.usersSubject.asObservable();
+
   constructor(private httpClient: HttpClient) { }
 
-  async getPaginatedUsers(pageSize: number, pageNumber: number): Promise<{ users: UserResponseDto[], pagination: any }> {
-    const response = await firstValueFrom(this.httpClient.get<Array<UserResponseDto>>(`${this.apiUrl}/paginated?pageSize=${pageSize}&pageNumber=${pageNumber}`,
-      {...this.httpOptions,
-      observe: 'response'})
-      .pipe(
-        retry(2),
-      catchError(this.handleError)
-    )
+  getPaginatedUsers(pageSize: number, pageNumber: number): Observable<{ users: UserResponseDto[], pagination: any }> {
+    return this.httpClient.get<UserResponseDto[]>(`${usersEndpoints.paginatedUsers(pageSize.toString(), pageNumber.toString())}`,
+      {
+        ...this.httpOptions,
+        observe: 'response'
+      }).pipe(
+      retry(2),
+      map(response => {
+        const pagination = JSON.parse(response.headers.get('X-Pagination')!);
+        return {
+          users: response.body || [],
+          pagination: pagination
+        };
+      }),
+      tap(result => {
+        this.usersSubject.next(result.users);
+      })
     );
-
-    const pagination = JSON.parse(response.headers.get('X-Pagination')!);
-    console.log(response);
-    return {
-    users: response.body || [],
-    pagination: pagination
-    };
   }
 
-  async deleteUserById(userId: string) {
-    await firstValueFrom(this.httpClient.delete<GeneralResponseDto>(`${this.apiUrl}/${userId}`, this.httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      ));
+  deleteUserById(userId: string): Observable<GeneralResponseDto> {
+    return this.httpClient.delete<GeneralResponseDto>(`${usersEndpoints.users}/${userId}`, this.httpOptions).pipe(
+      retry(2),
+    );
   }
 
-  async getUserById(userId: string) {
-    return await firstValueFrom(this.httpClient.get<UserResponseDto>(`${this.apiUrl}/${userId}`, this.httpOptions)
-      .pipe(
-        retry(2),
-        catchError(this.handleError)
-      ));
+  getUserById(userId: string): Observable<UserResponseDto> {
+    return this.httpClient.get<UserResponseDto>(`${usersEndpoints.users}/${userId}`, this.httpOptions).pipe(
+
+    );
   }
 
-  async assignRole(model: AssignRoleRequestDto) {
-    return await firstValueFrom(this.httpClient.post<GeneralResponseDto>(`https://localhost:5001/api/roles/assignment`, model, this.httpOptions)
-      .pipe(
-        retry(2),
-        catchError(this.handleError)
-      ));
+  assignRole(model: AssignRoleRequestDto): Observable<GeneralResponseDto> {
+    return this.httpClient.post<GeneralResponseDto>(`${rolesEndpoints.assignment}`, model, this.httpOptions).pipe(
+      retry(2),
+    );
   }
 
-  async removeFromRole(email:string, role: string) {
+  removeFromRole(email: string, role: string): Observable<GeneralResponseDto> {
     const options = {
       headers: this.httpOptions.headers,
       body: {
@@ -70,24 +67,8 @@ export class UserService {
       },
     };
 
-    return await firstValueFrom(this.httpClient.delete<GeneralResponseDto>(`https://localhost:5001/api/roles/removal`, options)
-      .pipe(
-        retry(2),
-        catchError(this.handleError)
-      ));
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = '';
-    if (error.error) {
-      const errorDetails: ErrorDetails = error.error;
-      errorMessage = `${errorDetails.ErrorMessage}`;
-    } else {
-      errorMessage = error.message;
-    }
-
-    console.log(errorMessage);
-
-    return throwError(() => errorMessage);
+    return this.httpClient.delete<GeneralResponseDto>(`${rolesEndpoints.removal}`, options).pipe(
+      retry(2),
+    );
   }
 }
