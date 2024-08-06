@@ -10,6 +10,7 @@ networks:
   gateway-network:
     driver: bridge
 
+    
 services:
   authentication_service:
     container_name: auth-service
@@ -54,7 +55,7 @@ services:
       - elasticsearch
       - zookeeper
     networks:
-      - mongo-network
+      - postgres-network
       - elk-network
       - gateway-network
   
@@ -78,7 +79,6 @@ services:
       - elasticsearch
       - zookeeper
     networks:
-      - postgres-network
       - elk-network
       - mongo-network
       - gateway-network
@@ -98,13 +98,8 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     volumes:
       - ~/.aspnet/https:/https:ro
-    depends_on:
-      - authentication_service
-      - profile_service
-      - match_service
     networks:
       - gateway-network
-      - elk-network
 
   postgres:
     container_name: postgres-db
@@ -176,6 +171,8 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - "9200:9200"
+    depends_on:
+      - logstash
     networks:
       - elk-network
 
@@ -187,8 +184,6 @@ services:
     ports:
       - "5044:5044"
       - "9600:9600"
-    depends_on:
-      - elasticsearch
     networks:
       - elk-network
 
@@ -214,6 +209,14 @@ services:
     volumes:
       - ./../data:/data
     command: server --console-address :9001 /data
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - elk-network
 
 volumes:
   postgres-data:

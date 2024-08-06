@@ -1,6 +1,6 @@
 ﻿version: '3.8'
 
-services:  
+services:
   authentication_service:
     container_name: auth-service
     build:
@@ -14,7 +14,7 @@ services:
       context: .
       dockerfile: Services/Profile/Profile.Presentation/Dockerfile
     restart: unless-stopped
-
+    
   match_service:
     container_name: match-service
     build:
@@ -34,6 +34,7 @@ services:
     image: postgres:latest
     restart: unless-stopped
 
+    
   zookeeper:
     container_name: zookeeper
     image: confluentinc/cp-zookeeper
@@ -64,6 +65,11 @@ services:
     container_name: kibana
     restart: unless-stopped
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+  
   minio:
     image: minio/minio
     container_name: minio
