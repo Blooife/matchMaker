@@ -5,7 +5,7 @@ using Profile.Application.Exceptions;
 using Profile.Application.Services.Interfaces;
 using Profile.Application.Services.Interfaces;
 using Profile.Domain.Models;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 
 namespace Profile.Application.UseCases.ImageUseCases.Commands.RemoveImage;
 

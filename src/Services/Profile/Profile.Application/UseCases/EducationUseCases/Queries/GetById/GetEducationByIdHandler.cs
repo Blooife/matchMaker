@@ -3,7 +3,7 @@ using MediatR;
 using Profile.Application.DTOs.Education.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Services.Interfaces;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 
 namespace Profile.Application.UseCases.EducationUseCases.Queries.GetById;
 

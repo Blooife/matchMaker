@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Profile.Application.Extensions;
 using Profile.Infrastructure.Extensions;
 using Profile.Infrastructure.Services;
@@ -11,7 +10,7 @@ builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureInfrastructure(builder.Configuration);
-builder.Services.ConfigureApplication();
+builder.Services.ConfigureApplication(builder.Configuration);
 builder.Services.ConfigurePresentation(builder.Configuration);
 
 var app = builder.Build();
@@ -26,10 +25,10 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseCors("MyCorsPolicy");
-app.MapControllers();
-app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllers();
+app.UseRouting();
 app.MapGrpcService<ProfileGrpcService>();
 
 app.ApplyMigrations(app.Services);

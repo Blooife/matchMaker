@@ -3,7 +3,7 @@ using MediatR;
 using Profile.Application.DTOs.Image.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Services.Interfaces;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 
 namespace Profile.Application.UseCases.ImageUseCases.Queries.GetById;
 

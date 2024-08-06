@@ -1,4 +1,5 @@
 using System.Text;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -25,6 +26,7 @@ public static class ServiceExtension
         services.ConfigureSwagger();
         services.ConfigureMinio(config);
         services.ConfigureRedisCache(config);
+        services.Configure<ConsumerConfig>(config.GetRequiredSection("Kafka:Consumer"));
     }
 
     private static void ConfigureMinio(this IServiceCollection services, IConfiguration config)

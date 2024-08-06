@@ -1,7 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Country.Response;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 
 namespace Profile.Application.UseCases.CountryUseCases.Queries.GetAll;
 

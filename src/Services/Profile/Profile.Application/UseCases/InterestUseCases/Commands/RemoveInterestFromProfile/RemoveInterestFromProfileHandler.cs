@@ -3,8 +3,11 @@ using MediatR;
 using Profile.Application.DTOs.Interest.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
+
 using Profile.Application.Services.Interfaces;
-using Profile.Domain.Repositories;
+
+using Profile.Domain.Interfaces;
+
 using Profile.Domain.Specifications.ProfileSpecifications;
 
 namespace Profile.Application.UseCases.InterestUseCases.Commands.RemoveInterestFromProfile;

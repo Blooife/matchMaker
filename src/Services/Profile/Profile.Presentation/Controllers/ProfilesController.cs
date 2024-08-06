@@ -44,6 +44,7 @@ public class ProfilesController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = $"{Roles.User}")]
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileDto dto, CancellationToken cancellationToken)
     {
         var command = new CreateProfileCommand(dto);

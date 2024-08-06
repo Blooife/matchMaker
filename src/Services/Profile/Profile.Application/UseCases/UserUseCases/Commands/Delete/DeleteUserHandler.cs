@@ -3,7 +3,7 @@ using MediatR;
 using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Services.Interfaces;
-using Profile.Domain.Repositories;
+using Profile.Domain.Interfaces;
 
 namespace Profile.Application.UseCases.UserUseCases.Commands.Delete;
 
@@ -18,7 +18,7 @@ public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheS
         if (user is null)
         {
             throw new NotFoundException("User", request.UserId);
-        }
+        } 
         
         await _unitOfWork.UserRepository.DeleteUserAsync(user, cancellationToken);
 
