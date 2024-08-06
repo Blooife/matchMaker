@@ -10,7 +10,6 @@ networks:
   gateway-network:
     driver: bridge
 
-    
 services:
   authentication_service:
     container_name: auth-service
