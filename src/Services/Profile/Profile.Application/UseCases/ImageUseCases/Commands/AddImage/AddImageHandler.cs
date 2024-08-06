@@ -3,7 +3,6 @@ using MediatR;
 using Profile.Application.DTOs.Image.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Services.Interfaces;
-using Profile.Application.Services.Interfaces;
 using Profile.Domain.Models;
 using Profile.Domain.Interfaces;
 

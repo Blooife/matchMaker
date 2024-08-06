@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Profile.Application.UseCases.CityUseCases.Queries.GetAll;
 using Profile.Application.UseCases.CityUseCases.Queries.GetById;
-using Profile.Application.UseCases.CityUseCases.Queries.GetCityWithCountryById;
 using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
@@ -33,16 +32,6 @@ public class CitiesController : ControllerBase
     public async Task<IActionResult> GetCityById([FromRoute] int id, CancellationToken cancellationToken)
     {
         var query = new GetCityByIdQuery(id);
-        
-        var city = await _mediator.Send(query, cancellationToken);
-        
-        return Ok(city);
-    }
-    
-    [HttpGet("{id}/country")]
-    public async Task<IActionResult> GetCityWithCountryById([FromRoute] int id, CancellationToken cancellationToken)
-    {
-        var query = new GetCityWithCountryByIdQuery(id);
         
         var city = await _mediator.Send(query, cancellationToken);
         

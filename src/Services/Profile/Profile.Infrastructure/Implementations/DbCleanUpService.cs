@@ -1,11 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Profile.Infrastructure.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Profile.Application.Kafka.Producers;
 using Profile.Domain.Interfaces;
-using Shared.Messages.Profile;
 
 namespace Profile.Infrastructure.Implementations
 {

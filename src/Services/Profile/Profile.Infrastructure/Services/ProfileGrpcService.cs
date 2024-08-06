@@ -1,6 +1,6 @@
 using Grpc.Core;
+using Profile.Domain.Interfaces;
 using Profile.Infrastructure.Protos;
-using Profile.Domain.Repositories;
 
 namespace Profile.Infrastructure.Services;
 
