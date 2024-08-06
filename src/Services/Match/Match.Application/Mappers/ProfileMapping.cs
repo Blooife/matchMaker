@@ -10,8 +10,6 @@ public class ProfileMapping : AutoMapper.Profile
     {
         CreateMap<CreateProfileDto, Profile>();
         CreateMap<UpdateProfileDto, Profile>();
-        CreateMap<Profile, ProfileResponseDto>()
-            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Location != null ? (double?)src.Location.Coordinates.X : null))
-            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Location != null ? (double?)src.Location.Coordinates.Y : null));;
+        CreateMap<Profile, ProfileResponseDto>();
     }
 }

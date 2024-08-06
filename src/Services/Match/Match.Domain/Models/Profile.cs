@@ -1,4 +1,3 @@
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.GeoJsonObjectModel;
 using Shared.Constants;
@@ -10,8 +9,6 @@ public class Profile : ISoftDeletable
 {
     [BsonId]
     public string Id { get; set; }
-    public string Name { get; set; }
-    public string LastName { get; set; }
     public DateTime BirthDate { get; set; }
     public int AgeFrom { get; set; }
     public int AgeTo { get; set; }

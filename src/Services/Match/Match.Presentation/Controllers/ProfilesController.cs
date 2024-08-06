@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Match.Application.DTOs.Profile.Request;
 using Match.Application.UseCases.ProfileUseCases.Commands.UpdateLocation;
 using Match.Application.UseCases.ProfileUseCases.Queries.GetPagedRecs;
-using Match.Application.UseCases.ProfileUseCases.Queries.GetRecsByProfileId;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Shared.Constants;
@@ -14,17 +13,6 @@ namespace Match.Presentation.Controllers;
 [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
 public class ProfilesController(IMediator _mediator) : ControllerBase
 {
-
-    [HttpGet("{profileId}/recommendations")]
-    public async Task<IActionResult> GetRecommendations([FromRoute]string profileId, CancellationToken cancellationToken)
-    {
-        var query = new GetRecsByProfileIdQuery(profileId);
-
-        var recommendations = await _mediator.Send(query, cancellationToken);
-
-        return Ok(recommendations);
-    }
-        
     [HttpGet("{profileId}/paged/recommendations")]
     public async Task<IActionResult> GetPagedRecommendations([FromRoute] string profileId, CancellationToken cancellationToken, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -40,8 +28,8 @@ public class ProfilesController(IMediator _mediator) : ControllerBase
     {
         var command = new UpdateLocationCommand(dto);
 
-        var profile = await _mediator.Send(command, cancellationToken);
+        await _mediator.Send(command, cancellationToken);
 
-        return Ok(profile);
+        return Ok();
     }
 }
