@@ -5,11 +5,13 @@ using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
 using Shared.Messages.Authentication;
+using Microsoft.Extensions.Logging;
 using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
-public class UserService(IUserRepository _userRepository, IMapper _mapper, ProducerService _producerService) : IUserService
+public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogger<UserService> _logger, ProducerService _producerService) : IUserService
+
 {
     public async Task<GeneralResponseDto> DeleteUserByIdAsync(string userId, CancellationToken cancellationToken)
     {
@@ -17,6 +19,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, Produ
         
         if (user is null)
         {
+            _logger.LogError("Delete user by id failed: User with id = {userId} was not found", userId);
             throw new NotFoundException(userId);
         }
 
@@ -24,6 +27,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, Produ
         
         if (!result.Succeeded)
         {
+            _logger.LogError("Delete user by id failed with errors: {errors}", result.Errors.Select(e => e.Description).ToArray());
             throw new DeleteUserException(ExceptionMessages.DeleteUserFailed);
         }
 
@@ -71,6 +75,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, Produ
 
         if (user is null)
         {
+            _logger.LogError("Get user by id failed: User with id = {userId} was not found", userId);
             throw new NotFoundException(userId);
         }
         
@@ -83,6 +88,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, Produ
         
         if (user is null)
         {
+            _logger.LogError("Get user by email failed: User with email = {email} was not found", email);
             throw new NotFoundException(email);
         }
         
@@ -95,6 +101,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, Produ
         
         if (user is null)
         {
+            _logger.LogError("Get user's roles failed: User with id = {userId} was not found", userId);
             throw new NotFoundException(userId);
         }
 

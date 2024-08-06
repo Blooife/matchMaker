@@ -23,7 +23,7 @@ public static class ServicesExtension
         services.ConfigureSwagger();
         services.ConfigureCors();
     }
-
+    
     private static void ConfigureJwtOptions(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));

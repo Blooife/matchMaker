@@ -7,11 +7,12 @@ namespace Authentication.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController(IAuthService _authService) : ControllerBase
+public class AuthController(IAuthService _authService, ILogger<AuthController> logger) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] UserRequestDto model)
     {
+        logger.LogInformation("bhbhjbfhewbjhfbhjewbfhj");
         var response = await _authService.RegisterAsync(model);
         
         return Ok(response);

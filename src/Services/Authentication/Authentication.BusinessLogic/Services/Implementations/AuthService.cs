@@ -7,23 +7,27 @@ using Authentication.BusinessLogic.Services.Interfaces;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using AutoMapper;
+using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Shared.Constants;
 using Shared.Messages.Authentication;
 using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
-public class AuthService(IUserRepository _userRepository, IMapper _mapper, ProducerService _producerService,
-    IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider) : IAuthService
+public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogger<AuthService> _logger,
+    IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider, IValidator<UserRequestDto> _validator, ProducerService _producerService) : IAuthService
 {
     public async Task<GeneralResponseDto> RegisterAsync(UserRequestDto registrationRequestDto)
     {
+        await _validator.ValidateAndThrowAsync(registrationRequestDto);
         var user = _mapper.Map<User>(registrationRequestDto);
         
         var result = await _userRepository.RegisterAsync(user, registrationRequestDto.Password);
         
         if (!result.Succeeded)
         {
+            _logger.LogError("User registration failed with errors: {errors}", result.Errors.Select(e => e.Description).ToArray());
             throw new RegisterException(result.Errors.First().Description);
         }
         
@@ -37,10 +41,12 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, Produ
 
     public async Task<LoginResponseDto> LoginAsync(UserRequestDto loginRequestDto, CancellationToken cancellationToken)
     {
+        await _validator.ValidateAndThrowAsync(loginRequestDto, cancellationToken);
         var user = await _userRepository.GetByEmailAsync(loginRequestDto.Email, cancellationToken);
             
         if (user is null)
         {
+            _logger.LogError("Login failed: user with email = {email} was not found", loginRequestDto.Email);
             throw new LoginException(ExceptionMessages.LoginFailed);
         }
 
@@ -48,6 +54,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, Produ
 
         if (isValid == false)
         {
+            _logger.LogError("Login failed: Incorrect password for user with email = {email}", loginRequestDto.Email);
             throw new LoginException(ExceptionMessages.LoginFailed);
         }
         
@@ -72,11 +79,13 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, Produ
             
         if (user is null)
         {
+            _logger.LogError("Refresh failed: user with refresh token = {token} was not found", refreshToken);
             throw new LoginException(ExceptionMessages.LoginFailed);
         }
             
         if(user.RefreshTokenExpiredAt < DateTime.Now)
         {
+            _logger.LogError("Refresh failed: refresh token expired at {at}", user.RefreshTokenExpiredAt);
             throw new LoginException("Refresh token expired");
         }
 
