@@ -26,7 +26,6 @@ export class UserService {
         ...this.httpOptions,
         observe: 'response'
       }).pipe(
-      retry(2),
       map(response => {
         const pagination = JSON.parse(response.headers.get('X-Pagination')!);
         return {

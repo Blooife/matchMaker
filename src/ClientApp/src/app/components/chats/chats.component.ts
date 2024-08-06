@@ -1,7 +1,7 @@
 import {Component, OnInit, HostListener, OnDestroy, ChangeDetectorRef} from '@angular/core';
 import {ChatDto} from "../../dtos/chat/ChatDto";
 import {MatchService} from "../../services/match-service.service";
-import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {ChatMessagesComponent} from "./messages/messages.component";
 import {FormsModule} from "@angular/forms";
 import {ProfileService} from "../../services/profile-service.service";
@@ -25,6 +25,7 @@ import {ProfileCardComponent} from "../profile/profile-card/profile-card.compone
     NgClass,
     InfiniteScrollDirective,
     ProfileCardComponent,
+    NgStyle,
   ],
   standalone: true
 })
@@ -38,6 +39,9 @@ export class ChatsComponent implements OnInit, OnDestroy {
   selectedChat?: ChatDto;
   profile: ProfileDto | null = null;
   selectedProfile: ProfileDto | null = null;
+  showContextMenu = false;
+  contextMenuPosition = { x: 0, y: 0 };
+  selectedChatId?: string;
   private subscriptions: Subscription[] = [];
 
   constructor(private matchService: MatchService,
@@ -134,5 +138,25 @@ export class ChatsComponent implements OnInit, OnDestroy {
 
   closeProfileModal(){
     this.selectedProfile = null;
+  }
+
+  deleteChat(chatId: string){
+    this.matchService.deleteChatById(chatId).subscribe(
+      () => {
+        this.chats = this.chats.filter(chat => chat.id !== chatId);
+      }
+    )
+  }
+
+  onRightClick(event: MouseEvent, chat: ChatDto): void {
+    event.preventDefault();
+    this.selectedChatId = chat.id;
+    this.contextMenuPosition = { x: event.clientX, y: event.clientY };
+    this.showContextMenu = true;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    this.showContextMenu = false;
   }
 }

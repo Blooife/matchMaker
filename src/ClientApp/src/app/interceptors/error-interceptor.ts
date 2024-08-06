@@ -14,7 +14,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     const ignoredStatuses = req.context.get(_IGNORED_STATUSES);
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (ignoredStatuses) {
+        if (ignoredStatuses || error.status === 401) {
           return throwError(() => error);
         }
         this.errorHandlerService.handleError(error);

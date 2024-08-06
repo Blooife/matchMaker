@@ -11,7 +11,7 @@ export class ErrorHandlerService {
 
   handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
-
+    console.log("error")
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Error: ${error.error.message}`;
     } else if(error.error){

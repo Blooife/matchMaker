@@ -47,9 +47,9 @@ export class ChatMessagesComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['chatId'] && changes['chatId'].currentValue) {
-      console.log("update")
       this.updateConnection();
       this.messages = [];
+      this.pageNumber = 1
       this.loadMessages();
       setTimeout(() => {
         this.scrollToBottom();

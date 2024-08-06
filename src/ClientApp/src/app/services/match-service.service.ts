@@ -6,7 +6,6 @@ import {
   likesEndpoints,
   matchesEndpoints, messagesEndpoints,
   profilesEndpoints,
-  usersEndpoints
 } from "../constants/api-endpoints";
 import {map, retry, tap} from "rxjs/operators";
 import {AddLikeDto} from "../dtos/like/AddLikeDto";
@@ -17,6 +16,7 @@ import {ChatDto} from "../dtos/chat/ChatDto";
 import {MessageDto} from "../dtos/message/MessageDto";
 import {CreateChatDto} from "../dtos/chat/CreateChatDto";
 import {_IGNORED_STATUSES} from "../constants/http-context";
+import {GeneralResponseDto} from "../dtos/shared/generalResponseDto";
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +36,6 @@ export class MatchService {
 
     return this.httpClient.get<ProfileDto[]>(`${profilesEndpoints.recs(profileId)}`,
       this.httpOptions).pipe(
-      retry(2),
       tap(() => {
         this.recsLoadingSubject.next(false);
       })
@@ -46,7 +45,6 @@ export class MatchService {
   addLike(model: AddLikeDto){
     return this.httpClient.post<LikeDto>(`${likesEndpoints.likes}`, model, this.httpOptions)
       .pipe(
-        retry(2),
       );
   }
 
@@ -63,7 +61,6 @@ export class MatchService {
         ...this.httpOptions,
         observe: 'response'
       }).pipe(
-      retry(2),
       map(response => {
         const pagination = JSON.parse(response.headers.get('X-Pagination')!);
         return {
@@ -80,7 +77,6 @@ export class MatchService {
         ...this.httpOptions,
         observe: 'response'
       }).pipe(
-      retry(2),
       map(response => {
         const pagination = JSON.parse(response.headers.get('X-Pagination')!);
 
@@ -98,7 +94,6 @@ export class MatchService {
         ...this.httpOptions,
         observe: 'response'
       }).pipe(
-      retry(2),
       map(response => {
         const pagination = JSON.parse(response.headers.get('X-Pagination')!);
         return {
@@ -115,14 +110,18 @@ export class MatchService {
       context: new HttpContext().set(_IGNORED_STATUSES, true),
     })
       .pipe(
-        retry(2),
       );
   }
 
   createChat(model: CreateChatDto){
     return this.httpClient.post<ChatDto>(chatsEndpoints.chats, model, this.httpOptions)
       .pipe(
-        retry(2),
+      );
+  }
+
+  deleteChatById(chatId: string){
+    return this.httpClient.delete<GeneralResponseDto>(`${chatsEndpoints.chats}/${chatId}`, this.httpOptions)
+      .pipe(
       );
   }
 }

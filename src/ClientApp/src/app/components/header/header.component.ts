@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from "../../services/auth-service.service";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {roles} from "../../constants/roles";
+import {UserService} from "../../services/user-service.service";
 
 @Component({
   selector: 'app-header',
@@ -16,19 +17,30 @@ import {roles} from "../../constants/roles";
   ],
   standalone: true
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn$: boolean = false;
   currentUserId$: string | null = '';
   isMenuVisible = true;
+  private subscriptions: Subscription[] = [];
 
-  constructor(private authService: AuthService, private router: Router) {
-    this.authService.isLoggedIn$.subscribe((isLoggedIn) =>{
+  constructor(private authService: AuthService, private router: Router, private userService: UserService) {
+
+  }
+
+  ngOnInit() {
+    const sub1 = this.authService.isLoggedIn$.subscribe((isLoggedIn) =>{
       this.isLoggedIn$ = isLoggedIn;
     });
 
-    this.authService.currentUserId$.subscribe((id) =>{
+    const sub2 = this.authService.currentUserId$.subscribe((id) =>{
       this.currentUserId$ = id;
     });
+
+    this.subscriptions.push(sub1, sub2);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   toggleMenu() {
@@ -53,6 +65,15 @@ export class HeaderComponent {
   }
 
   deleteUserById(){
-
+    if(this.currentUserId$){
+      if (confirm('Are you sure you want to delete your account?')) {
+        this.userService.deleteUserById(this.currentUserId$).subscribe(
+          () =>{
+            this.authService.logOut();
+            this.router.navigate(['']);
+          }
+        );
+      }
+    }
   }
 }

@@ -10,7 +10,6 @@ import {UpdateInterestsComponent} from "./components/profile/update-interests/up
 import {UpdateEducationComponent} from "./components/profile/update-education/update-education.component";
 import {UpdateProfileComponent} from "./components/profile/update-profile/update-profile.component";
 import {AdminGuard} from "./guards/admin-guard";
-import {AuthGuard} from "./guards/auth-guard";
 import {LoggedInGuard} from "./guards/loggedIn-guard";
 import {FindMatchComponent} from "./components/find-match/find-match.component";
 import {ProfileCardComponent} from "./components/profile/profile-card/profile-card.component";
@@ -25,13 +24,13 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [ProfileCreatedGuard] },
-  { path: 'create-profile/:userId', component: CreateProfileComponent, canActivate: [AuthGuard] },
-  { path: 'update-profile/:profileId', component: UpdateProfileComponent, canActivate: [AuthGuard] },
-  { path: 'update-languages/:profileId', component: UpdateLanguagesComponent, canActivate: [AuthGuard] },
-  { path: 'update-images/:profileId', component: UpdateImagesComponent, canActivate: [AuthGuard] },
-  { path: 'update-interests/:profileId', component: UpdateInterestsComponent, canActivate: [AuthGuard] },
-  { path: 'update-education/:profileId', component: UpdateEducationComponent, canActivate: [AuthGuard] },
-  { path: 'profile-card', component: ProfileCardComponent, canActivate: [AuthGuard] },
+  { path: 'create-profile/:userId', component: CreateProfileComponent },
+  { path: 'update-profile/:profileId', component: UpdateProfileComponent },
+  { path: 'update-languages/:profileId', component: UpdateLanguagesComponent},
+  { path: 'update-images/:profileId', component: UpdateImagesComponent },
+  { path: 'update-interests/:profileId', component: UpdateInterestsComponent},
+  { path: 'update-education/:profileId', component: UpdateEducationComponent },
+  { path: 'profile-card', component: ProfileCardComponent },
   { path: 'find-match', component: FindMatchComponent, canActivate: [ProfileCreatedGuard] },
   { path: 'matches', component: MatchesComponent, canActivate: [ProfileCreatedGuard] },
   { path: 'chats', component: ChatsComponent, canActivate: [ProfileCreatedGuard] },

@@ -51,8 +51,10 @@ export class AuthService {
   }
 
   refreshToken(): Observable<boolean> {
-    const refreshToken = this.getRefreshToken();
 
+
+    const refreshToken = this.getRefreshToken();
+    console.log(refreshToken)
     if (!refreshToken) {
       return of(false);
     }
@@ -61,9 +63,9 @@ export class AuthService {
 
     return this.httpClient.post<LoginResponseDto>(`${authEndpoints.refresh}`, model, this.httpOptions)
       .pipe(
-        retry(2),
         tap(response => {
           if (response.refreshToken) {
+            console.log(response)
             this.setTokens(response);
           } else {
             this.isLoggedInSubject.next(false);

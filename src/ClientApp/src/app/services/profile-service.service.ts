@@ -66,6 +66,7 @@ export class ProfileService {
     })
       .pipe(
         tap(result => {
+          console.log(result)
           this.profileSubject.next(result);
         }),
         catchError(error => {
@@ -73,7 +74,7 @@ export class ProfileService {
             this.profileSubject.next(null);
             return of(null);
           } else {
-            return throwError(error);
+            return throwError(() => error);
           }
         })
       );

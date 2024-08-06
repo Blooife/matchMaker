@@ -6,13 +6,16 @@ import {
   HttpRequest,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, throwError, from } from 'rxjs';
-import { catchError, switchMap, take } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth-service.service';
 import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  private isRefreshing = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
   constructor(private authService: AuthService, private router: Router) {}
 
   intercept(
@@ -22,42 +25,54 @@ export class AuthInterceptor implements HttpInterceptor {
     let accessToken = this.authService.getAccessToken();
 
     if (accessToken) {
-      if (!this.authService.isLogged()) {
-        /*return from(this.refresh(req, next)).pipe(
-          switchMap((newReq) => next.handle(newReq)),
-          catchError((error) => {
-            this.authService.logOut();
-            this.goToLogIn();
-            return throwError(() => error);
-          })
-        );*/
-      } else {
-        req = this.setAuthorizationHeader(req, accessToken);
-      }
+      req = this.setAuthorizationHeader(req, accessToken);
     }
 
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          this.authService.logOut();
-          this.goToLogIn();
+          return this.handle401Error(req, next);
         }
         return throwError(() => error);
       })
     );
   }
 
-  async refresh(req: HttpRequest<any>, next: HttpHandler): Promise<HttpRequest<any>> {
-    const refreshed = await this.authService.refreshToken();
+  private handle401Error(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
 
-    if (refreshed) {
-      const accessToken = this.authService.getAccessToken();
-      req = this.setAuthorizationHeader(req, accessToken!);
-      return req;
+      return this.authService.refreshToken().pipe(
+        switchMap((isRefreshed: boolean) => {
+          this.isRefreshing = false;
+          if (isRefreshed) {
+            const accessToken = this.authService.getAccessToken();
+            this.refreshTokenSubject.next(accessToken);
+            req = this.setAuthorizationHeader(req, accessToken!);
+            return next.handle(req);
+          } else {
+            this.authService.logOut();
+            this.goToLogIn();
+            return throwError(() => new Error('Token refresh failed'));
+          }
+        }),
+        catchError((err) => {
+          this.isRefreshing = false;
+          this.authService.logOut();
+          this.goToLogIn();
+          return throwError(() => err);
+        })
+      );
     } else {
-      this.authService.logOut();
-      this.goToLogIn();
-      throw new Error('Token refresh failed');
+      return this.refreshTokenSubject.pipe(
+        filter(token => token != null),
+        take(1),
+        switchMap(accessToken => {
+          req = this.setAuthorizationHeader(req, accessToken);
+          return next.handle(req);
+        })
+      );
     }
   }
 
@@ -73,6 +88,6 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private goToLogIn() {
-    this.router.navigate(['/login']).catch();
+    this.router.navigate(['']);
   }
 }
