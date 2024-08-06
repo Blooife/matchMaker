@@ -13,10 +13,10 @@ public class UpdateProfileValidator : AbstractValidator<UpdateProfileCommand>
             .NotEmpty().GreaterThanOrEqualTo(0)
             .WithMessage("Max distance must be >= 0");
         RuleFor(command => command.Dto.AgeFrom)
-            .NotEmpty().GreaterThanOrEqualTo(0)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("Age from must be >= 0");
         RuleFor(command => command.Dto.AgeTo)
-            .NotEmpty().GreaterThanOrEqualTo(0)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("Age to must be >= 0");
         RuleFor(command => command.Dto.AgeFrom)
             .LessThan(command => command.Dto.AgeTo)

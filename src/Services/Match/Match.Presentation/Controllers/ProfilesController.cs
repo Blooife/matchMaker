@@ -22,12 +22,12 @@ public class ProfilesController(IMediator _mediator) : ControllerBase
 
         return Ok(profiles);
     }
-        
+    
     [HttpPatch("location")]
     public async Task<IActionResult> UpdateLocation([FromBody]UpdateLocationDto dto, CancellationToken cancellationToken)
     {
         var command = new UpdateLocationCommand(dto);
-
+        
         await _mediator.Send(command, cancellationToken);
 
         return Ok();

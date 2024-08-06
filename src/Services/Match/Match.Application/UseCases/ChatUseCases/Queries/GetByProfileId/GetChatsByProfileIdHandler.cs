@@ -1,7 +1,7 @@
 using AutoMapper;
 using Match.Application.DTOs.Chat.Response;
 using Match.Application.Exceptions;
-using Match.Domain.Repositories;
+using Match.Domain.Interfaces;
 using MediatR;
 
 namespace Match.Application.UseCases.ChatUseCases.Queries.GetByProfileId;

@@ -1,8 +1,8 @@
 using Match.Domain.Models;
-using Match.Domain.Repositories.BaseRepositories;
+using Match.Domain.Interfaces.BaseRepositories;
 using Shared.Models;
 
-namespace Match.Domain.Repositories;
+namespace Match.Domain.Interfaces;
 
 public interface IMessageRepository : IGenericRepository<Message, string>
 {

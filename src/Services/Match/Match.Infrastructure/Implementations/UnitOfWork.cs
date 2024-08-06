@@ -1,9 +1,9 @@
 using Match.Domain.Models;
-using Match.Domain.Repositories;
+using Match.Domain.Interfaces;
 using Match.Infrastructure.Context;
 using Microsoft.Extensions.Options;
 
-namespace Match.Infrastructure.Repositories;
+namespace Match.Infrastructure.Implementations;
 
 public class UnitOfWork : IUnitOfWork
 {

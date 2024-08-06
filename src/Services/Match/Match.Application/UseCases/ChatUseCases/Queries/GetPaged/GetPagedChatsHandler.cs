@@ -1,7 +1,7 @@
 using AutoMapper;
 using Match.Application.Exceptions;
 using Match.Domain.Models;
-using Match.Domain.Repositories;
+using Match.Domain.Interfaces;
 using MediatR;
 using Shared.Models;
 

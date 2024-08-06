@@ -1,10 +1,10 @@
 using Match.Domain.Models;
-using Match.Domain.Repositories;
-using Match.Infrastructure.Repositories.BaseRepositories;
+using Match.Domain.Interfaces;
+using Match.Infrastructure.Implementations.BaseRepositories;
 using MongoDB.Driver;
 using Shared.Constants;
 
-namespace Match.Infrastructure.Repositories;
+namespace Match.Infrastructure.Implementations;
 
 public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericRepository<Profile, string>(_collection), IProfileRepository
 {

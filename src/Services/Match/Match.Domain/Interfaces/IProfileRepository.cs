@@ -1,7 +1,7 @@
 using Match.Domain.Models;
-using Match.Domain.Repositories.BaseRepositories;
+using Match.Domain.Interfaces.BaseRepositories;
 
-namespace Match.Domain.Repositories;
+namespace Match.Domain.Interfaces;
 
 public interface IProfileRepository : IGenericRepository<Profile, string>
 {
