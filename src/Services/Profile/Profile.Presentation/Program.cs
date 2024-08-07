@@ -25,10 +25,10 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseCors("MyCorsPolicy");
-app.UseAuthentication();
-app.UseAuthorization();
 app.MapControllers();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapGrpcService<ProfileGrpcService>();
 
 app.ApplyMigrations(app.Services);

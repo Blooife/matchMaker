@@ -12,7 +12,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
+[Authorize(Roles = $"{Roles.User}")]
 public class LanguagesController : ControllerBase
 {
     private readonly IMediator _mediator;

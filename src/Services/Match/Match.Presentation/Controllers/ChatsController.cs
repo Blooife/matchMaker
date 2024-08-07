@@ -13,7 +13,7 @@ namespace Match.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
+[Authorize(Roles = $"{Roles.User}")]
 public class ChatsController(IMediator _mediator) : ControllerBase
 {
     [HttpGet("profiles")]

@@ -10,11 +10,9 @@ namespace Match.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
+[Authorize(Roles = $"{Roles.User}")]
 public class ProfilesController(IMediator _mediator) : ControllerBase
 {
-
-
     [HttpGet("{profileId}/recommendations")]
     public async Task<IActionResult> GetPagedRecommendations([FromRoute] string profileId, CancellationToken cancellationToken)
     {
@@ -25,7 +23,6 @@ public class ProfilesController(IMediator _mediator) : ControllerBase
         return Ok(profiles);
     }
     
-        
     [HttpPatch("location")]
     public async Task<IActionResult> UpdateLocation([FromBody]UpdateLocationDto dto, CancellationToken cancellationToken)
     {

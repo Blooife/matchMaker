@@ -15,10 +15,11 @@ app.UseSwaggerForOcelotUI(options =>
 });
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
 app.UseRouting();
 app.MapControllers();
+app.UseCors("MyCorsPolicy");
 
 await app.UseAuthentication().UseOcelot();
-app.UseAuthorization();
 
 app.Run();

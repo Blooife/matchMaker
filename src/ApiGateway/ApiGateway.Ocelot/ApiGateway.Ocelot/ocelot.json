@@ -237,7 +237,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "profiles",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -257,7 +257,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "profiles",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -277,7 +277,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -297,7 +297,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -317,7 +317,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -337,7 +337,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -357,7 +357,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -377,7 +377,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -397,7 +397,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -417,7 +417,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -437,7 +437,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -457,7 +457,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -477,7 +477,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true

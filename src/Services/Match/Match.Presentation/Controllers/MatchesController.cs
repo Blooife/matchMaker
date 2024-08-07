@@ -9,7 +9,7 @@ namespace Match.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
+[Authorize(Roles = $"{Roles.User}")]
 public class MatchesController(IMediator _mediator) : ControllerBase
 {
     [HttpGet("paged/profiles/{profileId}")]
