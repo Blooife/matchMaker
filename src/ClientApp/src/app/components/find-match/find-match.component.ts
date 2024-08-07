@@ -54,8 +54,6 @@ export class FindMatchComponent implements OnInit, OnDestroy {
         this.recsLoading = loading;
       }
     )
-    this.subscriptions.push(sub);
-
     const sub2 = this.profileService.profile$.subscribe(
       (profileDto) =>{
         if(profileDto){
@@ -63,8 +61,7 @@ export class FindMatchComponent implements OnInit, OnDestroy {
         }
       }
     )
-    this.subscriptions.push(sub);
-    this.subscriptions.push(sub2);
+    this.subscriptions.push(sub, sub2);
 
     this.loadProfile().then(async () => {
       await this.requestLocation();

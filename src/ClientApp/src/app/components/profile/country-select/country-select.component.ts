@@ -15,7 +15,7 @@ import {FormsModule} from "@angular/forms";
   ],
   standalone: true
 })
-export class CountrySelectComponent implements OnInit, OnChanges {
+export class CountrySelectComponent implements OnInit {
   @Input() selectedCountryId: number | null = null;
   @Output() countrySelected = new EventEmitter<number>();
 
@@ -26,13 +26,6 @@ export class CountrySelectComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.loadCountries();
-    console.log("init")
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedCountryId'] && this.selectedCountryId !== null) {
-
-    }
   }
 
   async loadCountries() {
@@ -50,6 +43,7 @@ export class CountrySelectComponent implements OnInit, OnChanges {
     const selectElement = event.target as HTMLSelectElement;
     const value = selectElement.value;
     const id = this.extractCountryId(value);
+
     if(id === null){
       this.countrySelected.emit(undefined);
     }else{
@@ -59,7 +53,6 @@ export class CountrySelectComponent implements OnInit, OnChanges {
 
   private extractCountryId(value: string): string | null {
     const parts = value.split(':');
-    console.log(value)
     return parts.length > 1 ? parts[1].trim() : null;
   }
 

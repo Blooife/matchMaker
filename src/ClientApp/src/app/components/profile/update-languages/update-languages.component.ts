@@ -34,8 +34,7 @@ export class UpdateLanguagesComponent implements OnInit, OnDestroy {
         }
       }
     )
-    this.subscriptions.push(routeSub);
-    this.subscriptions.push(profileSub);
+    this.subscriptions.push(routeSub, profileSub);
     this.loadLanguages();
   }
 

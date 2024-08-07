@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {LanguageDto} from "../../../dtos/language/LanguageDto";
 import {ProfileService} from "../../../services/profile-service.service";
 import {NgForOf} from "@angular/common";
 import {AddInterestToProfileDto} from "../../../dtos/interest/AddInterestToProfileDto";
@@ -35,9 +34,7 @@ export class UpdateInterestsComponent implements OnInit, OnDestroy {
         }
       }
     )
-    this.subscriptions.push(routeSub);
-    this.subscriptions.push(profileSub);
-
+    this.subscriptions.push(routeSub, profileSub);
     this.loadInterests();
   }
 

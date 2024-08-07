@@ -46,6 +46,7 @@ export class CitySelectComponent implements OnChanges {
     const selectElement = event.target as HTMLSelectElement;
     const value = selectElement.value;
     const id = this.extractCityId(value);
+
     if(id === null){
       this.selectedCityId = null;
       this.citySelected.emit(undefined);
@@ -58,7 +59,6 @@ export class CitySelectComponent implements OnChanges {
 
   private extractCityId(value: string): string | null {
     const parts = value.split(':');
-    console.log(value)
     return parts.length > 1 ? parts[1].trim() : null;
   }
 }

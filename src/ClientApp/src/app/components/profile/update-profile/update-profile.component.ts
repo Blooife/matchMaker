@@ -12,7 +12,7 @@ import {UpdateInterestsComponent} from "../update-interests/update-interests.com
 import {UpdateLanguagesComponent} from "../update-languages/update-languages.component";
 import {UpdateEducationComponent} from "../update-education/update-education.component";
 import {UpdateImagesComponent} from "../update-images/update-images.component";
-import {minimumAge, rangeValidator, minValue, ageFromLessThanOrEqualAgeTo} from '../validators';
+import {minimumAge, rangeValidator, minValue, ageFromLessThanOrEqualAgeTo, getErrorMessage} from '../validators';
 
 @Component({
   selector: 'app-update-profile',
@@ -132,25 +132,5 @@ export class UpdateProfileComponent implements OnInit {
     this.profileForm.patchValue({ goalId });
   }
 
-  getErrorMessage(controlName: string): string {
-    const control = this.profileForm.get(controlName);
-    if (control && control.errors) {
-      if (control.errors['required']) {
-        return 'This field is required';
-      } else if (control.errors['minlength']) {
-        return `Minimum length is ${control.errors['minlength'].requiredLength}`;
-      } else if (control.errors['maxlength']) {
-        return `Maximum length is ${control.errors['maxlength'].requiredLength}`;
-      } else if (control.errors['minimumAge']) {
-        return `Minimum age is 16`;
-      } else if (control.errors['range']) {
-        return 'Value out of range';
-      } else if (control.errors['minValue']) {
-        return 'Value must be greater than or equal to 0';
-      } else if (control.errors['ageFromLessThanAgeTo']) {
-        return 'Age From must be less than Age To';
-      }
-    }
-    return '';
-  }
+  protected readonly getErrorMessage = getErrorMessage;
 }

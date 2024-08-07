@@ -7,13 +7,12 @@ import { Gender } from '../../../constants/gender';
 import { CountrySelectComponent } from '../country-select/country-select.component';
 import { CitySelectComponent } from '../city-select/city-select.component';
 import { GoalSelectComponent } from '../goal-select/goal-select.component';
-import { SliderComponent } from '../slider/slider.component';
 import { MatButton } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import {NgForOf} from "@angular/common";
-import {ageFromLessThanOrEqualAgeTo, minimumAge, minValue, rangeValidator} from "../validators";
+import {ageFromLessThanOrEqualAgeTo, getErrorMessage, minimumAge, minValue, rangeValidator} from "../validators";
 
 @Component({
   selector: 'app-create-profile',
@@ -24,7 +23,6 @@ import {ageFromLessThanOrEqualAgeTo, minimumAge, minValue, rangeValidator} from 
     MatInputModule,
     MatSelectModule,
     MatSliderModule,
-    SliderComponent,
     CountrySelectComponent,
     CitySelectComponent,
     GoalSelectComponent,
@@ -109,25 +107,5 @@ export class CreateProfileComponent implements OnInit {
     this.profileForm.patchValue({ goalId });
   }
 
-  getErrorMessage(controlName: string): string {
-    const control = this.profileForm.get(controlName);
-    if (control && control.errors) {
-      if (control.errors['required']) {
-        return 'This field is required';
-      } else if (control.errors['minlength']) {
-        return `Minimum length is ${control.errors['minlength'].requiredLength}`;
-      } else if (control.errors['maxlength']) {
-        return `Maximum length is ${control.errors['maxlength'].requiredLength}`;
-      } else if (control.errors['minimumAge']) {
-        return `Minimum age is 16`;
-      } else if (control.errors['range']) {
-        return 'Value out of range';
-      } else if (control.errors['minValue']) {
-        return 'Value must be greater than or equal to 0';
-      } else if (control.errors['ageFromLessThanAgeTo']) {
-        return 'Age From must be less than Age To';
-      }
-    }
-    return '';
-  }
+  protected readonly getErrorMessage = getErrorMessage;
 }

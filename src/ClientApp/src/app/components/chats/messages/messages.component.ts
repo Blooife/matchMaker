@@ -17,7 +17,7 @@ import {InfiniteScrollDirective} from "ngx-infinite-scroll";
   ],
   standalone: true
 })
-export class ChatMessagesComponent implements OnInit, OnDestroy, OnChanges {
+export class ChatMessagesComponent implements OnDestroy, OnChanges {
   @Input() chatId!: string;
   @Input() profileId!: string;
 
@@ -32,14 +32,6 @@ export class ChatMessagesComponent implements OnInit, OnDestroy, OnChanges {
   private isConnectionActive = false;
 
   constructor(private matchService: MatchService) {}
-
-  ngOnInit(): void {
-    /*this.loadMessages();
-    this.initializeSignalR();
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 100);*/
-  }
 
   ngOnDestroy(): void {
     this.hubConnection?.stop();
@@ -75,7 +67,6 @@ export class ChatMessagesComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onScrollUp(): void {
-    console.log("Scroll Up Event Triggered");
     if (!this.isLoading && this.pagination.HasNext) {
       this.pageNumber++;
       this.loadMessages();
@@ -106,7 +97,6 @@ export class ChatMessagesComponent implements OnInit, OnDestroy, OnChanges {
         this.isConnectionActive = true;
       })
       .catch(err => console.error('SignalR Connection Error: ', err));
-
   }
 
   sendMessage(content: string): void {
@@ -120,9 +110,7 @@ export class ChatMessagesComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   scrollToBottom(): void {
-    console.log("to bottom")
     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-    console.log(this.chatContainer.nativeElement.scrollTop)
   }
 
   private updateConnection(): void {

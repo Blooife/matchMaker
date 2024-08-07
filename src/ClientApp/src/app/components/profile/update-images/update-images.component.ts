@@ -62,7 +62,6 @@ export class UpdateImagesComponent implements OnInit, OnDestroy {
   }
 
   onImageCropped(file: File): void {
-    console.log("Image cropped:", file);
     this.selectedFile = file;
   }
 

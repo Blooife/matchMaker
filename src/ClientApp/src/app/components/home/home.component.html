@@ -8,15 +8,6 @@
   <div class="auth-buttons">
     <button *ngIf="!isLoggedIn()" [routerLink]="['/login']">Login</button>
     <button *ngIf="!isLoggedIn()" [routerLink]="['/register']">Register</button>
-
-    <div *ngIf="isLoggedIn()">
-      <button *ngIf="isAdmin() || isModerator()" [routerLink]="['/admin-panel']">
-        Admin Panel
-      </button>
-      <button [routerLink]="['/profile']">
-        Profile
-      </button>
-    </div>
   </div>
 </div>
 </body>

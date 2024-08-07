@@ -5,12 +5,13 @@ import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {ChatMessagesComponent} from "./messages/messages.component";
 import {FormsModule} from "@angular/forms";
 import {ProfileService} from "../../services/profile-service.service";
-import {Subscription} from "rxjs";
+import {Observable, of, Subscription} from "rxjs";
 import {ProfileDto} from "../../dtos/profile/ProfileDto";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CreateChatDto} from "../../dtos/chat/CreateChatDto";
 import {InfiniteScrollDirective} from "ngx-infinite-scroll";
 import {ProfileCardComponent} from "../profile/profile-card/profile-card.component";
+import {catchError, map, switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-chats',
@@ -59,14 +60,18 @@ export class ChatsComponent implements OnInit, OnDestroy {
     )
     this.subscriptions.push(sub);
 
-    this.route.queryParams.subscribe(params => {
-      const firstProfileId = params['firstProfileId'];
-      const secondProfileId = params['secondProfileId'];
-      if (firstProfileId && secondProfileId) {
-        this.startOrCreateChat(firstProfileId, secondProfileId);
-      }
+    this.route.queryParams.pipe(
+      switchMap(params => {
+        const firstProfileId = params['firstProfileId'];
+        const secondProfileId = params['secondProfileId'];
+        if (firstProfileId && secondProfileId) {
+          return this.startOrCreateChat(firstProfileId, secondProfileId);
+        }
+        return of(null);
+      })
+    ).subscribe(() => {
+      this.loadChats();
     });
-    this.loadChats();
   }
 
   ngOnDestroy() {
@@ -99,29 +104,30 @@ export class ChatsComponent implements OnInit, OnDestroy {
     this.selectedProfile = null;
   }
 
-  startOrCreateChat(firstProfileId: string, secondProfileId: string): void {
-    this.matchService.getChatByProfilesIds(firstProfileId, secondProfileId).subscribe({
-      next: (chat) => {
+  startOrCreateChat(firstProfileId: string, secondProfileId: string): Observable<any> {
+    return this.matchService.getChatByProfilesIds(firstProfileId, secondProfileId).pipe(
+      map(chat => {
         this.selectedChat = chat;
-      },
-      error: () => {
+        return chat;
+      }),
+      catchError(() => {
         const createChatDto: CreateChatDto = {
           firstProfileId: firstProfileId,
           secondProfileId: secondProfileId,
         };
-
-        this.matchService.createChat(createChatDto).subscribe({
-          next: (newChat) => {
+        return this.matchService.createChat(createChatDto).pipe(
+          map(newChat => {
             this.selectedChat = newChat;
-          }
-        });
-      }
-    });
+            return newChat;
+          })
+        );
+      })
+    );
   }
 
   onScrollDown(): void {
-    console.log(!this.isLoading && this.pagination.HasNext)
     if (!this.isLoading && this.pagination.HasNext) {
+      console.log("scroll")
       this.pageNumber++;
       this.loadChats();
     }
@@ -144,6 +150,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
     this.matchService.deleteChatById(chatId).subscribe(
       () => {
         this.chats = this.chats.filter(chat => chat.id !== chatId);
+        this.closeModal();
       }
     )
   }

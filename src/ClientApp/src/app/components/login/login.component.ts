@@ -42,6 +42,7 @@ export class LoginComponent {
 
   getErrorMessage(controlName: string): string {
     const control = this.loginForm.get(controlName);
+
     if (control && control.errors) {
       if (control.errors['required']) {
         return 'This field is required';
@@ -53,6 +54,7 @@ export class LoginComponent {
         return `Must contain email`;
       }
     }
+
     return '';
   }
 }
