@@ -31,23 +31,34 @@ export class CitySelectComponent implements OnChanges {
   }
 
   async loadCities() {
-    this.profileService.getCitiesByCountryId(this.countryId!).subscribe(
-      {next:(result) =>{
-          this.cities =result;
-        }}
-    );
+    if(this.countryId){
+      this.profileService.getCitiesByCountryId(this.countryId).subscribe(
+        {next:(result) =>{
+            this.cities =result;
+          }}
+      );
+    }else {
+      this.cities = [];
+    }
   }
 
   onCityChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const value = selectElement.value;
     const id = this.extractCityId(value);
-    this.selectedCityId = Number(id);
-    this.citySelected.emit(Number(id));
+    if(id === null){
+      this.selectedCityId = null;
+      this.citySelected.emit(undefined);
+    }else{
+      this.selectedCityId = Number(id);
+      this.citySelected.emit(Number(id));
+    }
+
   }
 
   private extractCityId(value: string): string | null {
     const parts = value.split(':');
+    console.log(value)
     return parts.length > 1 ? parts[1].trim() : null;
   }
 }

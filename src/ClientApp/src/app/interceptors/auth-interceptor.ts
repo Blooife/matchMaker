@@ -23,7 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     let accessToken = this.authService.getAccessToken();
-
+    console.log("intercept", req)
     if (accessToken) {
       req = this.setAuthorizationHeader(req, accessToken);
     }

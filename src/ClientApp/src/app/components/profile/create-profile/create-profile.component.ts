@@ -3,8 +3,6 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../../services/profile-service.service';
 import { CreateProfileDto } from '../../../dtos/profile/CreateProfileDto';
-import { CityDto } from '../../../dtos/city/CityDto';
-import { CountryDto } from '../../../dtos/country/CountryDto';
 import { Gender } from '../../../constants/gender';
 import { CountrySelectComponent } from '../country-select/country-select.component';
 import { CitySelectComponent } from '../city-select/city-select.component';
@@ -15,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import {NgForOf} from "@angular/common";
+import {ageFromLessThanOrEqualAgeTo, minimumAge, minValue, rangeValidator} from "../validators";
 
 @Component({
   selector: 'app-create-profile',
@@ -49,19 +48,21 @@ export class CreateProfileComponent implements OnInit {
     private profileService: ProfileService
   ) {
     this.profileForm = this.fb.group({
-      name: ['', Validators.required],
-      lastName: [''],
-      birthDate: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      lastName: ['', [Validators.minLength(2), Validators.maxLength(50)]],
+      birthDate: ['', [Validators.required, minimumAge(16)]],
       gender: ['', Validators.required],
-      bio: [''],
-      height: [''],
+      bio: [null, [Validators.minLength(10), Validators.maxLength(500)]],
+      height: [null, [rangeValidator(100, 220)]],
       showAge: [true, Validators.required],
-      ageFrom: [16, Validators.required],
-      ageTo: [100, Validators.required],
-      maxDistance: [0, Validators.required],
+      ageFrom: ['', [Validators.required, minValue(0)]],
+      ageTo: ['', [Validators.required, minValue(0)]],
+      maxDistance: ['', [Validators.required, minValue(0)]],
       preferredGender: ['', Validators.required],
-      goalId: [''],
-      cityId: ['', Validators.required]
+      goalId: [null],
+      cityId: [null, Validators.required],
+    }, {
+      validators: ageFromLessThanOrEqualAgeTo('ageFrom', 'ageTo')
     });
   }
 
@@ -74,6 +75,7 @@ export class CreateProfileComponent implements OnInit {
 
   onSubmit() {
     if (this.profileForm.valid) {
+      console.log("valid")
       const createProfileDto: CreateProfileDto = {
         ...this.profileForm.value,
         birthDate: new Date(this.profileForm.value.birthDate).toISOString(),
@@ -88,6 +90,9 @@ export class CreateProfileComponent implements OnInit {
           this.router.navigate(['/profile']);
         }
       });
+    }else {
+      console.log("not valid")
+      this.profileForm.markAllAsTouched();
     }
   }
 
@@ -102,5 +107,27 @@ export class CreateProfileComponent implements OnInit {
 
   onGoalSelected(goalId: number) {
     this.profileForm.patchValue({ goalId });
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.profileForm.get(controlName);
+    if (control && control.errors) {
+      if (control.errors['required']) {
+        return 'This field is required';
+      } else if (control.errors['minlength']) {
+        return `Minimum length is ${control.errors['minlength'].requiredLength}`;
+      } else if (control.errors['maxlength']) {
+        return `Maximum length is ${control.errors['maxlength'].requiredLength}`;
+      } else if (control.errors['minimumAge']) {
+        return `Minimum age is 16`;
+      } else if (control.errors['range']) {
+        return 'Value out of range';
+      } else if (control.errors['minValue']) {
+        return 'Value must be greater than or equal to 0';
+      } else if (control.errors['ageFromLessThanAgeTo']) {
+        return 'Age From must be less than Age To';
+      }
+    }
+    return '';
   }
 }

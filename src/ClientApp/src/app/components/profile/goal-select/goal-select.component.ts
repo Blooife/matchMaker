@@ -38,7 +38,7 @@ export class GoalSelectComponent implements OnInit, OnChanges{
     this.isLoading = true;
     this.profileService.getAllGoals().subscribe(
       {next:(result) => {
-          this.goals =result;
+          this.goals = result;
           this.isLoading = false;
         }}
     );
@@ -46,7 +46,17 @@ export class GoalSelectComponent implements OnInit, OnChanges{
 
   onGoalChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    const goalId = Number(selectElement.selectedIndex);
-    this.goalSelected.emit(goalId);
+    const value = selectElement.value;
+    const id = this.extractGoalId(value);
+    if(id === null){
+      this.goalSelected.emit(undefined);
+    }else{
+      this.goalSelected.emit(Number(id));
+    }
+  }
+
+  private extractGoalId(value: string): string | null {
+    const parts = value.split(':');
+    return parts.length > 1 ? parts[1].trim() : null;
   }
 }

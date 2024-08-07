@@ -51,7 +51,6 @@ export class MatchService {
   updateLocation(model: UpdateLocationDto){
     return this.httpClient.patch(`${profilesEndpoints.location}`, model, this.httpOptions)
       .pipe(
-        retry(2),
       );
   }
 

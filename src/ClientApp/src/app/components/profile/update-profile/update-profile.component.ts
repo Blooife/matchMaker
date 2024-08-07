@@ -1,11 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {formatDate, KeyValuePipe, NgForOf} from '@angular/common';
 import { Gender } from '../../../constants/gender';
 import { ProfileService } from '../../../services/profile-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CityDto } from '../../../dtos/city/CityDto';
-import { CountryDto } from '../../../dtos/country/CountryDto';
 import { CountrySelectComponent } from '../country-select/country-select.component';
 import { CitySelectComponent } from '../city-select/city-select.component';
 import { GoalSelectComponent } from '../goal-select/goal-select.component';
@@ -14,11 +12,12 @@ import {UpdateInterestsComponent} from "../update-interests/update-interests.com
 import {UpdateLanguagesComponent} from "../update-languages/update-languages.component";
 import {UpdateEducationComponent} from "../update-education/update-education.component";
 import {UpdateImagesComponent} from "../update-images/update-images.component";
+import {minimumAge, rangeValidator, minValue, ageFromLessThanOrEqualAgeTo} from '../validators';
 
 @Component({
   selector: 'app-update-profile',
   templateUrl: './update-profile.component.html',
-  styleUrls: ['./update-profile.component.css', '../create-profile/create-profile.component.css'],
+  styleUrls: ['../create-profile/create-profile.component.css'],
   imports: [
     NgForOf,
     ReactiveFormsModule,
@@ -39,8 +38,6 @@ export class UpdateProfileComponent implements OnInit {
     .filter(key => isNaN(Number(key)))
     .map(key => ({ key, value: Gender[key as keyof typeof Gender] }));
   profileId: string = '';
-  countries: CountryDto[] = [];
-  cities: CityDto[] = [];
   selectedCountryId: number | null = null;
   selectedCityId: number | null = null;
   selectedGoalId: number | null = null;
@@ -48,20 +45,22 @@ export class UpdateProfileComponent implements OnInit {
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private profileService: ProfileService) {
     this.profileForm = this.fb.group({
       id: ['', Validators.required],
-      name: ['', Validators.required],
-      lastName: [''],
-      birthDate: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      lastName: ['', [Validators.minLength(2), Validators.maxLength(50)]],
+      birthDate: ['', [Validators.required, minimumAge(16)]],
       gender: ['', Validators.required],
-      bio: [''],
-      height: [''],
+      bio: [null, [Validators.minLength(10), Validators.maxLength(500)]],
+      height: [null, [rangeValidator(100, 220)]],
       showAge: [true, Validators.required],
-      ageFrom: ['', Validators.required],
-      ageTo: ['', Validators.required],
-      maxDistance: ['', Validators.required],
+      ageFrom: ['', [Validators.required, minValue(0)]],
+      ageTo: ['', [Validators.required, minValue(0)]],
+      maxDistance: ['', [Validators.required, minValue(0)]],
       preferredGender: ['', Validators.required],
-      goalId: [''],
-      cityId: ["", Validators.required],
-      userId: ["", Validators.required],
+      goalId: [null],
+      cityId: [null, Validators.required],
+      userId: ['', Validators.required]
+    }, {
+      validators: ageFromLessThanOrEqualAgeTo('ageFrom', 'ageTo')
     });
   }
 
@@ -73,28 +72,30 @@ export class UpdateProfileComponent implements OnInit {
   }
 
   async loadProfile() {
-    this.profileService.getProfileById(this.profileId).subscribe(
+    this.profileService.profile$.subscribe(
       (profile) =>{
-        this.profileForm.patchValue({
-          id: profile.id,
-          name: profile.name,
-          lastName: profile.lastName,
-          birthDate: formatDate(profile.birthDate, 'yyyy-MM-dd', 'en-US'),
-          gender: profile.gender,
-          bio: profile.bio,
-          height: profile.height,
-          showAge: profile.showAge,
-          ageFrom: profile.ageFrom,
-          ageTo: profile.ageTo,
-          maxDistance: profile.maxDistance,
-          preferredGender: profile.preferredGender,
-          goalId: profile.goal?.id,
-          cityId: profile.city.id,
-          userId: profile.userId
-        });
-        this.selectedCountryId = profile.country.id ?? null;
-        this.selectedCityId = profile.city.id ?? null;
-        this.selectedGoalId = profile.goal?.id ?? null;
+        if(profile){
+          this.profileForm.patchValue({
+            id: profile.id,
+            name: profile.name,
+            lastName: profile.lastName,
+            birthDate: formatDate(profile.birthDate, 'yyyy-MM-dd', 'en-US'),
+            gender: profile.gender,
+            bio: profile.bio,
+            height: profile.height,
+            showAge: profile.showAge,
+            ageFrom: profile.ageFrom,
+            ageTo: profile.ageTo,
+            maxDistance: profile.maxDistance,
+            preferredGender: profile.preferredGender,
+            goalId: profile.goal?.id,
+            cityId: profile.city.id,
+            userId: profile.userId
+          });
+          this.selectedCountryId = profile.country.id ?? null;
+          this.selectedCityId = profile.city.id ?? null;
+          this.selectedGoalId = profile.goal?.id ?? null;
+        }
       }
       );
   }
@@ -113,9 +114,10 @@ export class UpdateProfileComponent implements OnInit {
           this.router.navigate(['/profile']);
         }
       });
+    }else{
+      this.profileForm.markAllAsTouched();
     }
   }
-
 
   onCountrySelected(countryId: number) {
     this.selectedCountryId = countryId;
@@ -128,5 +130,27 @@ export class UpdateProfileComponent implements OnInit {
 
   onGoalSelected(goalId: number) {
     this.profileForm.patchValue({ goalId });
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.profileForm.get(controlName);
+    if (control && control.errors) {
+      if (control.errors['required']) {
+        return 'This field is required';
+      } else if (control.errors['minlength']) {
+        return `Minimum length is ${control.errors['minlength'].requiredLength}`;
+      } else if (control.errors['maxlength']) {
+        return `Maximum length is ${control.errors['maxlength'].requiredLength}`;
+      } else if (control.errors['minimumAge']) {
+        return `Minimum age is 16`;
+      } else if (control.errors['range']) {
+        return 'Value out of range';
+      } else if (control.errors['minValue']) {
+        return 'Value must be greater than or equal to 0';
+      } else if (control.errors['ageFromLessThanAgeTo']) {
+        return 'Age From must be less than Age To';
+      }
+    }
+    return '';
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import {catchError, map, retry, tap} from 'rxjs/operators';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import {map, retry, tap} from 'rxjs/operators';
 import { GeneralResponseDto } from "../dtos/shared/generalResponseDto";
 import { UserResponseDto } from "../dtos/auth/userResponseDto";
 import { AssignRoleRequestDto } from "../dtos/auth/assignRoleRequestDto";
@@ -21,6 +21,7 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   getPaginatedUsers(pageSize: number, pageNumber: number): Observable<{ users: UserResponseDto[], pagination: any }> {
+
     return this.httpClient.get<UserResponseDto[]>(`${usersEndpoints.paginatedUsers(pageSize.toString(), pageNumber.toString())}`,
       {
         ...this.httpOptions,
@@ -28,6 +29,7 @@ export class UserService {
       }).pipe(
       map(response => {
         const pagination = JSON.parse(response.headers.get('X-Pagination')!);
+
         return {
           users: response.body || [],
           pagination: pagination
@@ -42,12 +44,6 @@ export class UserService {
   deleteUserById(userId: string): Observable<GeneralResponseDto> {
     return this.httpClient.delete<GeneralResponseDto>(`${usersEndpoints.users}/${userId}`, this.httpOptions).pipe(
       retry(2),
-    );
-  }
-
-  getUserById(userId: string): Observable<UserResponseDto> {
-    return this.httpClient.get<UserResponseDto>(`${usersEndpoints.users}/${userId}`, this.httpOptions).pipe(
-
     );
   }
 

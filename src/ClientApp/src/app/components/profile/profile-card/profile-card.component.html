@@ -7,7 +7,7 @@
           <div *ngFor="let image of profile.images; let i = index"
                class="image-item"
                [class.active]="i === currentImageIndex">
-            <img [src]="image.imageUrl" alt="Profile Image" class="profile-image" />
+            <img [src]="image.imageUrl" alt="Profile Image" height="360" width="360" class="profile-image" />
           </div>
         </div>
         <button class="slider-arrow right-arrow" (click)="nextImage()">&gt;</button>

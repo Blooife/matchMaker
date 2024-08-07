@@ -88,3 +88,8 @@ form .form-section p {
   margin: 0;
   color: #666;
 }
+
+.error-message {
+  color: red;
+  font-size: 0.8em;
+}

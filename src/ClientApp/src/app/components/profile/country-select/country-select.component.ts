@@ -48,7 +48,19 @@ export class CountrySelectComponent implements OnInit, OnChanges {
 
   onCountryChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    const countryId = selectElement.selectedIndex;
-    this.countrySelected.emit(countryId);
+    const value = selectElement.value;
+    const id = this.extractCountryId(value);
+    if(id === null){
+      this.countrySelected.emit(undefined);
+    }else{
+      this.countrySelected.emit(Number(id));
+    }
   }
+
+  private extractCountryId(value: string): string | null {
+    const parts = value.split(':');
+    console.log(value)
+    return parts.length > 1 ? parts[1].trim() : null;
+  }
+
 }

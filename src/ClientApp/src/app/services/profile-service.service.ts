@@ -43,20 +43,9 @@ export class ProfileService {
 
   constructor(private httpClient: HttpClient) { }
 
-  deleteProfileById(profileId: string): Observable<GeneralResponseDto> {
-    return this.httpClient.delete<GeneralResponseDto>(`${profilesEndpoints.profiles}/${profileId}`, this.httpOptions)
-      .pipe(
-        retry(2),
-      );
-  }
-
   getProfileById(profileId: string): Observable<ProfileDto> {
     return this.httpClient.get<ProfileDto>(`${profilesEndpoints.profiles}/${profileId}`, this.httpOptions)
-      .pipe(
-        tap(result => {
-          this.profileSubject.next(result);
-       })
-      );
+      .pipe();
   }
 
   getProfileByUserId(userId: string): Observable<ProfileDto | null> {
@@ -66,7 +55,6 @@ export class ProfileService {
     })
       .pipe(
         tap(result => {
-          console.log(result)
           this.profileSubject.next(result);
         }),
         catchError(error => {
@@ -83,7 +71,6 @@ export class ProfileService {
   updateProfile(model: UpdateProfileDto): Observable<ProfileDto> {
     return this.httpClient.put<ProfileDto>(`${profilesEndpoints.profiles}`, model, this.httpOptions)
       .pipe(
-        retry(2),
         tap(result => {
           this.profileSubject.next(result);
         }),
@@ -93,7 +80,6 @@ export class ProfileService {
   createProfile(model: CreateProfileDto): Observable<ProfileDto> {
     return this.httpClient.post<ProfileDto>(`${profilesEndpoints.profiles}`, model, this.httpOptions)
       .pipe(
-        retry(2),
         tap(result => {
           this.profileSubject.next(result);
         }),
@@ -103,21 +89,18 @@ export class ProfileService {
   getAllCountries(): Observable<CountryDto[]> {
     return this.httpClient.get<CountryDto[]>(`${countriesEndpoints.countries}`, this.httpOptions)
       .pipe(
-        retry(2),
       );
   }
 
   getAllLanguages(): Observable<LanguageDto[]> {
     return this.httpClient.get<LanguageDto[]>(`${languagesEndpoints.languages}`, this.httpOptions)
       .pipe(
-        retry(2),
       );
   }
 
   addLanguageToProfile(model: AddLanguageToProfileDto): Observable<LanguageDto[]> {
         return this.httpClient.post<LanguageDto[]>(`${languagesEndpoints.profilesLanguages}`, model, this.httpOptions)
       .pipe(
-        retry(2),
         tap(result => {
           const currentProfile = this.profileSubject.value;
           if (currentProfile) {
@@ -142,7 +125,6 @@ export class ProfileService {
 
     return this.httpClient.delete<LanguageDto[]>(`${languagesEndpoints.profilesLanguages}`, options)
       .pipe(
-        retry(2),
         tap(result => {
           const currentProfile = this.profileSubject.value;
           if (currentProfile) {
@@ -159,16 +141,15 @@ export class ProfileService {
   getAllInterests(): Observable<InterestDto[]> {
     return this.httpClient.get<InterestDto[]>(`${interestsEndpoints.interests}`, this.httpOptions)
       .pipe(
-        retry(2),
       );
   }
 
   addInterestToProfile(model: AddInterestToProfileDto): Observable<InterestDto[]> {
     return this.httpClient.post<InterestDto[]>(`${interestsEndpoints.profilesInterests}`, model, this.httpOptions)
       .pipe(
-        retry(2),
         tap(result => {
           const currentProfile = this.profileSubject.value;
+
           if (currentProfile) {
             const updatedProfile: ProfileDto = {
               ...currentProfile,
@@ -191,9 +172,9 @@ export class ProfileService {
 
     return this.httpClient.delete<InterestDto[]>(`${interestsEndpoints.profilesInterests}`, options)
       .pipe(
-        retry(2),
         tap(result => {
           const currentProfile = this.profileSubject.value;
+
           if (currentProfile) {
             const updatedProfile: ProfileDto = {
               ...currentProfile,
@@ -208,30 +189,27 @@ export class ProfileService {
   getAllGoals(): Observable<GoalDto[]> {
     return this.httpClient.get<GoalDto[]>(`${goalsEndpoints.goals}`, this.httpOptions)
       .pipe(
-        retry(2),
       );
   }
 
   getCitiesByCountryId(countryId: number): Observable<CityDto[]> {
     return this.httpClient.get<Array<CityDto>>(`${countriesEndpoints.cities(countryId)}`, this.httpOptions)
       .pipe(
-        retry(2),
       );
   }
 
   getAllEducations(): Observable<EducationDto[]> {
     return this.httpClient.get<EducationDto[]>(`${educationEndpoints.educations}`, this.httpOptions)
       .pipe(
-        retry(2),
       );
   }
 
   addEducationToProfile(model: AddEducationToProfileDto): Observable<ProfileEducationDto[]> {
     return this.httpClient.post<ProfileEducationDto[]>(`${educationEndpoints.profilesEducation}`, model, this.httpOptions)
       .pipe(
-        retry(2),
         tap(result => {
           const currentProfile = this.profileSubject.value;
+
           if (currentProfile) {
             const updatedProfile: ProfileDto = {
               ...currentProfile,
@@ -246,9 +224,9 @@ export class ProfileService {
   updateProfileEducation(model: UpdateProfileEducationDto): Observable<ProfileEducationDto[]> {
     return this.httpClient.put<ProfileEducationDto[]>(`${educationEndpoints.profilesEducation}`, model, this.httpOptions)
       .pipe(
-        retry(2),
         tap(result => {
           const currentProfile = this.profileSubject.value;
+
           if (currentProfile) {
             const updatedProfile: ProfileDto = {
               ...currentProfile,
@@ -271,9 +249,9 @@ export class ProfileService {
 
     return this.httpClient.delete<ProfileEducationDto[]>(`${educationEndpoints.profilesEducation}`, options)
       .pipe(
-        retry(2),
         tap(result => {
           const currentProfile = this.profileSubject.value;
+
           if (currentProfile) {
             const updatedProfile: ProfileDto = {
               ...currentProfile,
@@ -291,9 +269,9 @@ export class ProfileService {
 
     return this.httpClient.post<ImageDto>(`${imagesEndpoints.images}?ProfileId=${model.profileId}`, formData)
       .pipe(
-        retry(2),
         tap(result => {
           let currentProfile = this.profileSubject.value;
+
           if(currentProfile){
             currentProfile.images.push(result);
             this.profileSubject.next(currentProfile);
@@ -305,9 +283,9 @@ export class ProfileService {
   changeMainImage(model: ChangeMainImageDto): Observable<ImageDto[]> {
     return this.httpClient.patch<ImageDto[]>(`${imagesEndpoints.images}`, model, this.httpOptions)
       .pipe(
-        retry(2),
         tap(result => {
           let currentProfile = this.profileSubject.value;
+
           if(currentProfile){
             currentProfile.images = result;
           }
@@ -326,9 +304,9 @@ export class ProfileService {
 
     return this.httpClient.delete<ImageDto>(`${imagesEndpoints.images}`, options)
       .pipe(
-        retry(2),
         tap(() => {
           let currentProfile = this.profileSubject.value;
+
           if (currentProfile) {
             currentProfile.images = currentProfile.images.filter(image => image.id !== imageId);
             this.profileSubject.next(currentProfile);

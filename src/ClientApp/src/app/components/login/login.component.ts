@@ -23,7 +23,7 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
@@ -38,5 +38,21 @@ export class LoginComponent {
         },
       });
     }
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.loginForm.get(controlName);
+    if (control && control.errors) {
+      if (control.errors['required']) {
+        return 'This field is required';
+      } else if (control.errors['minlength']) {
+        return `Minimum length is ${control.errors['minlength'].requiredLength}`;
+      } else if (control.errors['maxlength']) {
+        return `Maximum length is ${control.errors['maxlength'].requiredLength}`;
+      }else if (control.errors['email']) {
+        return `Must contain email`;
+      }
+    }
+    return '';
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { catchError, map, retry, tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { UserRequestDto } from '../dtos/auth/userRequestDto';
 import { GeneralResponseDto } from '../dtos/shared/generalResponseDto';
 import { LoginResponseDto } from '../dtos/auth/loginResponseDto';
