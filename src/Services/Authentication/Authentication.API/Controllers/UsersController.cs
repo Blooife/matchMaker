@@ -6,7 +6,6 @@ using Shared.Constants;
 
 namespace Authentication.API.Controllers;
 
-
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController(IUserService _userService): ControllerBase
@@ -68,7 +67,7 @@ public class UsersController(IUserService _userService): ControllerBase
     } 
     
     [HttpDelete("{userId}")]
-    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
     public async Task<IActionResult> DeleteUserById([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var users = await _userService.DeleteUserByIdAsync(userId, cancellationToken);

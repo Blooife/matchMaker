@@ -11,6 +11,20 @@ public class CreateChatHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
 {
     public async Task<ChatResponseDto> Handle(CreateChatCommand request, CancellationToken cancellationToken)
     {
+        var profile1 = await _unitOfWork.Profiles.GetByIdAsync(request.Dto.FirstProfileId, cancellationToken);
+
+        if (profile1 is null)
+        {
+            throw new NotFoundException("Profile", request.Dto.FirstProfileId);
+        }
+        
+        var profile2 = await _unitOfWork.Profiles.GetByIdAsync(request.Dto.SecondProfileId, cancellationToken);
+
+        if (profile2 is null)
+        {
+            throw new NotFoundException("Profile", request.Dto.SecondProfileId);
+        } 
+        
         var areProfilesMatched =
             await _unitOfWork.Matches.AreProfilesMatchedAsync(request.Dto.FirstProfileId, request.Dto.SecondProfileId, cancellationToken);
         
@@ -22,6 +36,11 @@ public class CreateChatHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
         var chat = _mapper.Map<Chat>(request.Dto);
         await _unitOfWork.Chats.CreateAsync(chat, cancellationToken);
         
-        return _mapper.Map<ChatResponseDto>(chat);
+        var mappedChat = _mapper.Map<ChatResponseDto>(chat);
+        mappedChat.ProfileName = mappedChat.FirstProfileId == profile1.Id ? profile2.Name : profile1.Name;
+        mappedChat.ProfileLastName = mappedChat.FirstProfileId == profile1.Id ? profile2.LastName : profile1.LastName;
+        mappedChat.MainImageUrl = mappedChat.FirstProfileId == profile1.Id ? profile2.MainImageUrl : profile1.MainImageUrl;
+        
+        return mappedChat;
     }
 }

@@ -11,27 +11,13 @@ public class InterestRepository(ProfileDbContext _dbContext)
 {
     public async Task AddInterestToProfileAsync(UserProfile profile, Interest interest)
     {
+        _dbContext.Profiles.Attach(profile);
         profile.Interests.Add(interest);
     }
     
     public async Task RemoveInterestFromProfileAsync(UserProfile profile, Interest interest, CancellationToken cancellationToken)
     {
+        _dbContext.Profiles.Attach(profile);
         profile.Interests.Remove(interest);
-    }
-
-    public async Task<List<Interest>> GetProfilesInterestsAsync(string profileId, CancellationToken cancellationToken)
-    {
-        var userProfile = await _dbContext.Profiles.Include(p => p.Interests).AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
-
-        return userProfile!.Interests;
-    }
-    
-    public async Task<UserProfile?> GetProfileWithInterestsAsync(string profileId, CancellationToken cancellationToken)
-    {
-        var userProfile = await _dbContext.Profiles.Include(p => p.Interests)
-            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
-
-        return userProfile;
     }
 }

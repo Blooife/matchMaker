@@ -39,7 +39,7 @@ public class JwtTokenProvider : IJwtTokenProvider
             Issuer = _jwtOptions.Issuer,
             Subject = new ClaimsIdentity(claimList),
             IssuedAt = DateTime.UtcNow,
-            Expires = _jwtOptions.Expires,
+            Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiresInMinutes),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 

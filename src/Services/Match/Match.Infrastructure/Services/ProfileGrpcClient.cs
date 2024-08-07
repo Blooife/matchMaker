@@ -17,13 +17,13 @@ public class ProfileGrpcClient : IProfileGrpcClient
         _mapper = mapper;
     }
 
-    public async Task<List<FullProfileResponseDto>> GetProfilesInfo(IEnumerable<string> profileIds)
+    public async Task<List<ProfileResponseDto>> GetProfilesInfo(IEnumerable<string> profileIds)
     {
         var request = new GetProfilesRequest();
         request.ProfileIds.AddRange(profileIds);
             
         var response = await _client.GetProfilesByIdsAsync(request);
         
-        return _mapper.Map<List<FullProfileResponseDto>>(response.Profiles);
+        return _mapper.Map<List<ProfileResponseDto>>(response.Profiles);
     }
 }

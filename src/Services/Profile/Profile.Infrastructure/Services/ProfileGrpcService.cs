@@ -32,11 +32,20 @@ public class ProfileGrpcService(IUnitOfWork _unitOfWork) : ProfileService.Profil
                 {
                     Id = profile.City.Id,
                     Name = profile.City.Name,
-                    Country = new Country
+                    
+                },
+                Country = new Country
+                {
+                    Id = profile.City.Country.Id,
+                    Name = profile.City.Country.Name
+                },
+                Education =
+                {
+                    profile.ProfileEducations.Select(educ => new ProfileEducation()
                     {
-                        Id = profile.City.Country.Id,
-                        Name = profile.City.Country.Name
-                    }
+                        ProfileId = educ.ProfileId, EducationId = educ.EducationId,
+                        EducationName = educ.Education.Name, Description = educ.Description
+                    })
                 },
                 Languages =
                 {

@@ -7,6 +7,6 @@ public class ImageMapping : AutoMapper.Profile
 {
     public ImageMapping()
     {
-        CreateMap<Image, ImageResponseDto>();
+        CreateMap<Image, ImageResponseDto>().ReverseMap();
     }
 }

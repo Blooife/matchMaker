@@ -11,34 +11,19 @@ public class EducationRepository(ProfileDbContext _dbContext)
 {
     public async Task AddEducationToProfileAsync(UserProfile profile, ProfileEducation userEducation)
     {
+        _dbContext.Profiles.Attach(profile);
         profile.ProfileEducations.Add(userEducation);
-        _dbContext.Attach(profile);
     }
     
     public async Task RemoveEducationFromProfileAsync(UserProfile profile, ProfileEducation userEducation)
     {
+        _dbContext.Profiles.Attach(profile);
         profile.ProfileEducations.Remove(userEducation);
-        _dbContext.Attach(profile);
     }
     
     public async Task UpdateProfilesEducationAsync(ProfileEducation userEducation, string description)
     {
+        _dbContext.Attach(userEducation);
         userEducation.Description = description;
-    }
-    
-    public async Task<List<ProfileEducation>> GetProfilesEducationAsync(UserProfile profile, CancellationToken cancellationToken)
-    {
-        var userProfile = await _dbContext.Profiles.Include(p => p.ProfileEducations).ThenInclude(ue=>ue.Education).AsNoTracking()
-            .FirstOrDefaultAsync(p => p == profile, cancellationToken);
-
-        return userProfile!.ProfileEducations;
-    }
-    
-    public async Task<UserProfile?> GetProfileWithEducationAsync(string profileId, CancellationToken cancellationToken)
-    {
-        var userProfile = await _dbContext.Profiles.Include(p => p.ProfileEducations).ThenInclude(ue=>ue.Education)
-            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
-
-        return userProfile;
     }
 }

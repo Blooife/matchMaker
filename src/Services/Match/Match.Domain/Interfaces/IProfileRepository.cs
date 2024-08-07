@@ -5,6 +5,5 @@ namespace Match.Domain.Interfaces;
 
 public interface IProfileRepository : IGenericRepository<Profile, string>
 {
-    Task<(List<string> Ids, int TotalCount)> GetPagedRecsAsync(List<string> excludedProfileIds, Profile userProfile, int pageNumber,
-        int pageSize, CancellationToken cancellationToken);
+    Task<List<string>> GetRecsAsync(List<string> excludedProfileIds, Profile userProfile, CancellationToken cancellationToken);
 }

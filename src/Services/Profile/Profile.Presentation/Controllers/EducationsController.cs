@@ -7,7 +7,6 @@ using Profile.Application.UseCases.EducationUseCases.Commands.RemoveEducationFro
 using Profile.Application.UseCases.EducationUseCases.Commands.Update;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetAll;
 using Profile.Application.UseCases.EducationUseCases.Queries.GetById;
-using Profile.Application.UseCases.EducationUseCases.Queries.GetProfilesEducation;
 using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
@@ -44,17 +43,7 @@ public class EducationsController : ControllerBase
         return Ok(education);
     }
     
-    [HttpGet("profile/{id}")]
-    public async Task<IActionResult> GetProfileEducations(string id, CancellationToken cancellationToken)
-    {
-        var query = new GetProfilesEducationsQuery(id);
-
-        var education = await _mediator.Send(query, cancellationToken);
-        
-        return Ok(education);
-    }
-    
-    [HttpPut]
+    [HttpPut("profile")]
     public async Task<IActionResult> UpdateProfileEducation([FromBody] UpdateProfileEducationDto dto, CancellationToken cancellationToken)
     {
         var command = new UpdateProfileEducationCommand(dto);

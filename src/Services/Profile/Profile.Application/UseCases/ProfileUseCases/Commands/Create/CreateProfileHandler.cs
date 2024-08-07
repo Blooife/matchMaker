@@ -9,8 +9,7 @@ using Shared.Messages.Profile;
 
 namespace Profile.Application.UseCases.ProfileUseCases.Commands.Create;
 
-public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ProducerService _producerService, ICacheService _cacheService) : IRequestHandler<CreateProfileCommand, ProfileResponseDto>
-
+public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService, ProducerService _producerService) : IRequestHandler<CreateProfileCommand, ProfileResponseDto>
 {
     private readonly string _cacheKeyPrefix = "profile";
     
@@ -20,7 +19,7 @@ public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, Prod
         var result = await _unitOfWork.ProfileRepository.CreateProfileAsync(profile, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
 
-        var fullProfile = await _unitOfWork.ProfileRepository.GetAsync(userProfile => userProfile.Id == profile.Id, cancellationToken);
+        var fullProfile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == profile.Id, cancellationToken);
         var mappedProfile = _mapper.Map<ProfileResponseDto>(fullProfile);
         
         var cacheKey = $"{_cacheKeyPrefix}:{result.Id}";
@@ -30,6 +29,5 @@ public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, Prod
         await _producerService.ProduceAsync(message);
         
         return mappedProfile;
-
     }
 }

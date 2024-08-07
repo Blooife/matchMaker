@@ -2,11 +2,9 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
-
 using Profile.Application.Services.Interfaces;
 
 using Profile.Domain.Interfaces;
-
 
 namespace Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
 
@@ -24,7 +22,7 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
             return cachedData;
         }
         
-        var profile = await _unitOfWork.ProfileRepository.FirstOrDefaultAsync(request.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.ProfileId, cancellationToken);
         
         if (profile is null)
         {

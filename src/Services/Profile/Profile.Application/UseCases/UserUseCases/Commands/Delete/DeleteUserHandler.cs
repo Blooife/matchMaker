@@ -2,12 +2,15 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
+using Profile.Application.Kafka.Producers;
 using Profile.Application.Services.Interfaces;
+
 using Profile.Domain.Interfaces;
+using Shared.Messages.Profile;
 
 namespace Profile.Application.UseCases.UserUseCases.Commands.Delete;
 
-public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<DeleteUserCommand, UserResponseDto>
+public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService, ProducerService _producerService) : IRequestHandler<DeleteUserCommand, UserResponseDto>
 {
     private readonly string _cacheKeyPrefix = "user";
     
@@ -34,6 +37,9 @@ public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheS
         
         var cacheKeyProfile = $"profile:{profile.Id}";
         await _cacheService.RemoveAsync(cacheKeyProfile, cancellationToken:cancellationToken);
+        
+        var message = _mapper.Map<ProfileDeletedMessage>(profile);
+        await _producerService.ProduceAsync(message);
         
         return mappedUser;
     }

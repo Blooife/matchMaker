@@ -1,26 +1,34 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Language.Response;
+using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
-
 using Profile.Application.Services.Interfaces;
 
 using Profile.Domain.Interfaces;
-
+using Profile.Domain.Models;
 using Profile.Domain.Specifications.ProfileSpecifications;
 
 namespace Profile.Application.UseCases.LanguageUseCases.Commands.RemoveLanguageFromProfile;
 
 public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<RemoveLanguageFromProfileCommand, List<LanguageResponseDto>>
 {
-    private readonly string _cacheKeyPrefix = "language";
+    private readonly string _cacheKeyPrefix = "profile";
     
     public async Task<List<LanguageResponseDto>> Handle(RemoveLanguageFromProfileCommand request, CancellationToken cancellationToken)
     {
-        var profileWithLanguages = await _unitOfWork.LanguageRepository.GetProfileWithLanguagesAsync(request.Dto.ProfileId, cancellationToken);
+        var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
+        var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
+        {
+            var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.Dto.ProfileId, cancellationToken);
+            
+            return _mapper.Map<ProfileResponseDto>(profile);
+        }, cancellationToken);
+
+        var profile = _mapper.Map<UserProfile>(profileResponseDto);
         
-        if (profileWithLanguages is null)
+        if (profile is null)
         {
             throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
@@ -32,22 +40,20 @@ public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
             throw new NotFoundException("Language", request.Dto.LanguageId);
         }
 
-        var isProfileContainsLanguage = profileWithLanguages.ContainsLanguage(request.Dto.LanguageId);
+        var isProfileContainsLanguage = profile.ContainsLanguage(request.Dto.LanguageId);
 
         if (!isProfileContainsLanguage)
         {
             throw new NotContainsException(ExceptionMessages.ProfileNotContainsLanguage);
         }
 
-        var languageToRemove = profileWithLanguages.Languages.First(l=>l.Id == request.Dto.LanguageId);
-        await _unitOfWork.LanguageRepository.RemoveLanguageFromProfileAsync(profileWithLanguages, languageToRemove, cancellationToken);
+        var languageToRemove = profile.Languages.First(l=>l.Id == request.Dto.LanguageId);
+        await _unitOfWork.LanguageRepository.RemoveLanguageFromProfileAsync(profile, languageToRemove, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        var cacheKey = $"{_cacheKeyPrefix}:profile:{request.Dto.ProfileId}";
-        var mappedLanguages = _mapper.Map<List<LanguageResponseDto>>(profileWithLanguages.Languages);
-        await _cacheService.SetAsync(cacheKey, mappedLanguages,
+        await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),
             cancellationToken: cancellationToken);
         
-        return mappedLanguages;
+        return _mapper.Map<List<LanguageResponseDto>>(profile.Languages);
     }
 }

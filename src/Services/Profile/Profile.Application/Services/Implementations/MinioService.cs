@@ -8,8 +8,7 @@ namespace Profile.Application.Services.Implementations;
 public class MinioService : IMinioService
 {
     private readonly IMinioClient _minioClient;
-    private readonly string _bucketName;
-
+    
     public MinioService(string endpoint, string accessKey, string secretKey, string bucketname)
     {
         _minioClient = new MinioClient()
@@ -18,8 +17,11 @@ public class MinioService : IMinioService
                             .WithSSL(false)
                             .Build();
         _bucketName = bucketname;
+        Endpoint = endpoint;
     }
 
+    public string _bucketName { get; set; }
+    public string Endpoint { get; set; }
     public async Task UploadFileAsync(string objectName, IFormFile file)
     {
         var bucketExistsArgs = new BucketExistsArgs()
@@ -62,6 +64,29 @@ public class MinioService : IMinioService
         
         return memoryStream;
     }
+    
+    public async Task<Dictionary<string, Stream>> GetFilesAsync(List<string> objectNames)
+    {
+        var fileStreams = new Dictionary<string, Stream>();
+
+        foreach (var objectName in objectNames)
+        {
+            var memoryStream = new MemoryStream();
+            await _minioClient.GetObjectAsync(new GetObjectArgs()
+                .WithBucket(_bucketName)
+                .WithObject(objectName)
+                .WithCallbackStream(stream =>
+                {
+                    stream.CopyTo(memoryStream);
+                }));
+
+            memoryStream.Position = 0;
+            fileStreams.Add(objectName, memoryStream);
+        }
+
+        return fileStreams;
+    }
+
 
     public async Task DeleteFileAsync(string objectName)
     {

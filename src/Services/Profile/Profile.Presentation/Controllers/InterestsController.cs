@@ -6,7 +6,6 @@ using Profile.Application.UseCases.InterestUseCases.Commands.AddInterestToProfil
 using Profile.Application.UseCases.InterestUseCases.Commands.RemoveInterestFromProfile;
 using Profile.Application.UseCases.InterestUseCases.Queries.GetAll;
 using Profile.Application.UseCases.InterestUseCases.Queries.GetById;
-using Profile.Application.UseCases.InterestUseCases.Queries.GetProfilesInterests;
 using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
@@ -41,16 +40,6 @@ public class InterestsController : ControllerBase
         var interest = await _mediator.Send(query, cancellationToken);
         
         return Ok(interest);
-    }
-    
-    [HttpGet("profile/{id}")]
-    public async Task<IActionResult> GetProfileInterests(string id, CancellationToken cancellationToken)
-    {
-        var query = new GetProfilesInterestsQuery(id);
-
-        var interests = await _mediator.Send(query, cancellationToken);
-        
-        return Ok(interests);
     }
 
     [HttpPost("profile")]

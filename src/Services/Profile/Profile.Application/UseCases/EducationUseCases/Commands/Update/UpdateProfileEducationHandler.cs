@@ -1,21 +1,21 @@
 using AutoMapper;
 using MediatR;
-using Profile.Application.DTOs.Language.Response;
+using Profile.Application.DTOs.Education.Response;
 using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
 using Profile.Application.Services.Interfaces;
-using Profile.Domain.Interfaces;
 using Profile.Domain.Models;
+using Profile.Domain.Interfaces;
 using Profile.Domain.Specifications.ProfileSpecifications;
 
-namespace Profile.Application.UseCases.LanguageUseCases.Commands.AddLanguageToProfile;
+namespace Profile.Application.UseCases.EducationUseCases.Commands.Update;
 
-public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<AddLanguageToProfileCommand, List<LanguageResponseDto>>
+public class UpdateProfileEducationHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<UpdateProfileEducationCommand, ProfileEducationResponseDto>
 {
     private readonly string _cacheKeyPrefix = "profile";
     
-    public async Task<List<LanguageResponseDto>> Handle(AddLanguageToProfileCommand request, CancellationToken cancellationToken)
+    public async Task<ProfileEducationResponseDto> Handle(UpdateProfileEducationCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
         var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
@@ -32,26 +32,29 @@ public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
             throw new NotFoundException("Profile", request.Dto.ProfileId);
         }
         
-        var language = await _unitOfWork.LanguageRepository.FirstOrDefaultAsync(request.Dto.LanguageId, cancellationToken);
+        var education = await _unitOfWork.EducationRepository.FirstOrDefaultAsync(request.Dto.EducationId, cancellationToken);
         
-        if (language is null)
+        if (education is null)
         {
-            throw new NotFoundException("Language", request.Dto.LanguageId);
-        }
-
-        var isProfileContainsLanguage = profile.ContainsLanguage(request.Dto.LanguageId);
-
-        if (isProfileContainsLanguage)
-        {
-            throw new AlreadyContainsException(ExceptionMessages.ProfileContainsLanguage);
+            throw new NotFoundException("Education", request.Dto.EducationId);
         }
         
-        await _unitOfWork.LanguageRepository.AddLanguageToProfileAsync(profile, language);
+        var isContains = profile.ContainsEducation(request.Dto.EducationId);
+
+        if (!isContains)
+        {
+            throw new NotContainsException(ExceptionMessages.ProfileNotContainsEducation);
+        }
+
+        ProfileEducation profileEducation = profile.ProfileEducations.First(userEducation=>userEducation.EducationId == request.Dto.EducationId);
+        
+        await _unitOfWork.EducationRepository.UpdateProfilesEducationAsync(profileEducation, request.Dto.Description);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),
             cancellationToken: cancellationToken);
         
-        return _mapper.Map<List<LanguageResponseDto>>(profile.Languages);
+        
+        return _mapper.Map<ProfileEducationResponseDto>(profileEducation);;
     }
 }
