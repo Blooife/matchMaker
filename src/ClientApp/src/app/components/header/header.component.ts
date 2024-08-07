@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from "../../services/auth-service.service";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {Observable, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {roles} from "../../constants/roles";
 import {UserService} from "../../services/user-service.service";
 

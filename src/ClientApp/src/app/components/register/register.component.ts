@@ -42,6 +42,7 @@ export class RegisterComponent {
 
   getErrorMessage(controlName: string): string {
     const control = this.registerForm.get(controlName);
+
     if (control && control.errors) {
       if (control.errors['required']) {
         return 'This field is required';
@@ -53,6 +54,7 @@ export class RegisterComponent {
         return `Must contain email`;
       }
     }
+
     return '';
   }
 }

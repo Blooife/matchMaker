@@ -119,6 +119,6 @@ export class UpdateEducationComponent implements OnInit, OnDestroy {
 
       });
     });
-    alert('Profile updated successfully');
+    alert('Profile education updated successfully');
   }
 }

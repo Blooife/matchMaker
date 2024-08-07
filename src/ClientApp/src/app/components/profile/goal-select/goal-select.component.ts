@@ -15,7 +15,7 @@ import {FormsModule} from "@angular/forms";
   ],
   standalone: true
 })
-export class GoalSelectComponent implements OnInit, OnChanges{
+export class GoalSelectComponent implements OnInit {
   @Input() selectedGoalId: number | null = null;
   @Output() goalSelected = new EventEmitter<number>();
 
@@ -26,12 +26,6 @@ export class GoalSelectComponent implements OnInit, OnChanges{
 
   ngOnInit() {
     this.loadGaols();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedGoalId'] && this.selectedGoalId !== null) {
-
-    }
   }
 
   async loadGaols() {
@@ -48,6 +42,7 @@ export class GoalSelectComponent implements OnInit, OnChanges{
     const selectElement = event.target as HTMLSelectElement;
     const value = selectElement.value;
     const id = this.extractGoalId(value);
+
     if(id === null){
       this.goalSelected.emit(undefined);
     }else{

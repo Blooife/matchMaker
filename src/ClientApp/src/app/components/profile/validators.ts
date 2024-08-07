@@ -45,3 +45,25 @@ export function ageFromLessThanOrEqualAgeTo(ageFromKey: string, ageToKey: string
     }
   };
 }
+
+export function getErrorMessage(controlName: string, form: FormGroup): string {
+  const control = form.get(controlName);
+  if (control && control.errors) {
+    if (control.errors['required']) {
+      return 'This field is required';
+    } else if (control.errors['minlength']) {
+      return `Minimum length is ${control.errors['minlength'].requiredLength}`;
+    } else if (control.errors['maxlength']) {
+      return `Maximum length is ${control.errors['maxlength'].requiredLength}`;
+    } else if (control.errors['minimumAge']) {
+      return `Minimum age is 16`;
+    } else if (control.errors['range']) {
+      return 'Value out of range';
+    } else if (control.errors['minValue']) {
+      return 'Value must be greater than or equal to 0';
+    } else if (control.errors['ageFromLessThanAgeTo']) {
+      return 'Age From must be less than Age To';
+    }
+  }
+  return '';
+}
