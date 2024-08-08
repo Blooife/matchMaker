@@ -6,40 +6,23 @@ public class ProfileMapping : AutoMapper.Profile
 {
     public ProfileMapping()
     {
-            CreateMap<Protos.Profile, FullProfileResponseDto>()
-                .ForMember(dest => dest.Id, 
-                    opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Name, 
-                    opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.LastName, 
-                    opt => opt.MapFrom(src => src.LastName))
-                .ForMember(dest => dest.Bio, 
-                    opt => opt.MapFrom(src => src.Bio))
-                .ForMember(dest => dest.Height, 
-                    opt => opt.MapFrom(src => src.Height))
-                .ForMember(dest => dest.BirthDate, 
-                    opt => opt.MapFrom(src => src.BirthDate))
-                .ForMember(dest => dest.ShowAge, 
-                    opt => opt.MapFrom(src => src.ShowAge))
-                .ForMember(dest => dest.AgeFrom, 
-                    opt => opt.MapFrom(src => src.AgeFrom))
-                .ForMember(dest => dest.AgeTo, 
-                    opt => opt.MapFrom(src => src.AgeTo))
-                .ForMember(dest => dest.Gender, 
-                    opt => opt.MapFrom(src => src.Gender))
-                .ForMember(dest => dest.PreferredGender, 
-                    opt => opt.MapFrom(src => src.PreferredGender))
-                .ForMember(dest => dest.MaxDistance, 
-                    opt => opt.MapFrom(src => src.MaxDistance))
-                .ForMember(dest => dest.Country, 
-                    opt => opt.MapFrom(src => src.City.Country.Name))
-                .ForMember(dest => dest.City, 
-                    opt => opt.MapFrom(src => src.City.Name))
-                .ForMember(dest => dest.Languages, 
-                    opt => opt.MapFrom(src => src.Languages.Select(language => language.Name)))
-                .ForMember(dest => dest.Interests, 
-                    opt => opt.MapFrom(src => src.Interests.Select(interest => interest.Name)))
-                .ForMember(dest => dest.Goal, 
-                    opt => opt.MapFrom(src => src.Goal.Name));
+        CreateMap<Protos.Profile, ProfileResponseDto>()
+            .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => DateTime.Parse(src.BirthDate)))
+            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Images))
+            .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
+            .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
+            .ForMember(dest => dest.Goal, opt => opt.MapFrom(src => src.Goal))
+            .ForMember(dest => dest.Languages, opt => opt.MapFrom(src => src.Languages))
+            .ForMember(dest => dest.Interests, opt => opt.MapFrom(src => src.Interests))
+            .ForMember(dest => dest.Education, opt => opt.MapFrom(src => src.Education));
+
+        CreateMap<Protos.City, CityResponseDto>();
+        CreateMap<Protos.Country, CountryResponseDto>();
+        CreateMap<Protos.Goal, GoalResponseDto>();
+        CreateMap<Protos.Language, LanguageResponseDto>();
+        CreateMap<Protos.Interest, InterestResponseDto>();
+        CreateMap<Protos.ProfileEducation, ProfileEducationResponseDto>();
+        CreateMap<Protos.Image, ImageResponseDto>()
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Url));
     }
 }

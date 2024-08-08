@@ -1,6 +1,5 @@
 using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Authentication.API.Controllers;
@@ -27,7 +26,6 @@ public class AuthController(IAuthService _authService, ILogger<AuthController> l
     }
     
     [HttpPost("refresh")]
-    [Authorize]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshRequestDto refreshToken, CancellationToken cancellationToken)
     {
         var response = await _authService.RefreshTokenAsync(refreshToken.refreshToken, cancellationToken);

@@ -1,4 +1,5 @@
 using AutoMapper;
+using Match.Application.Services.Implementations;
 using Match.Application.Services.Interfaces;
 using Match.Infrastructure.Context;
 using Match.Infrastructure.Mapper;
@@ -19,6 +20,7 @@ public static class ServiceExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.ConfigureGrpcClient();
         services.AddScoped<IDbCleanupService, DbCleanupService>();
+        services.AddScoped<IChatService, ChatService>();
     }
     
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)

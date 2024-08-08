@@ -24,6 +24,8 @@ public class DeleteProfileHandler(IUnitOfWork _unitOfWork) : IRequestHandler<Del
         await _unitOfWork.Messages.DeleteManyAsync(message => chatIds.Contains(message.ChatId), cancellationToken);
         await _unitOfWork.Matches.DeleteManyAsync(
             match => match.FirstProfileId == profile.Id || match.SecondProfileId == profile.Id, cancellationToken);
+        await _unitOfWork.Likes.DeleteManyAsync(
+            like => like.ProfileId== profile.Id || like.TargetProfileId == profile.Id, cancellationToken);
         
         return new GeneralResponseDto();
     }

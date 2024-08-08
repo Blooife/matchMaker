@@ -8,26 +8,23 @@ namespace Match.Infrastructure.Implementations;
 
 public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericRepository<Profile, string>(_collection), IProfileRepository
 {
-    public async Task<(List<string> Ids, int TotalCount)> GetPagedRecsAsync(List<string> excludedProfileIds, Profile userProfile, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    public async Task<List<string>> GetRecsAsync(List<string> excludedProfileIds, Profile userProfile, CancellationToken cancellationToken)
     {
         var filter = GetFilterForRecommendations(excludedProfileIds, userProfile);
-
         var count = await _collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
 
         var findOptions = new FindOptions<Profile, Profile>()
         {
-            Skip = (pageNumber - 1) * pageSize,
-            Limit = pageSize,
+            Limit = 10,
             Projection = Builders<Profile>.Projection.Include(p => p.Id)
         };
 
         var ids = await _collection.Find(filter)
             .Project(p=>p.Id)
-            .Skip(findOptions.Skip)
             .Limit(findOptions.Limit)
             .ToListAsync(cancellationToken);
         
-        return (ids, (int)count);
+        return ids;
     }
 
     private FilterDefinition<Profile> GetFilterForRecommendations(List<string> excludedProfileIds, Profile userProfile)
@@ -61,6 +58,8 @@ public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericR
             filters.Add(Builders<Profile>.Filter.Eq(p => p.Country, userProfile.Country));
         }
         
-        return Builders<Profile>.Filter.And(filters);
+        var resFilter = ApplySoftDeleteFilter(Builders<Profile>.Filter.And(filters));
+        
+        return resFilter;
     }
 }

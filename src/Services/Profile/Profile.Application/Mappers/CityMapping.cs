@@ -7,10 +7,9 @@ public class CityMapping : AutoMapper.Profile
 {
     public CityMapping()
     {
-        CreateMap<City, CityResponseDto>();
-        
+        CreateMap<City, CityResponseDto>().ReverseMap();
+
         CreateMap<City, CityWithCountryResponseDto>()
-            .ForMember(dest=>dest.CountryName, opt => opt.MapFrom(src=>src.Country.Name))
-            .ForMember(dest=>dest.CountryId, opt => opt.MapFrom(src=>src.CountryId));;
+            .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country));
     }
 }

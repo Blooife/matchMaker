@@ -9,6 +9,8 @@ public class Profile : ISoftDeletable
 {
     [BsonId]
     public string Id { get; set; }
+    public string Name { get; set; }
+    public string LastName { get; set; }
     public DateTime BirthDate { get; set; }
     public int AgeFrom { get; set; }
     public int AgeTo { get; set; }
@@ -17,6 +19,7 @@ public class Profile : ISoftDeletable
     public int MaxDistance { get; set; }
     public string Country { get; set; }
     public string City { get; set; }
+    public string MainImageUrl { get; set; }
     public GeoJsonPoint<GeoJson2DCoordinates>? Location { get; set; }
     public DateTime? DeletedAt { get; set; }
 }

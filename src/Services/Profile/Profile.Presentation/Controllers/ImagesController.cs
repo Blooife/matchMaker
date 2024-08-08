@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 using Profile.Application.DTOs.Image.Request;
 using Profile.Application.Services.Interfaces;
 using Profile.Application.UseCases.ImageUseCases.Commands.AddImage;
+using Profile.Application.UseCases.ImageUseCases.Commands.ChangeMainImage;
 using Profile.Application.UseCases.ImageUseCases.Commands.RemoveImage;
 using Profile.Application.UseCases.ImageUseCases.Queries.GetById;
-using Profile.Application.UseCases.ImageUseCases.Queries.GetProfilesImages;
 using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
+[Authorize(Roles = $"{Roles.User}")]
 public class ImagesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -23,16 +23,6 @@ public class ImagesController : ControllerBase
     {
         _mediator = mediator;
         _minioService = minioService;
-    }
-    
-    [HttpGet("profile/{id}")]
-    public async Task<IActionResult> GetProfileImages(string id, CancellationToken cancellationToken)
-    {
-        var query = new GetProfilesImagesQuery(id);
-
-        var images = await _mediator.Send(query, cancellationToken);
-        
-        return Ok(images);
     }
     
     [HttpGet("{id}")]
@@ -59,9 +49,20 @@ public class ImagesController : ControllerBase
     }
 
     [HttpPost]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> AddImageToProfile(AddImageDto dto, CancellationToken cancellationToken)
     {
         var command = new AddImageCommand(dto);
+        
+        var result = await _mediator.Send(command, cancellationToken);
+        
+        return Ok(result);
+    }
+    
+    [HttpPatch]
+    public async Task<IActionResult> ChangeMainImage(ChangeMainImageDto dto, CancellationToken cancellationToken)
+    {
+        var command = new ChangeMainImageCommand(dto);
         
         var result = await _mediator.Send(command, cancellationToken);
         

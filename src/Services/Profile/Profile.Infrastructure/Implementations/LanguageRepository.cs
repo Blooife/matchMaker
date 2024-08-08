@@ -11,27 +11,13 @@ public class LanguageRepository(ProfileDbContext _dbContext)
 {
     public async Task AddLanguageToProfileAsync(UserProfile profile, Language language)
     {
+        _dbContext.Profiles.Attach(profile);
         profile.Languages.Add(language);
     }
     
     public async Task RemoveLanguageFromProfileAsync(UserProfile profile, Language language, CancellationToken cancellationToken)
     {
+        _dbContext.Profiles.Attach(profile);
         profile.Languages.Remove(language);
-    }
-    
-    public async Task<List<Language>> GetProfilesLanguagesAsync(string profileId, CancellationToken cancellationToken)
-    {
-        var userProfile = await _dbContext.Profiles.Include(p => p.Languages).AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
-
-        return userProfile!.Languages;
-    }
-    
-    public async Task<UserProfile?> GetProfileWithLanguagesAsync(string profileId, CancellationToken cancellationToken)
-    {
-        var userProfile = await _dbContext.Profiles.Include(p => p.Languages)
-            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
-
-        return userProfile;
     }
 }

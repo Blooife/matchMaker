@@ -20,20 +20,9 @@ public class ImageRepository(ProfileDbContext _dbContext)
     {
         _dbContext.Images.Remove(image);
     }
-
-    public async Task<List<Image>> GetProfilesImagesAsync(string profileId, CancellationToken cancellationToken)
-    {
-        var userProfile = await _dbContext.Profiles.Include(p => p.Images).AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
-
-        return userProfile!.Images;
-    }
     
-    public async Task<UserProfile?> GetProfileWithImagesAsync(string profileId, CancellationToken cancellationToken)
+    public async Task UpdateImageAsync(Image image, CancellationToken cancellationToken)
     {
-        var userProfile = await _dbContext.Profiles.Include(p => p.Images)
-            .FirstOrDefaultAsync(p => p.Id == profileId, cancellationToken);
-
-        return userProfile;
+        _dbContext.Images.Update(image);
     }
 }

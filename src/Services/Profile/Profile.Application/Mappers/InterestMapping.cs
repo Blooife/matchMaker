@@ -7,6 +7,6 @@ public class InterestMapping : AutoMapper.Profile
 {
     public InterestMapping()
     {
-        CreateMap<Interest, InterestResponseDto>();
+        CreateMap<Interest, InterestResponseDto>().ReverseMap();
     }
 }

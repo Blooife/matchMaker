@@ -7,7 +7,7 @@ namespace Match.Infrastructure.Implementations.BaseRepositories;
 
 public class GenericRepository<T, TKey>(IMongoCollection<T> _collection) : IGenericRepository<T, TKey> where T : class
 {
-    private FilterDefinition<T> ApplySoftDeleteFilter(FilterDefinition<T> baseFilter)
+    protected FilterDefinition<T> ApplySoftDeleteFilter(FilterDefinition<T> baseFilter)
     {
         if (typeof(ISoftDeletable).IsAssignableFrom(typeof(T)))
         {

@@ -6,14 +6,13 @@ using Profile.Application.UseCases.LanguageUseCases.Commands.AddLanguageToProfil
 using Profile.Application.UseCases.LanguageUseCases.Commands.RemoveLanguageFromProfile;
 using Profile.Application.UseCases.LanguageUseCases.Queries.GetAll;
 using Profile.Application.UseCases.LanguageUseCases.Queries.GetById;
-using Profile.Application.UseCases.LanguageUseCases.Queries.GetProfilesLanguages;
 using Shared.Constants;
 
 namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
+[Authorize(Roles = $"{Roles.User}")]
 public class LanguagesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -41,16 +40,6 @@ public class LanguagesController : ControllerBase
         var language = await _mediator.Send(query, cancellationToken);
         
         return Ok(language);
-    }
-    
-    [HttpGet("profile/{id}")]
-    public async Task<IActionResult> GetProfileLanguages(string id, CancellationToken cancellationToken)
-    {
-        var query = new GetProfilesLanguagesQuery(id);
-
-        var languages = await _mediator.Send(query, cancellationToken);
-        
-        return Ok(languages);
     }
 
     [HttpPost("profile")]
