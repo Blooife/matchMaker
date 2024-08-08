@@ -1,0 +1,5 @@
+<app-header *ngIf="showHeader"></app-header>
+<app-error-modal></app-error-modal>
+<main [ngClass]="{'main-with-header': showHeader, 'main-no-header': !showHeader}">
+  <router-outlet></router-outlet>
+</main>
