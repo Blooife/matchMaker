@@ -1,7 +1,7 @@
 using Match.Application.DTOs.Profile.Response;
 using Match.Application.Exceptions;
-using Match.Application.Services.Interfaces;
-using Match.Domain.Interfaces;
+using Match.Application.Services;
+using Match.Domain.Interfaces.Repositories;
 using MediatR;
 using Shared.Models;
 

@@ -4,8 +4,8 @@ using Profile.Application.DTOs.Language.Response;
 using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Exceptions.Messages;
-using Profile.Application.Services.Interfaces;
-using Profile.Domain.Interfaces;
+using Profile.Domain.Interfaces.Repositories;
+using Profile.Domain.Interfaces.Services;
 using Profile.Domain.Models;
 using Profile.Domain.Specifications.ProfileSpecifications;
 

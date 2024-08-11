@@ -1,7 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.City.Response;
-using Profile.Domain.Interfaces;
+using Profile.Domain.Interfaces.Repositories;
 
 namespace Profile.Application.UseCases.CityUseCases.Queries.GetAll;
 

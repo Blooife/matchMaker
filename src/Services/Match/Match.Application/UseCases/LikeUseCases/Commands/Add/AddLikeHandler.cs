@@ -2,7 +2,7 @@ using AutoMapper;
 using Match.Application.DTOs.Like.Response;
 using Match.Application.Exceptions;
 using Match.Domain.Models;
-using Match.Domain.Interfaces;
+using Match.Domain.Interfaces.Repositories;
 using MediatR;
 
 namespace Match.Application.UseCases.LikeUseCases.Commands.Add;

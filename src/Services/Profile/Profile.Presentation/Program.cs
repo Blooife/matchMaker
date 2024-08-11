@@ -1,6 +1,6 @@
 using Profile.Application.Extensions;
 using Profile.Infrastructure.Extensions;
-using Profile.Infrastructure.Services;
+using Profile.Infrastructure.Implementations.Services;
 using Profile.Presentation.Extensions;
 using Profile.Presentation.MiddlewareHandlers;
 

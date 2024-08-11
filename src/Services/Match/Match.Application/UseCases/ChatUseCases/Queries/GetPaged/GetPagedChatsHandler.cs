@@ -1,7 +1,7 @@
 using AutoMapper;
 using Match.Application.DTOs.Chat.Response;
 using Match.Application.Exceptions;
-using Match.Domain.Interfaces;
+using Match.Domain.Interfaces.Repositories;
 using MediatR;
 using Shared.Models;
 
@@ -21,7 +21,6 @@ public class GetPagedChatsHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         var result = await _unitOfWork.Chats.GetPagedAsync(request.ProfileId, request.PageNumber, request.PageSize,
             cancellationToken);
         
-        ///what if profile already deleted. think about it. think about when creating chat add names
         var profileIds = result.Item1
             .SelectMany(chat => new[] { chat.FirstProfileId, chat.SecondProfileId })
             .Distinct()

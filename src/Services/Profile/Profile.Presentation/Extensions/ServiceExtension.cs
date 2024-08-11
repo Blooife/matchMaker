@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Profile.Application.Services.Implementations;
-using Profile.Application.Services.Interfaces;
+using Profile.Domain.Interfaces.Services;
 using Profile.Infrastructure.Contexts;
+using Profile.Infrastructure.Implementations.Services;
 using Shared.Models;
 
 namespace Profile.Presentation.Extensions;

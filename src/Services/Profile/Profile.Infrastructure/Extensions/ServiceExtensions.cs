@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Profile.Domain.Interfaces;
+using Profile.Domain.Interfaces.Repositories;
+using Profile.Domain.Interfaces.Services;
 using Profile.Infrastructure.Contexts;
 using Profile.Infrastructure.Implementations;
+using Profile.Infrastructure.Implementations.Repositories;
+using Profile.Infrastructure.Implementations.Services;
 
 namespace Profile.Infrastructure.Extensions;
 
@@ -15,6 +18,7 @@ public static class ServiceExtensions
         services.ConfigureRepositories();
         services.AddGrpc();
         services.AddScoped<IDbCleanupService, DbCleanUpService>();
+        services.AddSingleton<ICacheService, CacheService>();
     }
     
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)

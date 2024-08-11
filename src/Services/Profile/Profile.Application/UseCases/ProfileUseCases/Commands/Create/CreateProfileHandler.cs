@@ -1,10 +1,10 @@
 using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Profile.Response;
-using Profile.Application.Services.Interfaces;
 using Profile.Application.Kafka.Producers;
 using Profile.Domain.Models;
-using Profile.Domain.Interfaces;
+using Profile.Domain.Interfaces.Repositories;
+using Profile.Domain.Interfaces.Services;
 using Shared.Messages.Profile;
 
 namespace Profile.Application.UseCases.ProfileUseCases.Commands.Create;

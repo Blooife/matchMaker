@@ -1,5 +1,5 @@
 using Match.Application.Exceptions;
-using Match.Domain.Interfaces;
+using Match.Domain.Interfaces.Repositories;
 using MediatR;
 using Shared.Models;
 

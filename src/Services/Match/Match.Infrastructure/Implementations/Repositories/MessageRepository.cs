@@ -1,0 +1,32 @@
+using System.Linq.Expressions;
+using Match.Domain.Models;
+using Match.Domain.Interfaces.Repositories;
+using Match.Infrastructure.Implementations.BaseRepositories;
+using MongoDB.Driver;
+
+namespace Match.Infrastructure.Implementations.Repositories;
+
+public class MessageRepository(IMongoCollection<Message> _collection) : GenericRepository<Message, string>(_collection), IMessageRepository
+{
+    public async Task<(List<Message>, int)> GetPagedAsync(string chatId, int pageNumber, int pageSize, CancellationToken cancellationToken)
+    {
+        Expression<Func<Message, bool>> filter = x => x.ChatId == chatId;
+
+        var count = await _collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
+
+        var findOptions = new FindOptions<Message, Message>()
+        {
+            Skip = (pageNumber - 1) * pageSize,
+            Limit = pageSize,
+            Sort = Builders<Message>.Sort.Descending(m => m.Timestamp)
+        };
+
+        var items = await _collection.Find(filter)
+            .Sort(findOptions.Sort)
+            .Skip(findOptions.Skip)
+            .Limit(findOptions.Limit)
+            .ToListAsync(cancellationToken);
+        
+        return new (items, (int)count);
+    }
+}

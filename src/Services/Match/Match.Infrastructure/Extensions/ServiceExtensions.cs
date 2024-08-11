@@ -1,11 +1,12 @@
 using AutoMapper;
-using Match.Application.Services.Implementations;
+using Match.Application.Services;
 using Match.Application.Services.Interfaces;
 using Match.Infrastructure.Context;
 using Match.Infrastructure.Mapper;
-using Match.Infrastructure.Services;
-using Match.Domain.Interfaces;
-using Match.Infrastructure.Implementations;
+using Match.Domain.Interfaces.Repositories;
+using Match.Domain.Interfaces.Services;
+using Match.Infrastructure.Implementations.Repositories;
+using Match.Infrastructure.Implementations.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;

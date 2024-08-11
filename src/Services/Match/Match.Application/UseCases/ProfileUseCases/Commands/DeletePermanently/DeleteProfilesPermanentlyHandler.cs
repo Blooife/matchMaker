@@ -1,4 +1,4 @@
-using Match.Domain.Interfaces;
+using Match.Domain.Interfaces.Services;
 using MediatR;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.DeletePermanently;

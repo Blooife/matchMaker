@@ -1,6 +1,6 @@
 using AutoMapper;
 using Match.Application.Exceptions;
-using Match.Domain.Interfaces;
+using Match.Domain.Interfaces.Repositories;
 using MediatR;
 using Profile = Match.Domain.Models.Profile;
 
