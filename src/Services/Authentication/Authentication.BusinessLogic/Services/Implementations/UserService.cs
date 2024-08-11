@@ -10,7 +10,7 @@ using Shared.Models;
 
 namespace Authentication.BusinessLogic.Services.Implementations;
 
-public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogger<UserService> _logger, ProducerService _producerService) : IUserService
+public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogger<UserService> _logger, IProducerService _producerService) : IUserService
 
 {
     public async Task<GeneralResponseDto> DeleteUserByIdAsync(string userId, CancellationToken cancellationToken)

@@ -16,7 +16,7 @@ using Shared.Models;
 namespace Authentication.BusinessLogic.Services.Implementations;
 
 public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogger<AuthService> _logger,
-    IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider, IValidator<UserRequestDto> _validator, ProducerService _producerService) : IAuthService
+    IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider, IValidator<UserRequestDto> _validator, IProducerService _producerService) : IAuthService
 {
     public async Task<GeneralResponseDto> RegisterAsync(UserRequestDto registrationRequestDto)
     {
