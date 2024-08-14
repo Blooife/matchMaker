@@ -26,25 +26,7 @@ public class UsersController(IUserService _userService): ControllerBase
         var user = await _userService.GetUserByEmailAsync(email, cancellationToken);
         
         return Ok(user);
-    } 
-    
-    [HttpGet("{userId}/roles")]
-    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
-    public async Task<IActionResult> GetUsersRoles([FromRoute] string userId, CancellationToken cancellationToken)
-    {
-        var roles = await _userService.GetUsersRolesAsync(userId, cancellationToken);
-        
-        return Ok(roles);
-    } 
-    
-    [HttpGet]
-    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]
-    public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
-    {
-        var users = await _userService.GetAllUsersAsync(cancellationToken);
-        
-        return Ok(users);
-    } 
+    }
     
     [HttpGet("paginated")]
     [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}")]

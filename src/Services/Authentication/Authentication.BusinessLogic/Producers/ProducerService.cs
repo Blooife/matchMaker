@@ -6,7 +6,7 @@ using Shared.Messages.Authentication;
 
 namespace Authentication.BusinessLogic.Producers;
 
-public class ProducerService
+public class ProducerService : IProducerService
 {
     private readonly string _topic;
     private readonly IProducer<string, string> _producer;

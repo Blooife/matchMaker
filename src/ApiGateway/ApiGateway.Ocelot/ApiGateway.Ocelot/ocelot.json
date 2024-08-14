@@ -143,46 +143,6 @@
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "DownstreamPathTemplate": "/api/users/{userId}/roles",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "auth-service",
-          "Port": 443
-        }
-      ],
-      "UpstreamPathTemplate": "/users/{userId}/roles",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
-      },
-      "SwaggerKey": "auth",
-      "DangerousAcceptAnyServerCertificateValidator": true
-    },
-    {
-      "DownstreamPathTemplate": "/api/users",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "auth-service",
-          "Port": 443
-        }
-      ],
-      "UpstreamPathTemplate": "/users",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
-      },
-      "SwaggerKey": "auth",
-      "DangerousAcceptAnyServerCertificateValidator": true
-    },
-    {
       "DownstreamPathTemplate": "/api/users/paginated",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [

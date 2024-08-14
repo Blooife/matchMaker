@@ -15,6 +15,5 @@ public interface IUserRepository
     Task<User?> GetByRefreshTokenAsync(string token, CancellationToken cancellationToken);
     Task<IdentityResult> DeleteUserByIdAsync(User user);
     Task<IdentityResult> UpdateUserAsync(User user);
-    Task<List<User>> GetAllUsersAsync(CancellationToken cancellationToken);
     Task<(List<User> Users, int TotalCount)> GetPagedUsersAsync(int pageNumber, int pageSize);
 }

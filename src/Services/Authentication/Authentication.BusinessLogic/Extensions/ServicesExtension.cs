@@ -23,7 +23,7 @@ public static class ServicesExtension
     {
         services.ConfigureServices();
         services.ConfigureProviders();
-        services.AddSingleton<ProducerService>();
+        services.AddSingleton<IProducerService, ProducerService>();
         services.Configure<ProducerConfig>(config.GetRequiredSection("Kafka:Producer"));
         services.ConfigureHangfire(config);
     }

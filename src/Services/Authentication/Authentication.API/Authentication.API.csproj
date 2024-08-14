@@ -28,7 +28,6 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-      <Folder Include="Behaviors\" />
     </ItemGroup>
 
 </Project>
