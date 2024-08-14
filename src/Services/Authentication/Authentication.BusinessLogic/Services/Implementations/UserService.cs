@@ -105,7 +105,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogg
             throw new NotFoundException(userId);
         }
 
-        var roles = _userRepository.GetRolesAsync(user);
+        var roles = await _userRepository.GetRolesAsync(user);
         
         return _mapper.Map<IEnumerable<RoleResponseDto>>(roles);
     }

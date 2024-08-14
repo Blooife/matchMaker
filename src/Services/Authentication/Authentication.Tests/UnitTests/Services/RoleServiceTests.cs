@@ -8,6 +8,8 @@ using Authentication.BusinessLogic.Services.Implementations;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using Authentication.Tests.UnitTests;
+using Authentication.Tests.UnitTests.Fakers;
+using Bogus;
 using Microsoft.AspNetCore.Identity;
 using Shared.Models;
 
@@ -18,6 +20,8 @@ public class RoleServiceTests
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<ILogger<RoleService>> _loggerMock;
     private readonly RoleService _roleService;
+    private readonly Faker<User> _userFaker = TestDataGenerator.CreateUser();
+    private readonly Faker<RoleResponseDto> _roleResponseDtoFaker = TestDataGenerator.CreateRoleResponseDto();
 
     public RoleServiceTests()
     {
@@ -29,13 +33,13 @@ public class RoleServiceTests
     }
 
     [Fact]
-    public async Task GetAllRolesAsync_ShouldReturnRoles_WhenRolesExist()
+    public async Task GetAllRolesAsync_ReturnsRoles_WhenRolesExist()
     {
-        var roles = new List<Role> { new Role { Name = "Admin" }, new Role { Name = "User" } };
+        var roles = new List<Role> ();
         var roleResponseDtos = new List<RoleResponseDto>
         {
-            new RoleResponseDto { Name = "Admin" },
-            new RoleResponseDto { Name = "User" }
+            _roleResponseDtoFaker.Generate(),
+            _roleResponseDtoFaker.Generate()
         };
 
         _roleRepositoryMock.Setup(r => r.GetAllRolesAsync(It.IsAny<CancellationToken>()))
@@ -49,23 +53,22 @@ public class RoleServiceTests
     }
 
     [Fact]
-    public async Task AssignRoleAsync_ShouldReturnSuccess_WhenRoleAssignedSuccessfully()
+    public async Task AssignRoleAsync_ReturnsSuccess_WhenRoleAssignedSuccessfully()
     {
-        var email = "user@example.com";
-        var roleName = "Admin";
-        var user = new User { Email = email };
+        var roleName = _roleResponseDtoFaker.Generate().Name;
+        var user = _userFaker.Generate();
         var result = IdentityResult.Success;
         
         var expectedResponse = new GeneralResponseDto { Message = "Role assigned successfully" };
 
-        _userRepositoryMock.Setup(r => r.GetByEmailAsync(email, It.IsAny<CancellationToken>()))
+        _userRepositoryMock.Setup(r => r.GetByEmailAsync(user.Email!, It.IsAny<CancellationToken>()))
                            .ReturnsAsync(user);
         _roleRepositoryMock.Setup(r => r.RoleExistsAsync(roleName))
                            .ReturnsAsync(true);
         _userRepositoryMock.Setup(r => r.AddToRoleAsync(user, roleName))
                            .ReturnsAsync(result);
 
-        var response = await _roleService.AssignRoleAsync(email, roleName, CancellationToken.None);
+        var response = await _roleService.AssignRoleAsync(user.Email!, roleName, CancellationToken.None);
 
         response.Should().BeEquivalentTo(expectedResponse);
     }
@@ -73,11 +76,11 @@ public class RoleServiceTests
     [Fact]
     public async Task AssignRoleAsync_ShouldThrowNotFoundException_WhenUserNotFound()
     {
-        var email = "user@example.com";
-        var roleName = "Admin";
+        var email = _userFaker.Generate().Email!;
+        var roleName = _roleResponseDtoFaker.Generate().Name;
 
         _userRepositoryMock.Setup(r => r.GetByEmailAsync(email, It.IsAny<CancellationToken>()))
-                           .ReturnsAsync((User)null);
+                           .ReturnsAsync(null as User);
 
         Func<Task> act = async () => await _roleService.AssignRoleAsync(email, roleName, CancellationToken.None);
 
@@ -88,9 +91,9 @@ public class RoleServiceTests
     [Fact]
     public async Task AssignRoleAsync_ShouldThrowAssignRoleException_WhenRoleDoesNotExist()
     {
-        var email = "user@example.com";
-        var roleName = "Admin";
-        var user = new User { Email = email };
+        var email = _userFaker.Generate().Email!;
+        var roleName = _roleResponseDtoFaker.Generate().Name;
+        var user = _userFaker.Generate();
 
         _userRepositoryMock.Setup(r => r.GetByEmailAsync(email, It.IsAny<CancellationToken>()))
                            .ReturnsAsync(user);
@@ -103,13 +106,35 @@ public class RoleServiceTests
                  .WithMessage(ExceptionMessages.RoleNotExists);
         _loggerMock.VerifyLog(LogLevel.Error, Times.Once());
     }
+    
+    [Fact]
+    public async Task AssignRoleAsync_ShouldThrowAssignRoleException_WhenAssigningRoleFails()
+    {
+        var email = _userFaker.Generate().Email!;
+        var roleName = _roleResponseDtoFaker.Generate().Name;
+        var user = _userFaker.Generate();
+        var result = IdentityResult.Failed(new IdentityError());
+
+
+        _userRepositoryMock.Setup(r => r.GetByEmailAsync(email, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+        _roleRepositoryMock.Setup(r => r.RoleExistsAsync(roleName))
+            .ReturnsAsync(true);
+        _userRepositoryMock.Setup(r => r.AddToRoleAsync(user, roleName))
+            .ReturnsAsync(result);
+        
+        Func<Task> act = async () => await _roleService.AssignRoleAsync(email, roleName, CancellationToken.None);
+
+        await act.Should().ThrowAsync<AssignRoleException>();
+        _loggerMock.VerifyLog(LogLevel.Error, Times.Once());
+    }
 
     [Fact]
-    public async Task RemoveUserFromRoleAsync_ShouldReturnSuccess_WhenRoleRemovedSuccessfully()
+    public async Task RemoveUserFromRoleAsync_ReturnsSuccess_WhenRoleRemovedSuccessfully()
     {
-        var email = "user@example.com";
-        var roleName = "Admin";
-        var user = new User { Email = email };
+        var email = _userFaker.Generate().Email!;
+        var roleName = _roleResponseDtoFaker.Generate().Name;
+        var user = _userFaker.Generate();
         var roles = new List<string> { "Admin", "User" };
         var result = IdentityResult.Success;
         var expectedResponse = new GeneralResponseDto { Message = "Role removed successfully" };
@@ -120,6 +145,8 @@ public class RoleServiceTests
                            .ReturnsAsync(roles);
         _userRepositoryMock.Setup(r => r.RemoveFromRoleAsync(user, roleName))
                            .ReturnsAsync(result);
+        _roleRepositoryMock.Setup(r => r.RoleExistsAsync(roleName))
+            .ReturnsAsync(true);
 
         var response = await _roleService.RemoveUserFromRoleAsync(email, roleName, CancellationToken.None);
 
@@ -130,11 +157,11 @@ public class RoleServiceTests
     [Fact]
     public async Task RemoveUserFromRoleAsync_ShouldThrowNotFoundException_WhenUserNotFound()
     {
-        var email = "user@example.com";
-        var roleName = "Admin";
+        var email = _userFaker.Generate().Email!;
+        var roleName = _roleResponseDtoFaker.Generate().Name;
 
         _userRepositoryMock.Setup(r => r.GetByEmailAsync(email, It.IsAny<CancellationToken>()))
-                           .ReturnsAsync((User)null);
+                           .ReturnsAsync(null as User);
 
         Func<Task> act = async () => await _roleService.RemoveUserFromRoleAsync(email, roleName, CancellationToken.None);
 
@@ -145,9 +172,9 @@ public class RoleServiceTests
     [Fact]
     public async Task RemoveUserFromRoleAsync_ShouldThrowRemoveRoleException_WhenUserHasOnlyOneRole()
     {
-        var email = "user@example.com";
-        var roleName = "Admin";
-        var user = new User { Email = email };
+        var email = _userFaker.Generate().Email!;
+        var roleName = _roleResponseDtoFaker.Generate().Name;
+        var user = _userFaker.Generate();
         var roles = new List<string> { "Admin" };
 
         _userRepositoryMock.Setup(r => r.GetByEmailAsync(email, It.IsAny<CancellationToken>()))
@@ -164,13 +191,12 @@ public class RoleServiceTests
     [Fact]
     public async Task RemoveUserFromRoleAsync_ShouldThrowRemoveRoleException_WhenRemovingRoleFails()
     {
-        var email = "user@example.com";
-        var roleName = "Admin";
-        var user = new User { Email = email };
+        var email = _userFaker.Generate().Email!;
+        var roleName = _roleResponseDtoFaker.Generate().Name;
+        var user = _userFaker.Generate();
         var roles = new List<string> { "Admin", "User" };
-        var result = IdentityResult.Failed(new IdentityError { Description = "Error removing role" });
-
-
+        var result = IdentityResult.Failed();
+        
         _userRepositoryMock.Setup(r => r.GetByEmailAsync(email, It.IsAny<CancellationToken>()))
                            .ReturnsAsync(user);
         _userRepositoryMock.Setup(r => r.GetRolesAsync(user))
@@ -184,4 +210,3 @@ public class RoleServiceTests
         _loggerMock.VerifyLog(LogLevel.Error, Times.Once());
     }
 }
-

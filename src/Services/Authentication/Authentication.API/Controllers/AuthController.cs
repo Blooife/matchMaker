@@ -1,18 +1,16 @@
 using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Authentication.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController(IAuthService _authService, ILogger<AuthController> logger) : ControllerBase
+public class AuthController(IAuthService _authService) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] UserRequestDto model)
     {
-        logger.LogInformation("bhbhjbfhewbjhfbhjewbfhj");
         var response = await _authService.RegisterAsync(model);
         
         return Ok(response);
@@ -27,7 +25,6 @@ public class AuthController(IAuthService _authService, ILogger<AuthController> l
     }
     
     [HttpPost("refresh")]
-    [Authorize]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshRequestDto refreshToken, CancellationToken cancellationToken)
     {
         var response = await _authService.RefreshTokenAsync(refreshToken.refreshToken, cancellationToken);

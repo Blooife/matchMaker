@@ -7,15 +7,17 @@ using Authentication.BusinessLogic.Services.Implementations;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using Authentication.Tests.UnitTests;
+using Authentication.Tests.UnitTests.Fakers;
 using AutoMapper;
+using Bogus;
 using FluentAssertions;
 using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Shared.Messages.Authentication;
 using Shared.Models;
+using ValidationResult = FluentValidation.Results.ValidationResult;
 
 public class AuthServiceTests
 {
@@ -27,6 +29,7 @@ public class AuthServiceTests
     private readonly Mock<IValidator<UserRequestDto>> _validatorMock;
     private readonly Mock<IProducerService> _producerServiceMock;
     private readonly AuthService _authService;
+    private readonly Faker<UserRequestDto> _userRequestDtoFaker = TestDataGenerator.CreateUserRequestDto();
 
     public AuthServiceTests()
     {
@@ -50,10 +53,10 @@ public class AuthServiceTests
     }
 
     [Fact]
-    public async Task RegisterAsync_ShouldReturnSuccess_WhenUserRegisteredSuccessfully()
+    public async Task Register_ReturnsSuccess_WhenUserRegisteredSuccessfully()
     {
-        var userRequestDto = new UserRequestDto { Email = "test@example.com", Password = "password123" };
-        var user = new User { Email = userRequestDto.Email };
+        var userRequestDto = _userRequestDtoFaker.Generate();
+        var user = new User();
         var identityResultMock = IdentityResult.Success;
 
         _validatorMock.Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<UserRequestDto>>(), default))
@@ -74,14 +77,14 @@ public class AuthServiceTests
     [Fact]
     public async Task RegisterAsync_ShouldThrowRegisterException_WhenRegistrationFails()
     {
-        var userRequestDto = new UserRequestDto { Email = "test@example.com", Password = "password123" };
-        var user = new User { Email = userRequestDto.Email };
-        var identityResultMock = IdentityResult.Failed(new IdentityError { Description = "Error" });
+        var userRequestDto = _userRequestDtoFaker.Generate();
+        var user = new User();
+        var identityResultMock = IdentityResult.Failed(new IdentityError());
 
         _validatorMock.Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<UserRequestDto>>(), default))
             .ReturnsAsync(new ValidationResult());
         _mapperMock.Setup(m => m.Map<User>(userRequestDto)).Returns(user);
-        _userRepositoryMock.Setup(r => r.RegisterAsync(It.IsAny<User>(), It.IsAny<string>()))
+        _userRepositoryMock.Setup(r => r.RegisterAsync(user, userRequestDto.Password))
                            .ReturnsAsync(identityResultMock);
 
         Func<Task> act = async () => await _authService.RegisterAsync(userRequestDto);
@@ -91,10 +94,10 @@ public class AuthServiceTests
     }
 
     [Fact]
-    public async Task LoginAsync_ShouldReturnToken_WhenLoginIsSuccessful()
+    public async Task LoginAsync_ReturnsToken_WhenLoginIsSuccessful()
     {
-        var userRequestDto = new UserRequestDto { Email = "test@example.com", Password = "password123" };
-        var user = new User { Email = userRequestDto.Email };
+        var userRequestDto = _userRequestDtoFaker.Generate();
+        var user = new User();
         var token = "valid_token";
         var roles = new[] { "User" };
 
@@ -126,25 +129,24 @@ public class AuthServiceTests
     [Fact]
     public async Task LoginAsync_ShouldThrowLoginException_WhenUserNotFound()
     {
-        var userRequestDto = new UserRequestDto { Email = "test@example.com", Password = "password123" };
-
+        var userRequestDto = _userRequestDtoFaker.Generate();
+        
         _validatorMock.Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<UserRequestDto>>(), default))
             .ReturnsAsync(new ValidationResult());
         _userRepositoryMock.Setup(r => r.GetByEmailAsync(userRequestDto.Email, It.IsAny<CancellationToken>()))
-                           .ReturnsAsync((User)null);
+                           .ReturnsAsync(null as User);
 
         Func<Task> act = async () => await _authService.LoginAsync(userRequestDto, CancellationToken.None);
 
-        await act.Should().ThrowAsync<LoginException>()
-                 .WithMessage(ExceptionMessages.LoginFailed);
+        await act.Should().ThrowAsync<NotFoundException>();
         _loggerMock.VerifyLog(LogLevel.Error, Times.Once());
     }
 
     [Fact]
     public async Task LoginAsync_ShouldThrowLoginException_WhenPasswordIsIncorrect()
     {
-        var userRequestDto = new UserRequestDto { Email = "test@example.com", Password = "password123" };
-        var user = new User { Email = userRequestDto.Email };
+        var userRequestDto = _userRequestDtoFaker.Generate();
+        var user = new User();
 
         _validatorMock.Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<UserRequestDto>>(), default))
             .ReturnsAsync(new ValidationResult());
@@ -161,7 +163,7 @@ public class AuthServiceTests
     }
 
     [Fact]
-    public async Task RefreshTokenAsync_ShouldReturnNewToken_WhenRefreshTokenIsValid()
+    public async Task RefreshTokenAsync_ReturnsNewToken_WhenRefreshTokenIsValid()
     {
         var refreshToken = "valid_refresh_token";
         var user = new User
@@ -170,6 +172,7 @@ public class AuthServiceTests
             RefreshTokenExpiredAt = DateTime.Now.AddDays(1)
         };
         var newToken = "new_jwt_token";
+        var newRefreshToken = "new_refresh_token";
         var identityResult = IdentityResult.Success;
 
         _userRepositoryMock.Setup(r => r.GetByRefreshTokenAsync(refreshToken, It.IsAny<CancellationToken>()))
@@ -177,8 +180,8 @@ public class AuthServiceTests
         _jwtTokenProviderMock.Setup(p => p.GenerateToken(user, It.IsAny<IEnumerable<string>>()))
                              .Returns(newToken);
         _refreshTokenProviderMock.Setup(p => p.GenerateRefreshToken())
-                                 .Returns("new_refresh_token");
-        _userRepositoryMock.Setup(r => r.UpdateUserAsync(It.Is<User>(u => u.RefreshToken == "new_refresh_token")))
+                                 .Returns(newRefreshToken);
+        _userRepositoryMock.Setup(r => r.UpdateUserAsync(It.Is<User>(u => u.RefreshToken == newRefreshToken)))
                            .ReturnsAsync(identityResult);
         _mapperMock.Setup(m => m.Map<LoginResponseDto>(user))
                    .Returns(new LoginResponseDto());
@@ -189,22 +192,19 @@ public class AuthServiceTests
         _userRepositoryMock.Verify(r => r.GetByRefreshTokenAsync(refreshToken, It.IsAny<CancellationToken>()), Times.Once);
         _jwtTokenProviderMock.Verify(p => p.GenerateToken(user, It.IsAny<IEnumerable<string>>()), Times.Once);
         _refreshTokenProviderMock.Verify(r=>r.GenerateRefreshToken(), Times.Once);
-        _userRepositoryMock.Verify(r => r.UpdateUserAsync(It.Is<User>(u => u.RefreshToken == "new_refresh_token")), Times.Once);
+        _userRepositoryMock.Verify(r => r.UpdateUserAsync(It.Is<User>(u => u.RefreshToken == newRefreshToken)), Times.Once);
         _loggerMock.VerifyLog(LogLevel.Error, Times.Never());
     }
 
     [Fact]
     public async Task RefreshTokenAsync_ShouldThrowLoginException_WhenUserNotFound()
     {
-        var refreshToken = "invalid_refresh_token";
+        _userRepositoryMock.Setup(r => r.GetByRefreshTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                           .ReturnsAsync(null as User);
 
-        _userRepositoryMock.Setup(r => r.GetByRefreshTokenAsync(refreshToken, It.IsAny<CancellationToken>()))
-                           .ReturnsAsync((User)null);
+        Func<Task> act = async () => await _authService.RefreshTokenAsync(It.IsAny<string>(), CancellationToken.None);
 
-        Func<Task> act = async () => await _authService.RefreshTokenAsync(refreshToken, CancellationToken.None);
-
-        await act.Should().ThrowAsync<LoginException>()
-                 .WithMessage(ExceptionMessages.LoginFailed);
+        await act.Should().ThrowAsync<NotFoundException>();
         _loggerMock.VerifyLog(LogLevel.Error, Times.Once());
     }
 

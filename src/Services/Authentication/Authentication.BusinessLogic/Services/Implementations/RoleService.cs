@@ -55,6 +55,14 @@ public class RoleService(IRoleRepository _roleRepository, IUserRepository _userR
             _logger.LogError("Remove user from role failed: User with email = {email} was not found", email);
             throw new NotFoundException(email);
         }
+        
+        var isRoleExist = await _roleRepository.RoleExistsAsync(roleName);
+        
+        if (!isRoleExist)
+        {
+            _logger.LogError("Assign role failed: role with name = {name} does not exist", roleName);
+            throw new RemoveRoleException(ExceptionMessages.RoleNotExists);
+        }
 
         var roles = await _userRepository.GetRolesAsync(user);
         
