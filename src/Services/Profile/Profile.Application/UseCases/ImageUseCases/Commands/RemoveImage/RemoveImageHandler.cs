@@ -39,13 +39,13 @@ public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinio
             throw new NotFoundException("Image", request.Dto.ImageId);
         }
         
-        await _unitOfWork.ImageRepository.RemoveImageFromProfileAsync(image, cancellationToken);
+        await _unitOfWork.ImageRepository.RemoveImageFromProfileAsync(image);
         profile.Images.Remove(image);
         
         if (!profile.Images[0].IsMainImage)
         {
             profile.Images[0].IsMainImage = true;
-            await _unitOfWork.ImageRepository.UpdateImageAsync(profile.Images[0], cancellationToken);
+            await _unitOfWork.ImageRepository.UpdateImageAsync(profile.Images[0]);
             
             var message = _mapper.Map<ProfileUpdatedMessage>(profile);
             await _producerService.ProduceAsync(message);

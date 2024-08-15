@@ -1,6 +1,5 @@
 using AutoMapper;
 using Match.Application.Services;
-using Match.Application.Services.Interfaces;
 using Match.Infrastructure.Context;
 using Match.Infrastructure.Mapper;
 using Match.Domain.Interfaces.Repositories;

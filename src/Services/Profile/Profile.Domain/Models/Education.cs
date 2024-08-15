@@ -1,8 +1,7 @@
 namespace Profile.Domain.Models;
 
-public class Education
+public class Education : BaseModel<int>
 {
-    public int Id { get; set; }
     public string Name { get; set; }
     public List<ProfileEducation> ProfileEducations { get; set; } = new List<ProfileEducation>();
 }

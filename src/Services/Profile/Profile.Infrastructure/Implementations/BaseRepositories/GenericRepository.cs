@@ -1,12 +1,13 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Profile.Domain.Interfaces.BaseRepositories;
+using Profile.Domain.Models;
 using Profile.Domain.Specifications;
 using Profile.Infrastructure.Contexts;
 
 namespace Profile.Infrastructure.Implementations.BaseRepositories;
 
-public class GenericRepository<T, TKey>(ProfileDbContext _dbContext) : IGenericRepository<T, TKey> where T : class
+public class GenericRepository<T, TKey>(ProfileDbContext _dbContext) : IGenericRepository<T, TKey> where T : BaseModel<TKey>
 {
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken)
     {
@@ -15,7 +16,7 @@ public class GenericRepository<T, TKey>(ProfileDbContext _dbContext) : IGenericR
     
     public async Task<T?> FirstOrDefaultAsync(TKey id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Set<T>().WhereNotDeleted().AsNoTracking().FirstOrDefaultAsync(e => EF.Property<TKey>(e, "Id").Equals(id), cancellationToken);
+        return await _dbContext.Set<T>().WhereNotDeleted().AsNoTracking().FirstOrDefaultAsync(e => e.Id != null && e.Id.Equals(id), cancellationToken);
     }
     
     public IQueryable<T> FindAll()

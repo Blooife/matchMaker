@@ -31,8 +31,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogg
             throw new DeleteUserException(ExceptionMessages.DeleteUserFailed);
         }
 
-        var message = _mapper.Map<UserDeletedMessage>(user);
-        await _producerService.ProduceAsync(message);
+        await _producerService.ProduceAsync(new UserDeletedMessage(){Id = user.Id});
         
         return new GeneralResponseDto() { Message = "User deleted successfully" };
     }
@@ -41,11 +40,7 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper, ILogg
     {
         var (users, totalCount) = await _userRepository.GetPagedUsersAsync(pageNumber, pageSize);
 
-        var userResponseDtos = users.Select(user => new UserResponseDto
-        {
-            Id = user.Id,
-            Email = user.Email,
-        }).ToList();
+        var userResponseDtos = _mapper.Map<List<UserResponseDto>>(users);
 
         for (int i = 0; i < userResponseDtos.Count; i++)
         {

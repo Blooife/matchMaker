@@ -15,12 +15,12 @@ public class ImageRepository(ProfileDbContext _dbContext)
         return image;
     }
     
-    public async Task RemoveImageFromProfileAsync(Image image, CancellationToken cancellationToken)
+    public async Task RemoveImageFromProfileAsync(Image image)
     {
         _dbContext.Images.Remove(image);
     }
     
-    public async Task UpdateImageAsync(Image image, CancellationToken cancellationToken)
+    public async Task UpdateImageAsync(Image image)
     {
         _dbContext.Images.Update(image);
     }

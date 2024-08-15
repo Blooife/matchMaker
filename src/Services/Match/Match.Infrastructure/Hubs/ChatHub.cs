@@ -1,4 +1,4 @@
-using Match.Application.Services.Interfaces;
+using Match.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Match.Infrastructure.Hubs;

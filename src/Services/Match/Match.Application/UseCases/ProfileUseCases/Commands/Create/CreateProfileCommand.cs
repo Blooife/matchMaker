@@ -3,7 +3,4 @@ using MediatR;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.Create;
 
-public sealed record CreateProfileCommand(CreateProfileDto Dto) : IRequest
-{
-    
-}
+public sealed record CreateProfileCommand(CreateProfileDto Dto) : IRequest;

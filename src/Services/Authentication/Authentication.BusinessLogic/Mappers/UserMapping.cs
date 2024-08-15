@@ -19,7 +19,5 @@ public class UserMapping : Profile
         CreateMap<User, LoginResponseDto>();
 
         CreateMap<User, UserCreatedMessage>();
-        
-        CreateMap<User, UserDeletedMessage>();
     }
 }

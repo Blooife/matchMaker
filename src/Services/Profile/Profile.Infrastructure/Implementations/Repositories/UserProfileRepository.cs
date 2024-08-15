@@ -11,14 +11,14 @@ namespace Profile.Infrastructure.Implementations.Repositories;
 public class UserProfileRepository(ProfileDbContext _dbContext)
     : GenericRepository<UserProfile, string>(_dbContext), IUserProfileRepository
 {
-    public async Task<UserProfile> UpdateProfileAsync(UserProfile profile, CancellationToken cancellationToken)
+    public async Task<UserProfile> UpdateProfileAsync(UserProfile profile)
     {
         _dbContext.Update(profile);
         
         return profile;
     }
 
-    public async Task DeleteProfileAsync(UserProfile profile, CancellationToken cancellationToken)
+    public async Task DeleteProfileAsync(UserProfile profile)
     {
         profile.DeletedAt = DateTime.UtcNow;
         _dbContext.Update(profile);

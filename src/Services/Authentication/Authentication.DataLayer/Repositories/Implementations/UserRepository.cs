@@ -56,6 +56,7 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
     public async Task<IdentityResult> DeleteUserByIdAsync(User user)
     {
         user.DeletedAt = DateTime.UtcNow;
+        
         return await _userManager.UpdateAsync(user);
     }
     

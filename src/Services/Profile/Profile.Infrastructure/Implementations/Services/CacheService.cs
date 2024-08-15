@@ -9,7 +9,7 @@ namespace Profile.Infrastructure.Implementations.Services;
 public class CacheService(IDistributedCache _distributedCache) : ICacheService
 {
     private readonly TimeSpan _defaultExpiration = TimeSpan.FromHours(1);
-    private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions()
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new ()
     {
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
     };

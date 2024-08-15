@@ -6,7 +6,7 @@ using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.UpdateLocation;
 
-public class UpdateLocationHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<UpdateLocationCommand>
+public class UpdateLocationHandler(IUnitOfWork _unitOfWork) : IRequestHandler<UpdateLocationCommand>
 {
     public async Task Handle(UpdateLocationCommand request, CancellationToken cancellationToken)
     {

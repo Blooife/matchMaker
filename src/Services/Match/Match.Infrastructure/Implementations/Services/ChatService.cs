@@ -1,6 +1,6 @@
 using Match.Application.Exceptions;
-using Match.Application.Services.Interfaces;
 using Match.Domain.Interfaces.Repositories;
+using Match.Domain.Interfaces.Services;
 using Match.Domain.Models;
 
 namespace Match.Infrastructure.Implementations.Services;

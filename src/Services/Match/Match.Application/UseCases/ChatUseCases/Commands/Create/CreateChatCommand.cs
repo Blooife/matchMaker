@@ -4,7 +4,4 @@ using MediatR;
 
 namespace Match.Application.UseCases.ChatUseCases.Commands.Create;
 
-public sealed record CreateChatCommand(CreateChatDto Dto) : IRequest<ChatResponseDto>
-{
-    
-}
+public sealed record CreateChatCommand(CreateChatDto Dto) : IRequest<ChatResponseDto>;

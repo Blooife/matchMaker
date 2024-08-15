@@ -112,12 +112,12 @@
         }
       ],
       "UpstreamPathTemplate": "/users/{userId}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
       },
       "SwaggerKey": "auth",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -137,7 +137,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
       },
       "SwaggerKey": "auth",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -158,26 +158,6 @@
       },
       "RouteClaimsRequirement": {
         "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
-      },
-      "SwaggerKey": "auth",
-      "DangerousAcceptAnyServerCertificateValidator": true
-    },
-    {
-      "DownstreamPathTemplate": "/api/users/{userId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "auth-service",
-          "Port": 443
-        }
-      ],
-      "UpstreamPathTemplate": "/users/{userId}",
-      "UpstreamHttpMethod": [ "DELETE" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
       },
       "SwaggerKey": "auth",
       "DangerousAcceptAnyServerCertificateValidator": true

@@ -10,7 +10,8 @@ public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericR
 {
     public async Task<List<string>> GetRecsAsync(List<string> excludedProfileIds, Profile userProfile, CancellationToken cancellationToken)
     {
-        var filter = GetFilterForRecommendations(excludedProfileIds, userProfile);
+        var filter = GetFilterForRecommendations(excludedProfileIds, userProfile, false);
+        
         var count = await _collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
 
         var findOptions = new FindOptions<Profile, Profile>()
@@ -24,10 +25,20 @@ public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericR
             .Limit(findOptions.Limit)
             .ToListAsync(cancellationToken);
         
+        if (ids.Count == 0)
+        {
+            filter = GetFilterForRecommendations(excludedProfileIds, userProfile, true);
+
+            ids = await _collection.Find(filter)
+                .Project(p => p.Id)
+                .Limit(10)
+                .ToListAsync(cancellationToken);
+        }
+        
         return ids;
     }
 
-    private FilterDefinition<Profile> GetFilterForRecommendations(List<string> excludedProfileIds, Profile userProfile)
+    private FilterDefinition<Profile> GetFilterForRecommendations(List<string> excludedProfileIds, Profile userProfile, bool filterByCountry)
     {
         var filters = new List<FilterDefinition<Profile>>
         {
@@ -40,13 +51,10 @@ public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericR
             filters.Add(Builders<Profile>.Filter.Eq(p => p.Gender, userProfile.PreferredGender));
         }
 
-        if (userProfile.AgeFrom != 0 && userProfile.AgeTo != 0)
-        {
-            filters.Add(Builders<Profile>.Filter.And(
-                Builders<Profile>.Filter.Gte(p => p.BirthDate, DateTime.Now.AddYears(-userProfile.AgeTo)),
-                Builders<Profile>.Filter.Lte(p => p.BirthDate, DateTime.Now.AddYears(-userProfile.AgeFrom))
-            ));
-        }
+        filters.Add(Builders<Profile>.Filter.And(
+            Builders<Profile>.Filter.Gte(p => p.BirthDate, DateTime.Now.AddYears(-userProfile.AgeTo)),
+            Builders<Profile>.Filter.Lte(p => p.BirthDate, DateTime.Now.AddYears(-userProfile.AgeFrom))
+        ));
 
         if (userProfile is { Location: not null, MaxDistance: > 0 })
         {
@@ -55,7 +63,14 @@ public class ProfileRepository(IMongoCollection<Profile> _collection) : GenericR
         }
         else
         {
-            filters.Add(Builders<Profile>.Filter.Eq(p => p.Country, userProfile.Country));
+            if (filterByCountry && !string.IsNullOrEmpty(userProfile.Country))
+            {
+                filters.Add(Builders<Profile>.Filter.Eq(p => p.Country, userProfile.Country));
+            }
+            else
+            {
+                filters.Add(Builders<Profile>.Filter.Eq(p => p.City, userProfile.City));
+            }
         }
         
         var resFilter = ApplySoftDeleteFilter(Builders<Profile>.Filter.And(filters));

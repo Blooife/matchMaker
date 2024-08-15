@@ -19,7 +19,7 @@ public class ConsumerService : BackgroundService
         _serviceProvider = serviceProvider;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    protected async override Task ExecuteAsync(CancellationToken cancellationToken)
     {
         try
         {

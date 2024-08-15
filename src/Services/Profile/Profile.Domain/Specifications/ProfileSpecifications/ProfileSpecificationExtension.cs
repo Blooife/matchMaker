@@ -8,6 +8,7 @@ public static class ProfileSpecificationExtension
     {
         var spec = new ContainsInterestSpecification(interestId);
         bool result = spec.IsSatisfied(profile);
+        
         return result;
     }
     
@@ -15,6 +16,7 @@ public static class ProfileSpecificationExtension
     {
         var spec = new InterestsLessThanSpecification(lessThanCount);
         bool result = spec.IsSatisfied(profile);
+        
         return result;
     }
     
@@ -22,6 +24,7 @@ public static class ProfileSpecificationExtension
     {
         var spec = new ContainsLanguageSpecification(languageId);
         bool result = spec.IsSatisfied(profile);
+        
         return result;
     }
     
@@ -29,6 +32,7 @@ public static class ProfileSpecificationExtension
     {
         var spec = new ContainsEducationSpecification(educationId);
         bool result = spec.IsSatisfied(profile);
+        
         return result;
     }
 }

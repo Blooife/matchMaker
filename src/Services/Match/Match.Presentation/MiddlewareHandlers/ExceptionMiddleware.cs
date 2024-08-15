@@ -32,34 +32,55 @@ public class ExceptionMiddleware
     {
         context.Response.ContentType = "application/json";
         HttpStatusCode statusCode;
-        var result = JsonConvert.SerializeObject(new ErrorDetails
-        {
-            ErrorMessage = exception.Message,
-            ErrorType = "Failure"
-        });
+        string result;
 
         switch (exception)
         {
             case ValidationException validationException:
                 statusCode = HttpStatusCode.BadRequest;
-                result = JsonConvert.SerializeObject(validationException.Errors);
+                result = CreatValidationErrorResponse(validationException.Errors, "ValidationError");
                 break;
             case AlreadyExistsException alreadyExistsException:
                 statusCode = HttpStatusCode.Conflict;
+                result = CreateErrorResponse(alreadyExistsException.Message, "AlreadyExistsError");
                 break;
             case NotFoundException notFoundException:
                 statusCode = HttpStatusCode.NotFound;
+                result = CreateErrorResponse(notFoundException.Message, "NotFoundError");
                 break;
             case MongoException mongoException:
                 statusCode = HttpStatusCode.BadRequest;
+                result = CreateErrorResponse(mongoException.Message, "DatabaseError");
                 break;
             default:
                 statusCode = HttpStatusCode.InternalServerError;
+                result = CreateErrorResponse(exception.Message, "Failure");
                 break;
         }
 
         context.Response.StatusCode = (int)statusCode;
 
         return context.Response.WriteAsync(result);
+    }
+    
+    private string CreateErrorResponse(string message, string errorType)
+    {
+        return JsonConvert.SerializeObject(new ErrorDetails
+        {
+            ErrorMessage = message,
+            ErrorType = errorType
+        });
+    }
+    
+    private string CreatValidationErrorResponse(List<ValidationError> errors, string errorType)
+    {
+        var errorMessage = $"Validation Errors: ";
+
+        foreach (var error in errors)
+        {
+            errorMessage += $" | {error.Error}";
+        }
+            
+        return CreateErrorResponse(errorMessage, "DatabaseError");
     }
 }

@@ -19,7 +19,7 @@ public class ConsumerService : BackgroundService
         _serviceProvider = serviceProvider;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    protected async override Task ExecuteAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -39,7 +39,6 @@ public class ConsumerService : BackgroundService
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Console.WriteLine("njdnkd");
         }
         finally
         {

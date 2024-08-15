@@ -14,7 +14,7 @@ public class InterestRepository(ProfileDbContext _dbContext)
         profile.Interests.Add(interest);
     }
     
-    public async Task RemoveInterestFromProfileAsync(UserProfile profile, Interest interest, CancellationToken cancellationToken)
+    public async Task RemoveInterestFromProfileAsync(UserProfile profile, Interest interest)
     {
         _dbContext.Profiles.Attach(profile);
         profile.Interests.Remove(interest);

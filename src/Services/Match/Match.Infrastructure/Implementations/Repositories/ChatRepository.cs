@@ -11,6 +11,7 @@ public class ChatRepository(IMongoCollection<Chat> _collection) : GenericReposit
     public async Task<IEnumerable<Chat>> GetChatsByProfileIdAsync(string profileId, CancellationToken cancellationToken)
     {
         var chats = await GetAsync(chat => chat.FirstProfileId == profileId || chat.SecondProfileId == profileId, cancellationToken);
+        
         return chats;
     }
     

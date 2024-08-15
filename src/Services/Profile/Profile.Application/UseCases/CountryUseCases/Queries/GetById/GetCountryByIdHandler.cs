@@ -29,11 +29,8 @@ public class GetCountryByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
         }
         
         var mappedCountry = _mapper.Map<CountryResponseDto>(country);
-        
-        if (mappedCountry is not null)
-        {
-            await _cacheService.SetAsync(cacheKey, mappedCountry, cancellationToken:cancellationToken);
-        }
+
+        await _cacheService.SetAsync(cacheKey, mappedCountry, cancellationToken:cancellationToken);
 
         return mappedCountry;
     }

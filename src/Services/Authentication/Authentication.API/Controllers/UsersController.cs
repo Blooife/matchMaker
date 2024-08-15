@@ -11,7 +11,7 @@ namespace Authentication.API.Controllers;
 public class UsersController(IUserService _userService): ControllerBase
 {
     [HttpGet("{userId}")]
-    [Authorize]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
     public async Task<IActionResult> GetUserById([FromRoute] string userId, CancellationToken cancellationToken)
     {
         var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
@@ -20,7 +20,7 @@ public class UsersController(IUserService _userService): ControllerBase
     } 
     
     [HttpGet("email/{email}")]
-    [Authorize]
+    [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
     public async Task<IActionResult> GetUserByEmail([FromRoute] string email, CancellationToken cancellationToken)
     {
         var user = await _userService.GetUserByEmailAsync(email, cancellationToken);

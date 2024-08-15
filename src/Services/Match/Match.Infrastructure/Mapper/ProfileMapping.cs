@@ -17,11 +17,17 @@ public class ProfileMapping : AutoMapper.Profile
             .ForMember(dest => dest.Education, opt => opt.MapFrom(src => src.Education));
 
         CreateMap<Protos.City, CityResponseDto>();
+        
         CreateMap<Protos.Country, CountryResponseDto>();
+        
         CreateMap<Protos.Goal, GoalResponseDto>();
+        
         CreateMap<Protos.Language, LanguageResponseDto>();
+        
         CreateMap<Protos.Interest, InterestResponseDto>();
+        
         CreateMap<Protos.ProfileEducation, ProfileEducationResponseDto>();
+        
         CreateMap<Protos.Image, ImageResponseDto>()
             .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Url));
     }

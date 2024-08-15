@@ -25,20 +25,14 @@ public class DbCleanupService : IDbCleanupService
             var mongoContext = scope.ServiceProvider.GetRequiredService<IMongoDbContext>();
             var profilesCollection = mongoContext.GetCollection<Profile>(_options.Value.ProfilesCollectionName);
             var matchesCollection = mongoContext.GetCollection<MatchEntity>(_options.Value.MatchesCollectionName);
-            var chatsCollection = mongoContext.GetCollection<Chat>(_options.Value.ChatsCollectionName);
 
             var profileFilter = Builders<Profile>.Filter.In(p => p.Id, profileIds);
-            var result = await profilesCollection.DeleteManyAsync(profileFilter, cancellationToken);
-                Console.WriteLine(result);
+            await profilesCollection.DeleteManyAsync(profileFilter, cancellationToken);
+           
             var matchFilter = Builders<MatchEntity>.Filter.Or(
                 Builders<MatchEntity>.Filter.In(m => m.FirstProfileId, profileIds),
                 Builders<MatchEntity>.Filter.In(m => m.SecondProfileId, profileIds));
             await matchesCollection.DeleteManyAsync(matchFilter, cancellationToken);
-
-            var chatFilter = Builders<Chat>.Filter.Or(
-                Builders<Chat>.Filter.In(c => c.FirstProfileId, profileIds),
-                Builders<Chat>.Filter.In(c => c.SecondProfileId, profileIds));
-            await chatsCollection.DeleteManyAsync(chatFilter, cancellationToken);
                     
         }
     }

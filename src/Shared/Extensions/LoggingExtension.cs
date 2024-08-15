@@ -20,7 +20,7 @@ public static class LoggingExtension
 
                 configuration
                     .ReadFrom.Configuration(configurationRoot)
-                    .WriteTo.Http(configurationRoot["LogstashConfiguration:Uri"], null);
+                    .WriteTo.Http(configurationRoot["LogstashConfiguration:Uri"]!, null);
             });
     }
 }

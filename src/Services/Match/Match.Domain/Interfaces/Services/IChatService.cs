@@ -1,6 +1,6 @@
 using Match.Domain.Models;
 
-namespace Match.Application.Services.Interfaces;
+namespace Match.Domain.Interfaces.Services;
 
 public interface IChatService
 {

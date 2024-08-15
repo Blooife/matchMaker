@@ -1,6 +1,6 @@
 using AutoMapper;
 using MediatR;
-using Profile.Application.DTOs.Profile.Response;
+using Profile.Application.DTOs.User.Response;
 using Profile.Application.Exceptions;
 using Profile.Domain.Models;
 using Profile.Domain.Interfaces.Repositories;

@@ -24,7 +24,6 @@ public class UpdateProfileEducationHandler(IUnitOfWork _unitOfWork, IMapper _map
             
             return _mapper.Map<ProfileResponseDto>(profile);
         }, cancellationToken);
-
         var profile = _mapper.Map<UserProfile>(profileResponseDto);
         
         if (profile is null)
@@ -46,7 +45,7 @@ public class UpdateProfileEducationHandler(IUnitOfWork _unitOfWork, IMapper _map
             throw new NotContainsException(ExceptionMessages.ProfileNotContainsEducation);
         }
 
-        ProfileEducation profileEducation = profile.ProfileEducations.First(userEducation=>userEducation.EducationId == request.Dto.EducationId);
+        var profileEducation = profile.ProfileEducations.First(profileEducation => profileEducation.EducationId == request.Dto.EducationId);
         
         await _unitOfWork.EducationRepository.UpdateProfilesEducationAsync(profileEducation, request.Dto.Description);
         await _unitOfWork.SaveAsync(cancellationToken);

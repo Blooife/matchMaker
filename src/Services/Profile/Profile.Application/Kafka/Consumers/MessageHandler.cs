@@ -35,17 +35,15 @@ public class MessageHandler(IMapper _mapper, IMediator _mediator)
                 if (typedMessage is UserCreatedMessage userCreatedMessage)
                 {
                     var command = new CreateUserCommand(_mapper.Map<CreateUserDto>(userCreatedMessage));
-                    var result = await _mediator.Send(command, cancellationToken);
+                    await _mediator.Send(command, cancellationToken);
                 }
                 else if (typedMessage is UserDeletedMessage userDeletedMessage)
                 {
                     var command = new DeleteUserCommand(userDeletedMessage.Id);
-                    var result = await _mediator.Send(command, cancellationToken);
+                    await _mediator.Send(command, cancellationToken);
                 }
                 else if(typedMessage is ManyUsersDeletedMessage manyUsersDeletedMessage)
                 {
-                    Console.WriteLine(manyUsersDeletedMessage.UsersIds.ToString());
-                    Console.WriteLine("here");
                     var command = new DeleteProfilesPermanentlyCommand(manyUsersDeletedMessage.UsersIds);
                     await _mediator.Send(command, cancellationToken);
                 }

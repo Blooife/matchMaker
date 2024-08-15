@@ -1,6 +1,6 @@
 using AutoMapper;
 using MediatR;
-using Profile.Application.DTOs.Profile.Response;
+using Profile.Application.DTOs.User.Response;
 using Profile.Application.Exceptions;
 using Profile.Application.Kafka.Producers;
 using Profile.Domain.Interfaces.Repositories;
@@ -22,24 +22,22 @@ public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheS
             throw new NotFoundException("User", request.UserId);
         } 
         
-        await _unitOfWork.UserRepository.DeleteUserAsync(user, cancellationToken);
+        await _unitOfWork.UserRepository.DeleteUserAsync(user);
 
         var profiles =
             await _unitOfWork.ProfileRepository.GetAsync(profile => profile.UserId == user.Id, cancellationToken);
         var profile = profiles.First();
-        await _unitOfWork.ProfileRepository.DeleteProfileAsync(profile, cancellationToken);
+        await _unitOfWork.ProfileRepository.DeleteProfileAsync(profile);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var cacheKey = $"{_cacheKeyPrefix}:{user.Id}";
-        var mappedUser = _mapper.Map<UserResponseDto>(user);
         await _cacheService.RemoveAsync(cacheKey, cancellationToken:cancellationToken);
         
         var cacheKeyProfile = $"profile:{profile.Id}";
         await _cacheService.RemoveAsync(cacheKeyProfile, cancellationToken:cancellationToken);
         
-        var message = _mapper.Map<ProfileDeletedMessage>(profile);
-        await _producerService.ProduceAsync(message);
+        await _producerService.ProduceAsync(new ProfileDeletedMessage(){Id = profile.Id});
         
-        return mappedUser;
+        return _mapper.Map<UserResponseDto>(user);;
     }
 }

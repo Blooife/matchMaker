@@ -47,7 +47,7 @@ public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
         }
 
         var languageToRemove = profile.Languages.First(l=>l.Id == request.Dto.LanguageId);
-        await _unitOfWork.LanguageRepository.RemoveLanguageFromProfileAsync(profile, languageToRemove, cancellationToken);
+        await _unitOfWork.LanguageRepository.RemoveLanguageFromProfileAsync(profile, languageToRemove);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),

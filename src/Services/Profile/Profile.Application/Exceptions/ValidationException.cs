@@ -10,7 +10,4 @@ public class ValidationException : Exception
     }
 }
 
-public sealed record ValidationError(string PropertyName, string Error)
-{
-    
-}
+public sealed record ValidationError(string PropertyName, string Error);

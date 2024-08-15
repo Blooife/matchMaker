@@ -25,7 +25,7 @@ public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICac
         }
         
         var profile = _mapper.Map<UserProfile>(request.UpdateProfileDto);
-        var result = await _unitOfWork.ProfileRepository.UpdateProfileAsync(profile, cancellationToken);
+        var result = await _unitOfWork.ProfileRepository.UpdateProfileAsync(profile);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var fullProfile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == profile.Id, cancellationToken);

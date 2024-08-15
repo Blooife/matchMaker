@@ -14,7 +14,7 @@ public class LanguageRepository(ProfileDbContext _dbContext)
         profile.Languages.Add(language);
     }
     
-    public async Task RemoveLanguageFromProfileAsync(UserProfile profile, Language language, CancellationToken cancellationToken)
+    public async Task RemoveLanguageFromProfileAsync(UserProfile profile, Language language)
     {
         _dbContext.Profiles.Attach(profile);
         profile.Languages.Remove(language);

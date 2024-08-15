@@ -1,4 +1,4 @@
-using Shared.Messages.Authentication;
+using Shared.Messages;
 
 namespace Authentication.BusinessLogic.Producers;
 

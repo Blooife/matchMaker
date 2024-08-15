@@ -18,10 +18,10 @@ public class GetPagedChatsHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
             throw new NotFoundException("Profile", request.ProfileId);
         }
 
-        var result = await _unitOfWork.Chats.GetPagedAsync(request.ProfileId, request.PageNumber, request.PageSize,
+        var (chats, count) = await _unitOfWork.Chats.GetPagedAsync(request.ProfileId, request.PageNumber, request.PageSize,
             cancellationToken);
         
-        var profileIds = result.Item1
+        var profileIds = chats
             .SelectMany(chat => new[] { chat.FirstProfileId, chat.SecondProfileId })
             .Distinct()
             .ToList();
@@ -30,7 +30,7 @@ public class GetPagedChatsHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
 
         var profileDictionary = profiles.ToDictionary(p => p.Id);
 
-        var chatResponseDtos = result.Item1.Select(chat =>
+        var chatResponseDtos = chats.Select(chat =>
         {
             var otherProfileId = chat.FirstProfileId == request.ProfileId ? chat.SecondProfileId : chat.FirstProfileId;
             var otherProfile = profileDictionary[otherProfileId];
@@ -46,6 +46,6 @@ public class GetPagedChatsHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
             };
         }).ToList();
 
-        return new PagedList<ChatResponseDto>(chatResponseDtos, result.Item2, request.PageNumber, request.PageSize);
+        return new PagedList<ChatResponseDto>(chatResponseDtos, count, request.PageNumber, request.PageSize);
     }
 }

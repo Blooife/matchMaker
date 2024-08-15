@@ -8,16 +8,6 @@ namespace Match.Infrastructure.Implementations.Repositories;
 
 public class MatchRepository(IMongoCollection<MatchEntity> _collection) : GenericRepository<MatchEntity, string>(_collection), IMatchRepository
 {
-    public async Task<IEnumerable<MatchEntity>> GetMatchesByProfileIdAsync(string profileId, CancellationToken cancellationToken)
-    {
-        var filter = Builders<MatchEntity>.Filter.Or(
-            Builders<MatchEntity>.Filter.Eq(match => match.FirstProfileId, profileId),
-            Builders<MatchEntity>.Filter.Eq(match => match.SecondProfileId, profileId)
-        );
-
-        return await _collection.Find(filter).ToListAsync(cancellationToken);
-    }
-
     public async Task<bool> AreProfilesMatchedAsync(string profileId1, string profileId2, CancellationToken cancellationToken)
     {
         var filter = Builders<MatchEntity>.Filter.Or(

@@ -14,6 +14,7 @@ namespace Profile.Application.UseCases.ImageUseCases.Commands.AddImage;
 public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService, ICacheService _cacheService, ProducerService _producerService) : IRequestHandler<AddImageCommand, IEnumerable<ImageResponseDto>>
 {
     private readonly string _cacheKeyPrefix = "profile";
+    private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png" };
     
     public async Task<IEnumerable<ImageResponseDto>> Handle(AddImageCommand request, CancellationToken cancellationToken)
     {
@@ -24,7 +25,6 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
             
             return _mapper.Map<ProfileResponseDto>(profile);
         }, cancellationToken);
-        
         var profile = _mapper.Map<UserProfile>(profileResponseDto);
         
         if (profile is null)
@@ -33,10 +33,9 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
         }
         
         var file = request.Dto.file;
-        var fileExtension = Path.GetExtension(file.FileName);
-        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+        var fileExtension = Path.GetExtension(file.FileName); 
 
-        if (!allowedExtensions.Contains(fileExtension.ToLowerInvariant()))
+        if (!_allowedExtensions.Contains(fileExtension.ToLowerInvariant()))
         {
             throw new ImageUploadException("Wrong extension");
         }
@@ -45,9 +44,7 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
         
         await using var stream = new MemoryStream();
         await file.CopyToAsync(stream, cancellationToken);
-        
         stream.Position = 0;
-
         await _minioService.UploadFileAsync(objectName, file);
 
         bool isMain = profile.Images.Count == 0;
@@ -55,7 +52,7 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
         var imageEntity = new Image
         {
             ProfileId = request.Dto.ProfileId,
-            ImageUrl = $"http://{_minioService.Endpoint}/{_minioService._bucketName}/{objectName}",
+            ImageUrl = $"http://{_minioService.Endpoint}/{_minioService.BucketName}/{objectName}",
             IsMainImage = isMain,
             UploadTimestamp = DateTime.UtcNow
         };

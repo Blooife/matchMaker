@@ -6,6 +6,6 @@ namespace Profile.Domain.Interfaces.Repositories;
 public interface IImageRepository : IGenericRepository<Image, int>
 {
     Task<Image> AddImageToProfileAsync(Image image, CancellationToken cancellationToken);
-    Task RemoveImageFromProfileAsync(Image image, CancellationToken cancellationToken);
-    Task UpdateImageAsync(Image image, CancellationToken cancellationToken);
+    Task RemoveImageFromProfileAsync(Image image);
+    Task UpdateImageAsync(Image image);
 }

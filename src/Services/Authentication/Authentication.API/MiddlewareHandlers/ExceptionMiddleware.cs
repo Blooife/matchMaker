@@ -80,6 +80,7 @@ namespace Authentication.API.MiddlewareHandlers
             }
 
             context.Response.StatusCode = (int)statusCode;
+            
             return context.Response.WriteAsync(result);
         }
 

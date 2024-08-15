@@ -6,5 +6,5 @@ namespace Profile.Domain.Interfaces.Repositories;
 public interface IInterestRepository : IGenericRepository<Interest, int>
 {
     Task AddInterestToProfileAsync(UserProfile profile, Interest interest);
-    Task RemoveInterestFromProfileAsync(UserProfile profile, Interest interest, CancellationToken cancellationToken);
+    Task RemoveInterestFromProfileAsync(UserProfile profile, Interest interest);
 }

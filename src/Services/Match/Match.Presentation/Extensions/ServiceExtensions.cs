@@ -14,9 +14,7 @@ public static class ServiceExtensions
         services.AddAuthorization();
         services.AddControllers();
         services.ConfigureJwtOptions(config);
-        var serviceProvider = services.BuildServiceProvider();
-        var jwtOptions = serviceProvider.GetService<IOptions<JwtOptions>>()!.Value;
-        services.ConfigureAuthentication(jwtOptions);
+        services.ConfigureAuthentication(services.BuildServiceProvider().GetService<IOptions<JwtOptions>>()!.Value);
         services.ConfigureCors();
         services.ConfigureSwagger();
     }
@@ -52,6 +50,7 @@ public static class ServiceExtensions
 
     private static void ConfigureSwagger(this IServiceCollection services)
     {
+        services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
         services.AddSwaggerGen(option =>
         {
             option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme

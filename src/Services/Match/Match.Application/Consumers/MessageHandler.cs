@@ -35,7 +35,6 @@ public class MessageHandler(IMapper _mapper, IMediator _mediator)
 
                 if (typedMessage is ProfileCreatedMessage profileCreatedMessage)
                 {
-                    Console.WriteLine("created");
                     var command = new CreateProfileCommand(_mapper.Map<CreateProfileDto>(profileCreatedMessage));
                     await _mediator.Send(command, cancellationToken);
                 }
@@ -51,7 +50,6 @@ public class MessageHandler(IMapper _mapper, IMediator _mediator)
                 }
                 else if (typedMessage is ManyProfilesDeletedMessage manyProfilesDeletedMessage)
                 {
-                    Console.WriteLine(manyProfilesDeletedMessage.ProfilesIds);
                     var command = new DeleteProfilesPermanentlyCommand(manyProfilesDeletedMessage.ProfilesIds);
                     await _mediator.Send(command, cancellationToken);
                 }

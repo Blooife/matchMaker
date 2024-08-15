@@ -13,6 +13,7 @@ public class UserValidator : AbstractValidator<UserRequestDto>
             .EmailAddress().WithMessage("Invalid email");
         
         RuleFor(user => user.Password)
-            .NotEmpty().WithMessage("Password is required");
+            .NotEmpty().WithMessage("Password is required")
+            .MinimumLength(6).WithMessage("Minimum length of password is 6");
     }
 }

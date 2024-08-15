@@ -47,7 +47,6 @@ public class RemoveInterestFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
         }
         
         var interestToRemove = profile.Interests.First(i=>i.Id == request.Dto.InterestId);
-        await _unitOfWork.InterestRepository.RemoveInterestFromProfileAsync(profile, interestToRemove, cancellationToken);
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),

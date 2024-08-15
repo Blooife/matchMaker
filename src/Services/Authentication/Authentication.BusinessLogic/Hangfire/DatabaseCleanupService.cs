@@ -8,9 +8,9 @@ namespace Authentication.BusinessLogic.Hangfire;
 public class DatabaseCleanupService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ProducerService _producerService;
+    private readonly IProducerService _producerService;
 
-    public DatabaseCleanupService(IServiceProvider serviceProvider, ProducerService producerService)
+    public DatabaseCleanupService(IServiceProvider serviceProvider, IProducerService producerService)
     {
         _serviceProvider = serviceProvider;
         _producerService = producerService;

@@ -6,8 +6,8 @@ namespace Profile.Domain.Interfaces.Repositories;
 
 public interface IUserProfileRepository : IGenericRepository<UserProfile, string>
 {
-    Task<UserProfile> UpdateProfileAsync(UserProfile profile, CancellationToken cancellationToken);
-    Task DeleteProfileAsync(UserProfile profile, CancellationToken cancellationToken);
+    Task<UserProfile> UpdateProfileAsync(UserProfile profile);
+    Task DeleteProfileAsync(UserProfile profile);
     Task<UserProfile> CreateProfileAsync(UserProfile profile, CancellationToken cancellationToken);
     Task<UserProfile?> GetAllProfileInfoAsync(Expression<Func<UserProfile, bool>> expression, CancellationToken cancellationToken);
     Task<IEnumerable<UserProfile>> GetAllProfileInfoByIdsAsync(IEnumerable<string> profileIds);

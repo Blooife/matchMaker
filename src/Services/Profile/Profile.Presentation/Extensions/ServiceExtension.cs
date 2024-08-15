@@ -1,5 +1,4 @@
 using System.Text;
-using Confluent.Kafka;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -19,28 +18,18 @@ public static class ServiceExtension
         services.AddAuthorization();
         services.AddControllers();
         services.ConfigureJwtOptions(config);
-        var serviceProvider = services.BuildServiceProvider();
-        var jwtOptions = serviceProvider.GetService<IOptions<JwtOptions>>()!.Value;
-        services.ConfigureAuthentication(jwtOptions);
+        services.ConfigureMinioOptions(config);
+        services.ConfigureAuthentication(services.BuildServiceProvider().GetService<IOptions<JwtOptions>>()!.Value);
+        services.ConfigureMinio(services.BuildServiceProvider().GetService<IOptions<MinioOptions>>()!.Value);
         services.ConfigureCors();
         services.ConfigureSwagger();
-        services.ConfigureMinio(config);
         services.ConfigureRedisCache(config);
-        services.Configure<ConsumerConfig>(config.GetRequiredSection("Kafka:Consumer"));
     }
 
-    private static void ConfigureMinio(this IServiceCollection services, IConfiguration config)
+    private static void ConfigureMinio(this IServiceCollection services, MinioOptions minioOptions)
     {
-        services.AddSingleton<IMinioService>(provider =>
-        {
-            var minioConfig = config.GetSection("Minio");
-            var endpoint = minioConfig["Endpoint"];
-            var accessKey = minioConfig["AccessKey"];
-            var secretKey = minioConfig["SecretKey"];
-            var bucketName = minioConfig["BucketName"];
-            
-            return new MinioService(endpoint, accessKey, secretKey, bucketName);
-        });
+        services.AddSingleton<IMinioService>(provider => new MinioService(minioOptions.Endpoint, minioOptions.AccessKey, 
+            minioOptions.SecretKey, minioOptions.BucketName));
     }
     
     private static void ConfigureRedisCache(this IServiceCollection services, IConfiguration config)
@@ -54,6 +43,11 @@ public static class ServiceExtension
     private static void ConfigureJwtOptions(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<JwtOptions>(config.GetSection("ApiSettings:JwtOptions"));
+    }
+    
+    private static void ConfigureMinioOptions(this IServiceCollection services, IConfiguration config)
+    {
+        services.Configure<MinioOptions>(config.GetSection("Minio"));
     }
     
     private static void ConfigureAuthentication(this IServiceCollection services, JwtOptions jwtOptions)
@@ -82,6 +76,7 @@ public static class ServiceExtension
 
     private static void ConfigureSwagger(this IServiceCollection services)
     {
+        services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
         services.AddSwaggerGen(option =>
         {
             option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
