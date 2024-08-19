@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using Authentication.BusinessLogic.DTOs.Request;
 using Authentication.BusinessLogic.DTOs.Response;
-using Authentication.Tests.UnitTests.Fakers;
+using Authentication.Tests.Fakers;
 using Bogus;
 using FluentAssertions;
 using Shared.Constants;

@@ -8,7 +8,7 @@ using Authentication.BusinessLogic.Services.Implementations;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using Authentication.Tests.UnitTests;
-using Authentication.Tests.UnitTests.Fakers;
+using Authentication.Tests.Fakers;
 using Bogus;
 using Microsoft.AspNetCore.Identity;
 using Shared.Models;
@@ -36,11 +36,7 @@ public class RoleServiceTests
     public async Task GetAllRolesAsync_ReturnsRoles_WhenRolesExist()
     {
         var roles = new List<Role> ();
-        var roleResponseDtos = new List<RoleResponseDto>
-        {
-            _roleResponseDtoFaker.Generate(),
-            _roleResponseDtoFaker.Generate()
-        };
+        var roleResponseDtos = _roleResponseDtoFaker.Generate(2);
 
         _roleRepositoryMock.Setup(r => r.GetAllRolesAsync(It.IsAny<CancellationToken>()))
                            .ReturnsAsync(roles);

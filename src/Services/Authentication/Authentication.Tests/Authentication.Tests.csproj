@@ -31,10 +31,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Authentication.API\Authentication.API.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="IntegrationTests\RepositoriesTests\" />
-    </ItemGroup>
     
     <PropertyGroup>
         <PreserveCompilationContext>true</PreserveCompilationContext>

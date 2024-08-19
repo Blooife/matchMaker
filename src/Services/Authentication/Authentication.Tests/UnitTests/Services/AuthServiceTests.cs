@@ -7,7 +7,7 @@ using Authentication.BusinessLogic.Services.Implementations;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
 using Authentication.Tests.UnitTests;
-using Authentication.Tests.UnitTests.Fakers;
+using Authentication.Tests.Fakers;
 using AutoMapper;
 using Bogus;
 using FluentAssertions;

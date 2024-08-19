@@ -4,7 +4,7 @@ using Authentication.BusinessLogic.Producers;
 using Authentication.BusinessLogic.Services.Implementations;
 using Authentication.DataLayer.Models;
 using Authentication.DataLayer.Repositories.Interfaces;
-using Authentication.Tests.UnitTests.Fakers;
+using Authentication.Tests.Fakers;
 using AutoMapper;
 using Bogus;
 using FluentAssertions;
@@ -102,12 +102,7 @@ public class UserServiceTests
     {
         int pageSize = 10;
         int pageNumber = 1;
-        var users = new List<User>();
-
-        for (int i = 0; i < 5; i++)
-        {
-            users.Add(_userFaker.Generate());
-        }
+        var users = _userFaker.Generate(5);
         
         var totalCount = 5;
         var userDtos = users.Select(user => new UserResponseDto { Id = user.Id, Email = user.Email }).ToList();
@@ -132,12 +127,7 @@ public class UserServiceTests
     {
         int pageSize = 2;
         int pageNumber = 1;
-        var users = new List<User>();
-
-        for (int i = 0; i < 5; i++)
-        {
-            users.Add(_userFaker.Generate());
-        }
+        var users = _userFaker.Generate(5);
         
         var totalCount = 5;
         var userDtos = users.Select(user => new UserResponseDto { Id = user.Id, Email = user.Email }).ToList();

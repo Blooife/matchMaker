@@ -106,7 +106,7 @@ public class CustomWebApplicationFactory: WebApplicationFactory<Program>, IAsync
         await InitializeRespawnerAsync();
     }
     
-    new public async Task DisposeAsync()
+    public new async Task DisposeAsync()
     {
         await _postgresContainer.StopAsync();
         await _zookeeperContainer.StopAsync();

@@ -3,7 +3,7 @@ using Authentication.BusinessLogic.DTOs.Response;
 using Authentication.DataLayer.Models;
 using Bogus;
 
-namespace Authentication.Tests.UnitTests.Fakers;
+namespace Authentication.Tests.Fakers;
 
 public static class TestDataGenerator
 {
