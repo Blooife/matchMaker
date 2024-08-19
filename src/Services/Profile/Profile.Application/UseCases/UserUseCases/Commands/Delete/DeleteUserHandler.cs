@@ -11,7 +11,7 @@ namespace Profile.Application.UseCases.UserUseCases.Commands.Delete;
 
 public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService, ProducerService _producerService) : IRequestHandler<DeleteUserCommand, UserResponseDto>
 {
-    private readonly string _cacheKeyPrefix = "user";
+    private readonly string _cacheKeyPrefix = "profile";
     
     public async Task<UserResponseDto> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
@@ -30,10 +30,7 @@ public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheS
         await _unitOfWork.ProfileRepository.DeleteProfileAsync(profile);
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        var cacheKey = $"{_cacheKeyPrefix}:{user.Id}";
-        await _cacheService.RemoveAsync(cacheKey, cancellationToken:cancellationToken);
-        
-        var cacheKeyProfile = $"profile:{profile.Id}";
+        var cacheKeyProfile = $"{_cacheKeyPrefix}:{profile.Id}";
         await _cacheService.RemoveAsync(cacheKeyProfile, cancellationToken:cancellationToken);
         
         await _producerService.ProduceAsync(new ProfileDeletedMessage(){Id = profile.Id});

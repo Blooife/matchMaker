@@ -24,6 +24,7 @@ public class UpdateProfileEducationHandler(IUnitOfWork _unitOfWork, IMapper _map
             
             return _mapper.Map<ProfileResponseDto>(profile);
         }, cancellationToken);
+
         var profile = _mapper.Map<UserProfile>(profileResponseDto);
         
         if (profile is null)

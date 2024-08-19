@@ -26,7 +26,7 @@ public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
         }, cancellationToken);
 
         var profile = _mapper.Map<UserProfile>(profileResponseDto);
-        
+
         if (profile is null)
         {
             throw new NotFoundException("Profile", request.Dto.ProfileId);

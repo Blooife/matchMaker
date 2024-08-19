@@ -5,7 +5,7 @@ using Authentication.BusinessLogic.Providers.Interfaces;
 using Authentication.DataLayer.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Models;
+using Shared.Options;
 
 namespace Authentication.BusinessLogic.Providers.Implementations;
 

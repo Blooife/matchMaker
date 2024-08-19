@@ -24,6 +24,7 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork, IMapper 
             
             return _mapper.Map<ProfileResponseDto>(profile);
         }, cancellationToken);
+
         var profile = _mapper.Map<UserProfile>(profileResponseDto);
         
         if (profile is null)
@@ -50,8 +51,7 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork, IMapper 
         await _unitOfWork.EducationRepository.RemoveEducationFromProfileAsync(profile, profileEducation);
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),
-            cancellationToken: cancellationToken);
+        await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile), cancellationToken: cancellationToken);
         
         return _mapper.Map<List<ProfileEducationResponseDto>>(profile.ProfileEducations);
     }

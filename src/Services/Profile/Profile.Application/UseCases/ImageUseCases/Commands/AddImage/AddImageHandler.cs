@@ -25,6 +25,7 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
             
             return _mapper.Map<ProfileResponseDto>(profile);
         }, cancellationToken);
+
         var profile = _mapper.Map<UserProfile>(profileResponseDto);
         
         if (profile is null)

@@ -7,7 +7,7 @@ using Microsoft.OpenApi.Models;
 using Profile.Domain.Interfaces.Services;
 using Profile.Infrastructure.Contexts;
 using Profile.Infrastructure.Implementations.Services;
-using Shared.Models;
+using Shared.Options;
 
 namespace Profile.Presentation.Extensions;
 

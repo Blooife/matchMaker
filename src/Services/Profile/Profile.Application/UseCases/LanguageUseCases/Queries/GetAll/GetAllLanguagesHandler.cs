@@ -6,7 +6,7 @@ using Profile.Domain.Interfaces.Services;
 
 namespace Profile.Application.UseCases.LanguageUseCases.Queries.GetAll;
 
-public class GetAllILanguagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<GetAllLanguagesQuery, IEnumerable<LanguageResponseDto>>
+public class GetAllLanguagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<GetAllLanguagesQuery, IEnumerable<LanguageResponseDto>>
 {
     private readonly string _cacheKeyPrefix = "languages";
     
