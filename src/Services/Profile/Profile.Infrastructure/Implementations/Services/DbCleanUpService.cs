@@ -30,11 +30,13 @@ namespace Profile.Infrastructure.Implementations.Services
                         dbContext.Profiles.RemoveRange(profilesToDelete);
 
                         await dbContext.SaveChangesAsync();
+                        
                         await transaction.CommitAsync();
                     }
                     catch (Exception)
                     {
                         await transaction.RollbackAsync();
+                        
                         throw;
                     }
                 }

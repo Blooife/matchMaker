@@ -14,6 +14,7 @@ public class GetEducationByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, I
     public async Task<EducationResponseDto> Handle(GetEducationByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.EducationId}";
+        
         var cachedData = await _cacheService.GetAsync<EducationResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -29,6 +30,7 @@ public class GetEducationByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, I
         }
         
         var mappedEducation = _mapper.Map<EducationResponseDto>(education);
+        
         await _cacheService.SetAsync(cacheKey, mappedEducation, cancellationToken:cancellationToken);
         
         return mappedEducation;

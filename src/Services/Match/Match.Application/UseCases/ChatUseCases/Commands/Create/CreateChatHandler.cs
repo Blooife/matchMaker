@@ -34,6 +34,7 @@ public class CreateChatHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequ
         }
         
         var chat = _mapper.Map<Chat>(request.Dto);
+        
         await _unitOfWork.Chats.CreateAsync(chat, cancellationToken);
         
         var mappedChat = _mapper.Map<ChatResponseDto>(chat);

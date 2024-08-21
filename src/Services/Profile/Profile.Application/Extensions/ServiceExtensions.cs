@@ -26,7 +26,7 @@ public static class ServiceExtensions
         services.AddScoped<MessageHandler>();
         services.AddHostedService<ConsumerService>();
         services.Configure<ConsumerConfig>(config.GetRequiredSection("Kafka:Consumer"));
-        services.AddSingleton<ProducerService>();
+        services.AddScoped<IProducerService, ProducerService>();
         services.Configure<ProducerConfig>(config.GetRequiredSection("Kafka:Producer"));
     }
 }

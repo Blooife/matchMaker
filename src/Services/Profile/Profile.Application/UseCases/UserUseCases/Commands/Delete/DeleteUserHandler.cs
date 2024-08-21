@@ -9,7 +9,7 @@ using Shared.Messages.Profile;
 
 namespace Profile.Application.UseCases.UserUseCases.Commands.Delete;
 
-public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService, ProducerService _producerService) : IRequestHandler<DeleteUserCommand, UserResponseDto>
+public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService, IProducerService _producerService) : IRequestHandler<DeleteUserCommand, UserResponseDto>
 {
     private readonly string _cacheKeyPrefix = "profile";
     
@@ -26,11 +26,15 @@ public class DeleteUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheS
 
         var profiles =
             await _unitOfWork.ProfileRepository.GetAsync(profile => profile.UserId == user.Id, cancellationToken);
+        
         var profile = profiles.First();
+        
         await _unitOfWork.ProfileRepository.DeleteProfileAsync(profile);
+        
         await _unitOfWork.SaveAsync(cancellationToken);
         
         var cacheKeyProfile = $"{_cacheKeyPrefix}:{profile.Id}";
+        
         await _cacheService.RemoveAsync(cacheKeyProfile, cancellationToken:cancellationToken);
         
         await _producerService.ProduceAsync(new ProfileDeletedMessage(){Id = profile.Id});

@@ -18,6 +18,7 @@ public class RemoveInterestFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
     public async Task<List<InterestResponseDto>> Handle(RemoveInterestFromProfileCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
+        
         var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
         {
             var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.Dto.ProfileId, cancellationToken);
@@ -47,6 +48,9 @@ public class RemoveInterestFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
         }
         
         var interestToRemove = profile.Interests.First(i=>i.Id == request.Dto.InterestId);
+        
+        await _unitOfWork.InterestRepository.RemoveInterestFromProfileAsync(profile, interestToRemove);
+        
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),

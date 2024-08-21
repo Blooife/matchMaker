@@ -22,6 +22,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
     public async Task<GeneralResponseDto> RegisterAsync(UserRequestDto registrationRequestDto)
     {
         await _validator.ValidateAndThrowAsync(registrationRequestDto);
+        
         var user = _mapper.Map<User>(registrationRequestDto);
         
         var result = await _userRepository.RegisterAsync(user, registrationRequestDto.Password);
@@ -35,6 +36,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
         await _userRepository.AddToRoleAsync(user, Roles.User);
         
         var message = _mapper.Map<UserCreatedMessage>(user);
+        
         await _producerService.ProduceAsync(message);
         
         return new  GeneralResponseDto() { Message = "User registered successfully"};
@@ -43,6 +45,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
     public async Task<LoginResponseDto> LoginAsync(UserRequestDto loginRequestDto, CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(loginRequestDto, cancellationToken);
+        
         var user = await _userRepository.GetByEmailAsync(loginRequestDto.Email, cancellationToken);
             
         if (user is null)

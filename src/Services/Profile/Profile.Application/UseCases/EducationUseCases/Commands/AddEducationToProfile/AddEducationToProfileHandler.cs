@@ -18,6 +18,7 @@ public class AddEducationToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapp
     public async Task<List<ProfileEducationResponseDto>> Handle(AddEducationToProfileCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
+        
         var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
         {
             var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.Dto.ProfileId, cancellationToken);
@@ -47,10 +48,13 @@ public class AddEducationToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapp
         }
 
         var profileEducation = _mapper.Map<ProfileEducation>(request.Dto);
+        
         await _unitOfWork.EducationRepository.AddEducationToProfileAsync(profile, profileEducation);
+        
         await _unitOfWork.SaveAsync(cancellationToken);
 
         profileEducation.Education = education;
+        
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),
             cancellationToken: cancellationToken);
         

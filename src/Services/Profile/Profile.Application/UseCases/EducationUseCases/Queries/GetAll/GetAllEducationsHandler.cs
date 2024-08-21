@@ -22,6 +22,7 @@ public class GetAllEducationsHandler(IUnitOfWork _unitOfWork, IMapper _mapper, I
         var result = await _unitOfWork.EducationRepository.GetAllAsync(cancellationToken);
         
         var mappedEducations = _mapper.Map<List<EducationResponseDto>>(result);
+        
         await _cacheService.SetAsync(_cacheKeyPrefix, mappedEducations, cancellationToken:cancellationToken);
         
         return mappedEducations;

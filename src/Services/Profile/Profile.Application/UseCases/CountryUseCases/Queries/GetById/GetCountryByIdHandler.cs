@@ -14,6 +14,7 @@ public class GetCountryByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
     public async Task<CountryResponseDto> Handle(GetCountryByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.CountryId}";
+        
         var cachedData = await _cacheService.GetAsync<CountryResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)

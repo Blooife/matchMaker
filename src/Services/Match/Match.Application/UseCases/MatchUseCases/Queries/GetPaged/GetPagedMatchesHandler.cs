@@ -19,11 +19,13 @@ public class GetPagedMatchesHandler(IUnitOfWork _unitOfWork, IProfileGrpcClient 
         }
 
         var (matches, count) = await _unitOfWork.Matches.GetPagedAsync(request.ProfileId, request.PageNumber, request.PageSize, cancellationToken);
+        
         var filteredIds = matches
             .SelectMany(m => new[] { m.FirstProfileId, m.SecondProfileId })  
             .Where(id => id != request.ProfileId)  
             .Distinct()  
             .ToList();
+        
         var profiles = await _client.GetProfilesInfo(filteredIds);
         
         return new PagedList<ProfileResponseDto>(profiles, count, request.PageNumber, request.PageSize);

@@ -22,6 +22,7 @@ public class GetAllLanguagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IC
         var languages = await _unitOfWork.LanguageRepository.GetAllAsync(cancellationToken);
         
         var mappedLanguages = _mapper.Map<List<LanguageResponseDto>>(languages);
+        
         await _cacheService.SetAsync(_cacheKeyPrefix, mappedLanguages, cancellationToken:cancellationToken);
         
         return mappedLanguages;

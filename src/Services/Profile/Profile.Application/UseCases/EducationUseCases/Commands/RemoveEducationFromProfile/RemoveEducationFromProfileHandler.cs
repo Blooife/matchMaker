@@ -18,6 +18,7 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork, IMapper 
     public async Task<List<ProfileEducationResponseDto>> Handle(RemoveEducationFromProfileCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
+        
         var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
         {
             var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.Dto.ProfileId, cancellationToken);
@@ -49,6 +50,7 @@ public class RemoveEducationFromProfileHandler(IUnitOfWork _unitOfWork, IMapper 
         var profileEducation = profile.ProfileEducations.First(profileEducation => profileEducation.EducationId == request.Dto.EducationId);
         
         await _unitOfWork.EducationRepository.RemoveEducationFromProfileAsync(profile, profileEducation);
+        
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile), cancellationToken: cancellationToken);

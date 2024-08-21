@@ -14,6 +14,7 @@ public class AddLikeHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequest
         var likeEntity = _mapper.Map<Like>(request.Dto);
 
         var likerProfile = await _unitOfWork.Profiles.GetByIdAsync(likeEntity.ProfileId, cancellationToken);
+        
         var likedProfile = await _unitOfWork.Profiles.GetByIdAsync(likeEntity.TargetProfileId, cancellationToken);
 
         if (likerProfile is null)
@@ -36,7 +37,9 @@ public class AddLikeHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequest
                 SecondProfileId = likeEntity.TargetProfileId,
                 Timestamp = DateTime.UtcNow
             };
+            
             await _unitOfWork.Matches.CreateAsync(matchEntity, cancellationToken);
+            
             await _unitOfWork.Likes.DeleteAsync(mutualLike, cancellationToken);
         }
         else

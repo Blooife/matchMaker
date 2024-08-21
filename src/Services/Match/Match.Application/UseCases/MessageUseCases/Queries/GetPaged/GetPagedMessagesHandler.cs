@@ -20,6 +20,7 @@ public class GetPagedMessagesHandler(IUnitOfWork _unitOfWork, IMapper _mapper) :
 
         var (messages, count) =
             await _unitOfWork.Messages.GetPagedAsync(request.ChatId, request.PageNumber, request.PageSize, cancellationToken);
+        
         var mappedMessages = _mapper.Map<List<MessageResponseDto>>(messages);
 
         return new PagedList<MessageResponseDto>(mappedMessages, count, request.PageNumber, request.PageSize);

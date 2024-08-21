@@ -14,6 +14,7 @@ public class GetGoalByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICache
     public async Task<GoalResponseDto> Handle(GetGoalByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.GoalId}";
+        
         var cachedData = await _cacheService.GetAsync<GoalResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -29,6 +30,7 @@ public class GetGoalByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICache
         }
         
         var mappedGoal = _mapper.Map<GoalResponseDto>(goal);
+        
         await _cacheService.SetAsync(cacheKey, mappedGoal, cancellationToken:cancellationToken);
         
         return mappedGoal;

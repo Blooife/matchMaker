@@ -27,11 +27,13 @@ public class DbCleanupService : IDbCleanupService
             var matchesCollection = mongoContext.GetCollection<MatchEntity>(_options.Value.MatchesCollectionName);
 
             var profileFilter = Builders<Profile>.Filter.In(p => p.Id, profileIds);
+            
             await profilesCollection.DeleteManyAsync(profileFilter, cancellationToken);
            
             var matchFilter = Builders<MatchEntity>.Filter.Or(
                 Builders<MatchEntity>.Filter.In(m => m.FirstProfileId, profileIds),
                 Builders<MatchEntity>.Filter.In(m => m.SecondProfileId, profileIds));
+            
             await matchesCollection.DeleteManyAsync(matchFilter, cancellationToken);
                     
         }

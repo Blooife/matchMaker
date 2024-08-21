@@ -18,6 +18,7 @@ public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
     public async Task<List<LanguageResponseDto>> Handle(RemoveLanguageFromProfileCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
+        
         var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
         {
             var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.Dto.ProfileId, cancellationToken);
@@ -47,7 +48,9 @@ public class RemoveLanguageFromProfileHandler(IUnitOfWork _unitOfWork, IMapper _
         }
 
         var languageToRemove = profile.Languages.First(l=>l.Id == request.Dto.LanguageId);
+        
         await _unitOfWork.LanguageRepository.RemoveLanguageFromProfileAsync(profile, languageToRemove);
+        
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),

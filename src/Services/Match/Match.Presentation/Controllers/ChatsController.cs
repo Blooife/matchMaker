@@ -1,3 +1,4 @@
+using AutoMapper;
 using Match.Application.DTOs.Chat.Request;
 using Match.Application.UseCases.ChatUseCases.Commands.Create;
 using Match.Application.UseCases.ChatUseCases.Commands.Delete;
@@ -8,13 +9,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shared.Constants;
+using Shared.Models;
 
 namespace Match.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(Roles = $"{Roles.User}")]
-public class ChatsController(IMediator _mediator) : ControllerBase
+public class ChatsController(IMediator _mediator, IMapper _mapper) : ControllerBase
 {
     [HttpGet("profiles")]
     public async Task<IActionResult> GetByProfilesIds(CancellationToken cancellationToken, [FromQuery] string firstProfileId, [FromQuery] string secondProfileId)
@@ -32,15 +34,7 @@ public class ChatsController(IMediator _mediator) : ControllerBase
         var query = new GetPagedChatsQuery(profileId, pageNumber, pageSize);
 
         var pagedList = await _mediator.Send(query, cancellationToken);
-        var metadata = new
-        {
-            pagedList.TotalCount,
-            pagedList.PageSize,
-            pagedList.CurrentPage,
-            pagedList.TotalPages,
-            pagedList.HasNext,
-            pagedList.HasPrevious
-        };
+        var metadata = _mapper.Map<PaginationMetadata>(pagedList);
         
         HttpContext.Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
 

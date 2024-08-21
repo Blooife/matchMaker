@@ -14,6 +14,7 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
     public async Task<ProfileResponseDto> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.ProfileId}";
+        
         var cachedData = await _cacheService.GetAsync<ProfileResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -29,6 +30,7 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
         }
         
         var mappedProfile = _mapper.Map<ProfileResponseDto>(profile);
+        
         await _cacheService.SetAsync(cacheKey, mappedProfile, cancellationToken:cancellationToken);
         
         return mappedProfile;

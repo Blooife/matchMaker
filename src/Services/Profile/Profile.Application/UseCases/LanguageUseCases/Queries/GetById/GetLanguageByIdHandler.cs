@@ -14,6 +14,7 @@ public class GetLanguageByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IC
     public async Task<LanguageResponseDto> Handle(GetLanguageByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.LanguageId}";
+        
         var cachedData = await _cacheService.GetAsync<LanguageResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -29,6 +30,7 @@ public class GetLanguageByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IC
         }
         
         var mappedLanguage = _mapper.Map<LanguageResponseDto>(language);
+        
         await _cacheService.SetAsync(cacheKey, mappedLanguage, cancellationToken:cancellationToken);
         
         return mappedLanguage;

@@ -24,6 +24,7 @@ public class ConsumerService : BackgroundService
         try
         {
             await Task.Yield();
+            
             _consumer.Subscribe(_topic);
 
             while (!cancellationToken.IsCancellationRequested)
@@ -33,6 +34,7 @@ public class ConsumerService : BackgroundService
 
                 using var scope = _serviceProvider.CreateScope();
                 var messageHandler = scope.ServiceProvider.GetRequiredService<MessageHandler>();
+                
                 await messageHandler.HandleMessageAsync(message, cancellationToken);
             }
         }

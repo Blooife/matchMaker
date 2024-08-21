@@ -13,6 +13,7 @@ public class GetCityByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICache
     public async Task<CityResponseDto> Handle(GetCityByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.CityId}";
+        
         var cachedData = await _cacheService.GetAsync<CityResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -28,6 +29,7 @@ public class GetCityByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICache
         }
         
         var mappedCity = _mapper.Map<CityResponseDto>(city);
+        
         await _cacheService.SetAsync(cacheKey, mappedCity, cancellationToken:cancellationToken);
         
         return mappedCity;

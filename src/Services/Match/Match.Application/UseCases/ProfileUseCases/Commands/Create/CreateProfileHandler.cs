@@ -18,6 +18,7 @@ public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         }
         
         var profile = _mapper.Map<Profile>(request.Dto);
+        
         await _unitOfWork.Profiles.CreateAsync(profile, cancellationToken);
     }
 }

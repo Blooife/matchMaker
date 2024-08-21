@@ -45,6 +45,7 @@ public class MinioService : IMinioService
                 .WithStreamData(new MemoryStream(fileBytes))
                 .WithObjectSize(fileStream.Length)
                 .WithContentType(Path.GetExtension(objectName));
+            
             await _minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
         }
     }
@@ -52,6 +53,7 @@ public class MinioService : IMinioService
     public async Task<Stream> GetFileAsync(string objectName)
     {
         var memoryStream = new MemoryStream();
+        
         await _minioClient.GetObjectAsync(new GetObjectArgs()
             .WithBucket(BucketName)
             .WithObject(objectName)

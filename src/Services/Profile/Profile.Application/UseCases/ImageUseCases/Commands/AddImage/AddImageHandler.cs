@@ -11,7 +11,7 @@ using Shared.Messages.Profile;
 
 namespace Profile.Application.UseCases.ImageUseCases.Commands.AddImage;
 
-public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService, ICacheService _cacheService, ProducerService _producerService) : IRequestHandler<AddImageCommand, IEnumerable<ImageResponseDto>>
+public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService, ICacheService _cacheService, IProducerService _producerService) : IRequestHandler<AddImageCommand, IEnumerable<ImageResponseDto>>
 {
     private readonly string _cacheKeyPrefix = "profile";
     private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png" };
@@ -19,6 +19,7 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
     public async Task<IEnumerable<ImageResponseDto>> Handle(AddImageCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
+        
         var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
         {
             var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.Dto.ProfileId, cancellationToken);
@@ -44,8 +45,11 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
         var objectName = $"{request.Dto.ProfileId}/{file.FileName}";
         
         await using var stream = new MemoryStream();
+        
         await file.CopyToAsync(stream, cancellationToken);
+        
         stream.Position = 0;
+        
         await _minioService.UploadFileAsync(objectName, file);
 
         bool isMain = profile.Images.Count == 0;
@@ -59,6 +63,7 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
         };
 
         var result = await _unitOfWork.ImageRepository.AddImageToProfileAsync(imageEntity, cancellationToken);
+        
         await _unitOfWork.SaveAsync(cancellationToken);
         
         profile.Images.Add(result);
@@ -67,12 +72,14 @@ public class AddImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioSer
             .ThenByDescending(i => i.UploadTimestamp)
             .ToList();
         profile.Images = sortedImages;
+        
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),
             cancellationToken: cancellationToken);
 
         if (isMain)
         {
             var message = _mapper.Map<ProfileUpdatedMessage>(profile);
+            
             await _producerService.ProduceAsync(message);
         }
         

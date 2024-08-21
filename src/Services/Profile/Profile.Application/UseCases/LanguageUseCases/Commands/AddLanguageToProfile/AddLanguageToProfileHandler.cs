@@ -18,6 +18,7 @@ public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
     public async Task<List<LanguageResponseDto>> Handle(AddLanguageToProfileCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
+        
         var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
         {
             var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.Dto.ProfileId, cancellationToken);
@@ -47,6 +48,7 @@ public class AddLanguageToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
         }
         
         await _unitOfWork.LanguageRepository.AddLanguageToProfileAsync(profile, language);
+        
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),

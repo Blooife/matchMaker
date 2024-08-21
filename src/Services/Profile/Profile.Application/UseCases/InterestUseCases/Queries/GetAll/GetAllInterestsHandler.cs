@@ -22,6 +22,7 @@ public class GetAllInterestsHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IC
         var interests = await _unitOfWork.InterestRepository.GetAllAsync(cancellationToken);
         
         var mappedInterests = _mapper.Map<List<InterestResponseDto>>(interests);
+        
         await _cacheService.SetAsync(_cacheKeyPrefix, mappedInterests, cancellationToken:cancellationToken);
         
         return mappedInterests;

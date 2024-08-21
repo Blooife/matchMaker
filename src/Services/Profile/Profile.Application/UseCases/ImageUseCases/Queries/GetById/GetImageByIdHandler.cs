@@ -14,6 +14,7 @@ public class GetImageByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICach
     public async Task<ImageResponseDto> Handle(GetImageByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.ImageId}";
+        
         var cachedData = await _cacheService.GetAsync<ImageResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -29,6 +30,7 @@ public class GetImageByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICach
         }
         
         var mappedImage = _mapper.Map<ImageResponseDto>(image);
+        
         await _cacheService.SetAsync(cacheKey, mappedImage, cancellationToken:cancellationToken);
         
         return mappedImage;

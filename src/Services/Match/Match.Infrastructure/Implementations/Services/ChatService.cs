@@ -34,6 +34,7 @@ public class ChatService : IChatService
         await _unitOfWork.Messages.CreateAsync(newMessage, cancellationToken);
 
         chat.LastMessageTimestamp = newMessage.Timestamp;
+        
         await _unitOfWork.Chats.UpdateAsync(chat, cancellationToken);
         
         return newMessage;

@@ -22,6 +22,7 @@ public class GetAllCountriesHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IC
         var countries = await _unitOfWork.CountryRepository.GetAllAsync(cancellationToken);
         
         var mappedCountries = _mapper.Map<List<CountryResponseDto>>(countries);
+        
         await _cacheService.SetAsync(_cacheKeyPrefix, mappedCountries, cancellationToken:cancellationToken);
         
         return mappedCountries;

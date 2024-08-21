@@ -22,6 +22,7 @@ public class GetAllCitiesHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICach
         var cities = await _unitOfWork.CityRepository.GetAllAsync(cancellationToken);
         
         var mappedCities = _mapper.Map<List<CityResponseDto>>(cities);
+        
         await _cacheService.SetAsync(_cacheKeyPrefix, mappedCities, cancellationToken:cancellationToken);
         
         return mappedCities;

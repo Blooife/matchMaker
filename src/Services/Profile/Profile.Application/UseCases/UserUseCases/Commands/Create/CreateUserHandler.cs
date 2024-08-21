@@ -4,11 +4,10 @@ using Profile.Application.DTOs.User.Response;
 using Profile.Application.Exceptions;
 using Profile.Domain.Models;
 using Profile.Domain.Interfaces.Repositories;
-using Profile.Domain.Interfaces.Services;
 
 namespace Profile.Application.UseCases.UserUseCases.Commands.Create;
 
-public class CreateUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheService _cacheService) : IRequestHandler<CreateUserCommand, UserResponseDto>
+public class CreateUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<CreateUserCommand, UserResponseDto>
 {
     public async Task<UserResponseDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
@@ -20,11 +19,11 @@ public class CreateUserHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICacheS
         }
         
         var user = _mapper.Map<User>(request.CreateUserDto);
+        
         var result = await _unitOfWork.UserRepository.CreateUserAsync(user, cancellationToken);
+        
         await _unitOfWork.SaveAsync(cancellationToken);
         
-        var mappedUser = _mapper.Map<UserResponseDto>(result);
-        
-        return mappedUser;
+        return _mapper.Map<UserResponseDto>(result);
     }
 }

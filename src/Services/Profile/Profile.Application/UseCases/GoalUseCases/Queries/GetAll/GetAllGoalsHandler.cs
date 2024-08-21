@@ -22,6 +22,7 @@ public class GetAllGoalsHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICache
         var goals = await _unitOfWork.GoalRepository.GetAllAsync(cancellationToken);
         
         var mappedGoals = _mapper.Map<List<GoalResponseDto>>(goals);
+        
         await _cacheService.SetAsync(_cacheKeyPrefix, mappedGoals, cancellationToken:cancellationToken);
 
         return mappedGoals;

@@ -18,6 +18,7 @@ public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
     public async Task<List<InterestResponseDto>> Handle(AddInterestToProfileCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
+        
         var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
         {
             var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.Dto.ProfileId, cancellationToken);
@@ -54,6 +55,7 @@ public class AddInterestToProfileHandler(IUnitOfWork _unitOfWork, IMapper _mappe
         }
         
         await _unitOfWork.InterestRepository.AddInterestToProfileAsync(profile, interest);
+        
         await _unitOfWork.SaveAsync(cancellationToken);
         
         await _cacheService.SetAsync(cacheKey, _mapper.Map<ProfileResponseDto>(profile),

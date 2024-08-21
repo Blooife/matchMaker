@@ -11,13 +11,14 @@ using Shared.Messages.Profile;
 
 namespace Profile.Application.UseCases.ImageUseCases.Commands.RemoveImage;
 
-public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService, ICacheService _cacheService, ProducerService _producerService) : IRequestHandler<RemoveImageCommand, ImageResponseDto>
+public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinioService _minioService, ICacheService _cacheService, IProducerService _producerService) : IRequestHandler<RemoveImageCommand, ImageResponseDto>
 {
     private readonly string _cacheKeyPrefix = "profile";
     
     public async Task<ImageResponseDto> Handle(RemoveImageCommand request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.Dto.ProfileId}";
+        
         var profileResponseDto = await _cacheService.GetAsync(cacheKey, async () =>
         {
             var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.Dto.ProfileId, cancellationToken);
@@ -40,14 +41,17 @@ public class RemoveImageHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMinio
         }
         
         await _unitOfWork.ImageRepository.RemoveImageFromProfileAsync(image);
+        
         profile.Images.Remove(image);
         
         if (!profile.Images[0].IsMainImage)
         {
             profile.Images[0].IsMainImage = true;
+            
             await _unitOfWork.ImageRepository.UpdateImageAsync(profile.Images[0]);
             
             var message = _mapper.Map<ProfileUpdatedMessage>(profile);
+            
             await _producerService.ProduceAsync(message);
         }
         

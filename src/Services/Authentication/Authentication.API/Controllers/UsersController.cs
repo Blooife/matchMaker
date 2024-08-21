@@ -1,14 +1,16 @@
 using Authentication.BusinessLogic.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shared.Constants;
+using Shared.Models;
 
 namespace Authentication.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController(IUserService _userService): ControllerBase
+public class UsersController(IUserService _userService, IMapper _mapper): ControllerBase
 {
     [HttpGet("{userId}")]
     [Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
@@ -33,15 +35,7 @@ public class UsersController(IUserService _userService): ControllerBase
     public async Task<IActionResult> GetPaginatedUsers([FromQuery] int pageSize, [FromQuery] int pageNumber, CancellationToken cancellationToken)
     {
         var pagedList = await _userService.GetPaginatedUsersAsync(pageSize, pageNumber);
-        var metadata = new
-        {
-            pagedList.TotalCount,
-            pagedList.PageSize,
-            pagedList.CurrentPage,
-            pagedList.TotalPages,
-            pagedList.HasNext,
-            pagedList.HasPrevious
-        };
+        var metadata = _mapper.Map<PaginationMetadata>(pagedList);
 
         HttpContext.Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
         
