@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Shared.Models;
+using Shared.Options;
 
 namespace Match.Presentation.Extensions;
 
@@ -14,9 +14,7 @@ public static class ServiceExtensions
         services.AddAuthorization();
         services.AddControllers();
         services.ConfigureJwtOptions(config);
-        var serviceProvider = services.BuildServiceProvider();
-        var jwtOptions = serviceProvider.GetService<IOptions<JwtOptions>>()!.Value;
-        services.ConfigureAuthentication(jwtOptions);
+        services.ConfigureAuthentication(services.BuildServiceProvider().GetService<IOptions<JwtOptions>>()!.Value);
         services.ConfigureCors();
         services.ConfigureSwagger();
     }
@@ -52,6 +50,7 @@ public static class ServiceExtensions
 
     private static void ConfigureSwagger(this IServiceCollection services)
     {
+        services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
         services.AddSwaggerGen(option =>
         {
             option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
@@ -84,9 +83,11 @@ public static class ServiceExtensions
         {
             options.AddPolicy("MyCorsPolicy", builder =>
                 builder
-                    .AllowAnyOrigin()
+                    .WithOrigins("http://localhost:4200")
                     .AllowAnyMethod()
-                    .AllowAnyHeader());
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithExposedHeaders("X-Pagination"));
         });
     }
 }

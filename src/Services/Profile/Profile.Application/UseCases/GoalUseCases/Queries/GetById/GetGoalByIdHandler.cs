@@ -2,8 +2,8 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Goal.Response;
 using Profile.Application.Exceptions;
-using Profile.Application.Services.Interfaces;
-using Profile.Domain.Interfaces;
+using Profile.Domain.Interfaces.Repositories;
+using Profile.Domain.Interfaces.Services;
 
 namespace Profile.Application.UseCases.GoalUseCases.Queries.GetById;
 
@@ -14,6 +14,7 @@ public class GetGoalByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICache
     public async Task<GoalResponseDto> Handle(GetGoalByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.GoalId}";
+        
         var cachedData = await _cacheService.GetAsync<GoalResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -29,6 +30,7 @@ public class GetGoalByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICache
         }
         
         var mappedGoal = _mapper.Map<GoalResponseDto>(goal);
+        
         await _cacheService.SetAsync(cacheKey, mappedGoal, cancellationToken:cancellationToken);
         
         return mappedGoal;

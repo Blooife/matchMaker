@@ -9,7 +9,7 @@ namespace Match.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
+[Authorize(Roles = $"{Roles.User}")]
 public class LikesController(IMediator _mediator) : ControllerBase
 {
     [HttpPost]

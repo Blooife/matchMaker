@@ -2,7 +2,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Shared.Messages.Authentication;
+using Shared.Messages;
 
 namespace Authentication.BusinessLogic.Producers;
 

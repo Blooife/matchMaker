@@ -5,8 +5,6 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Profile.Application.Behavior;
-using Profile.Application.Services.Implementations;
-using Profile.Application.Services.Interfaces;
 using Profile.Application.Kafka.Consumers;
 using Profile.Application.Kafka.Producers;
 
@@ -20,7 +18,6 @@ public static class ServiceExtensions
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-        services.AddSingleton<ICacheService, CacheService>();
         services.ConfigureMessageBroker(config);
     }
 
@@ -29,7 +26,7 @@ public static class ServiceExtensions
         services.AddScoped<MessageHandler>();
         services.AddHostedService<ConsumerService>();
         services.Configure<ConsumerConfig>(config.GetRequiredSection("Kafka:Consumer"));
-        services.AddSingleton<ProducerService>();
+        services.AddScoped<IProducerService, ProducerService>();
         services.Configure<ProducerConfig>(config.GetRequiredSection("Kafka:Producer"));
     }
 }

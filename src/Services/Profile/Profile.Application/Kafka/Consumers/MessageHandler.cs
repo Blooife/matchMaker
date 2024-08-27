@@ -32,22 +32,32 @@ public class MessageHandler(IMapper _mapper, IMediator _mediator)
             {
                 var typedMessage = JsonConvert.DeserializeObject(payload, type);
 
-                if (typedMessage is UserCreatedMessage userCreatedMessage)
+                switch (typedMessage)
                 {
-                    var command = new CreateUserCommand(_mapper.Map<CreateUserDto>(userCreatedMessage));
-                    var result = await _mediator.Send(command, cancellationToken);
-                }
-                else if (typedMessage is UserDeletedMessage userDeletedMessage)
-                {
-                    var command = new DeleteUserCommand(userDeletedMessage.Id);
-                    var result = await _mediator.Send(command, cancellationToken);
-                }
-                else if(typedMessage is ManyUsersDeletedMessage manyUsersDeletedMessage)
-                {
-                    Console.WriteLine(manyUsersDeletedMessage.UsersIds.ToString());
-                    Console.WriteLine("here");
-                    var command = new DeleteProfilesPermanentlyCommand(manyUsersDeletedMessage.UsersIds);
-                    await _mediator.Send(command, cancellationToken);
+                    case UserCreatedMessage userCreatedMessage:
+                    {
+                        var command = new CreateUserCommand(_mapper.Map<CreateUserDto>(userCreatedMessage));
+                    
+                        await _mediator.Send(command, cancellationToken);
+                        
+                        break;
+                    }
+                    case UserDeletedMessage userDeletedMessage:
+                    {
+                        var command = new DeleteUserCommand(userDeletedMessage.Id);
+                    
+                        await _mediator.Send(command, cancellationToken);
+                        
+                        break;
+                    }
+                    case ManyUsersDeletedMessage manyUsersDeletedMessage:
+                    {
+                        var command = new DeleteProfilesPermanentlyCommand(manyUsersDeletedMessage.UsersIds);
+
+                        await _mediator.Send(command, cancellationToken);
+
+                        break;
+                    }
                 }
             }
         }

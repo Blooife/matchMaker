@@ -25,6 +25,7 @@ public static class ServicesExtension
         services.ConfigureProviders();
         services.AddSingleton<IProducerService, ProducerService>();
         services.Configure<ProducerConfig>(config.GetRequiredSection("Kafka:Producer"));
+        services.ConfigureKafka(config);
         services.ConfigureHangfire(config);
     }
     
@@ -42,6 +43,12 @@ public static class ServicesExtension
     {
         services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
         services.AddScoped<IRefreshTokenProvider, RefreshTokenProvider>();
+    }
+    
+    private static void ConfigureKafka(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddSingleton<IProducerService, ProducerService>();
+        services.Configure<ProducerConfig>(config.GetRequiredSection("Kafka:Producer"));
     }
 
     private static void ConfigureHangfire(this IServiceCollection services, IConfiguration config)

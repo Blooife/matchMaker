@@ -33,27 +33,40 @@ public class MessageHandler(IMapper _mapper, IMediator _mediator)
             {
                 var typedMessage = JsonConvert.DeserializeObject(payload, type);
 
-                if (typedMessage is ProfileCreatedMessage profileCreatedMessage)
+                switch (typedMessage)
                 {
-                    Console.WriteLine("created");
-                    var command = new CreateProfileCommand(_mapper.Map<CreateProfileDto>(profileCreatedMessage));
-                    await _mediator.Send(command, cancellationToken);
-                }
-                else if (typedMessage is ProfileDeletedMessage profileDeletedMessage)
-                {
-                    var command = new DeleteProfileCommand(profileDeletedMessage.Id);
-                    await _mediator.Send(command, cancellationToken);
-                }
-                else if (typedMessage is ProfileUpdatedMessage profileUpdatedMessage)
-                {
-                    var command = new UpdateProfileCommand(_mapper.Map<UpdateProfileDto>(profileUpdatedMessage));
-                    await _mediator.Send(command, cancellationToken);
-                }
-                else if (typedMessage is ManyProfilesDeletedMessage manyProfilesDeletedMessage)
-                {
-                    Console.WriteLine(manyProfilesDeletedMessage.ProfilesIds);
-                    var command = new DeleteProfilesPermanentlyCommand(manyProfilesDeletedMessage.ProfilesIds);
-                    await _mediator.Send(command, cancellationToken);
+                    case ProfileCreatedMessage profileCreatedMessage:
+                    {
+                        var command = new CreateProfileCommand(_mapper.Map<CreateProfileDto>(profileCreatedMessage));
+                    
+                        await _mediator.Send(command, cancellationToken);
+                        
+                        break;
+                    }
+                    case ProfileDeletedMessage profileDeletedMessage:
+                    {
+                        var command = new DeleteProfileCommand(profileDeletedMessage.Id);
+                    
+                        await _mediator.Send(command, cancellationToken);
+                        
+                        break;
+                    }
+                    case ProfileUpdatedMessage profileUpdatedMessage:
+                    {
+                        var command = new UpdateProfileCommand(_mapper.Map<UpdateProfileDto>(profileUpdatedMessage));
+                    
+                        await _mediator.Send(command, cancellationToken);
+                        
+                        break;
+                    }
+                    case ManyProfilesDeletedMessage manyProfilesDeletedMessage:
+                    {
+                        var command = new DeleteProfilesPermanentlyCommand(manyProfilesDeletedMessage.ProfilesIds);
+                    
+                        await _mediator.Send(command, cancellationToken);
+                        
+                        break;
+                    }
                 }
             }
         }

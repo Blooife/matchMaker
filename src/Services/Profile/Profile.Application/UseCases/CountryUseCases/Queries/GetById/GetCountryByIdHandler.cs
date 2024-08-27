@@ -2,8 +2,8 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Country.Response;
 using Profile.Application.Exceptions;
-using Profile.Application.Services.Interfaces;
-using Profile.Domain.Interfaces;
+using Profile.Domain.Interfaces.Repositories;
+using Profile.Domain.Interfaces.Services;
 
 namespace Profile.Application.UseCases.CountryUseCases.Queries.GetById;
 
@@ -14,6 +14,7 @@ public class GetCountryByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
     public async Task<CountryResponseDto> Handle(GetCountryByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.CountryId}";
+        
         var cachedData = await _cacheService.GetAsync<CountryResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -29,11 +30,8 @@ public class GetCountryByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
         }
         
         var mappedCountry = _mapper.Map<CountryResponseDto>(country);
-        
-        if (mappedCountry is not null)
-        {
-            await _cacheService.SetAsync(cacheKey, mappedCountry, cancellationToken:cancellationToken);
-        }
+
+        await _cacheService.SetAsync(cacheKey, mappedCountry, cancellationToken:cancellationToken);
 
         return mappedCountry;
     }

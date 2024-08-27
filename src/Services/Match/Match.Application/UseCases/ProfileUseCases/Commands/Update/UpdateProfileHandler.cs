@@ -1,6 +1,6 @@
 using AutoMapper;
 using Match.Application.Exceptions;
-using Match.Domain.Interfaces;
+using Match.Domain.Interfaces.Repositories;
 using MediatR;
 using Profile = Match.Domain.Models.Profile;
 
@@ -11,6 +11,7 @@ public class UpdateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
     public async Task Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var profileMapped = _mapper.Map<Profile>(request.Dto);
+        
         var profile = await _unitOfWork.Profiles.GetByIdAsync(profileMapped.Id, cancellationToken);
         
         if (profile is null)

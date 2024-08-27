@@ -5,4 +5,5 @@ public class ImageResponseDto
     public int Id { get; set; }
     public string ImageUrl { get; set; }
     public string ProfileId { get; set; }
+    public bool IsMainImage { get; set; }
 }

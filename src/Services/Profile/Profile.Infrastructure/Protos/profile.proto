@@ -17,9 +17,11 @@ message Profile {
   Gender preferred_gender = 12;
   Goal goal = 13;
   City city = 14;
-  repeated Language languages = 15;
-  repeated Interest interests = 16;
-  repeated Image images = 17;
+  Country country = 15;
+  repeated Language languages = 16;
+  repeated Interest interests = 17;
+  repeated Image images = 18;
+  repeated ProfileEducation education = 19;
 }
 
 message Goal {
@@ -30,7 +32,6 @@ message Goal {
 message City {
   int32 id = 1;
   string name = 2;
-  Country country = 3;
 }
 
 message Country {
@@ -51,6 +52,13 @@ message Interest {
 message Image {
   int32 id = 1;
   string url = 2;
+}
+
+message ProfileEducation {
+  string profileId = 1;
+  int32 educationId = 2;
+  string educationName = 3;
+  string description = 4;
 }
 
 enum Gender {

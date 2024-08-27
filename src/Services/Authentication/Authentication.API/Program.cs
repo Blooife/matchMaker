@@ -7,7 +7,6 @@ using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization(); 
@@ -36,7 +35,7 @@ app.UseAuthorization();
 app.AppendHangfireDashboard(builder.Configuration);
 app.ConfigureAndScheduleHangfireJobs();
 
-app.ApplyMigrations(app.Services);
+//app.ApplyMigrations(app.Services);
 
 app.Run();
 

@@ -1,15 +1,14 @@
 using AutoMapper;
-using Match.Application.DTOs.Profile.Response;
 using Match.Application.Exceptions;
-using Match.Domain.Interfaces;
+using Match.Domain.Interfaces.Repositories;
 using MediatR;
 using Profile = Match.Domain.Models.Profile;
 
 namespace Match.Application.UseCases.ProfileUseCases.Commands.Create;
 
-public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<CreateProfileCommand, ProfileResponseDto>
+public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<CreateProfileCommand>
 {
-    public async Task<ProfileResponseDto> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateProfileCommand request, CancellationToken cancellationToken)
     {
         var existingProfile = await _unitOfWork.Profiles.GetByIdAsync(request.Dto.Id, cancellationToken);
         
@@ -19,8 +18,7 @@ public class CreateProfileHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IR
         }
         
         var profile = _mapper.Map<Profile>(request.Dto);
-        await _unitOfWork.Profiles.CreateAsync(profile, cancellationToken);
         
-        return _mapper.Map<ProfileResponseDto>(profile);
+        await _unitOfWork.Profiles.CreateAsync(profile, cancellationToken);
     }
 }

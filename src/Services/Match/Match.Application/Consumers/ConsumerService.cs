@@ -19,11 +19,12 @@ public class ConsumerService : BackgroundService
         _serviceProvider = serviceProvider;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    protected async override Task ExecuteAsync(CancellationToken cancellationToken)
     {
         try
         {
             await Task.Yield();
+            
             _consumer.Subscribe(_topic);
 
             while (!cancellationToken.IsCancellationRequested)
@@ -33,13 +34,13 @@ public class ConsumerService : BackgroundService
 
                 using var scope = _serviceProvider.CreateScope();
                 var messageHandler = scope.ServiceProvider.GetRequiredService<MessageHandler>();
+                
                 await messageHandler.HandleMessageAsync(message, cancellationToken);
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Console.WriteLine("njdnkd");
         }
         finally
         {

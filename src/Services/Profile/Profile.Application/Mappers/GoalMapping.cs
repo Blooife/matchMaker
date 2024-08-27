@@ -7,6 +7,6 @@ public class GoalMapping : AutoMapper.Profile
 {
     public GoalMapping()
     {
-        CreateMap<Goal, GoalResponseDto>();
+        CreateMap<Goal, GoalResponseDto>().ReverseMap();
     }
 }

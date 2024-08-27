@@ -3,9 +3,8 @@ using Shared.Interfaces;
 
 namespace Profile.Domain.Models;
 
-public class UserProfile : ISoftDeletable
+public class UserProfile : BaseModel<string>, ISoftDeletable
 {
-    public string Id { get; set; }
     public string Name { get; set; }
     public string? LastName { get; set; }
     public DateTime BirthDate { get; set; }

@@ -56,12 +56,8 @@ public class UserRepository(AuthContext _dbContext, UserManager<User> _userManag
     public async Task<IdentityResult> DeleteUserByIdAsync(User user)
     {
         user.DeletedAt = DateTime.UtcNow;
+        
         return await _userManager.UpdateAsync(user);
-    }
-
-    public async Task<List<User>> GetAllUsersAsync(CancellationToken cancellationToken)
-    {
-        return await _userManager.Users.Where(u => u.DeletedAt == null).AsNoTracking().ToListAsync(cancellationToken);
     }
     
     public async Task<(List<User> Users, int TotalCount)> GetPagedUsersAsync(int pageNumber, int pageSize)

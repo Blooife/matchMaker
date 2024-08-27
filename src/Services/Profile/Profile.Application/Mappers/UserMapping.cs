@@ -1,5 +1,5 @@
-using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.DTOs.User.Request;
+using Profile.Application.DTOs.User.Response;
 using Profile.Domain.Models;
 
 namespace Profile.Application.Mappers;

@@ -35,15 +35,15 @@ public class UpdateProfileValidator : AbstractValidator<UpdateProfileCommand>
             .WithMessage("Max distance must be >= 0");
         
         RuleFor(command => command.UpdateProfileDto.AgeFrom)
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Age from must be >= 0");
+            .GreaterThanOrEqualTo(16)
+            .WithMessage("Age from must be >= 16");
         
         RuleFor(command => command.UpdateProfileDto.AgeTo)
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Age to must be >= 0");
+            .GreaterThanOrEqualTo(16)
+            .WithMessage("Age to must be >= 16");
         
         RuleFor(command => command.UpdateProfileDto.AgeFrom)
-            .LessThan(command => command.UpdateProfileDto.AgeTo)
-            .WithMessage("Age from must be less than age to");
+            .LessThanOrEqualTo(command => command.UpdateProfileDto.AgeTo)
+            .WithMessage("Age from must be less than or equal age to");
     }
 }

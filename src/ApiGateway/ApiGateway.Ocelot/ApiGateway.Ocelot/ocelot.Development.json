@@ -39,9 +39,6 @@
       ],
       "UpstreamPathTemplate": "/auth/refresh",
       "UpstreamHttpMethod": [ "POST" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
       "SwaggerKey": "auth",
       "DangerousAcceptAnyServerCertificateValidator": true
     },
@@ -115,12 +112,12 @@
         }
       ],
       "UpstreamPathTemplate": "/users/{userId}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "GET", "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
       },
       "SwaggerKey": "auth",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -135,46 +132,6 @@
         }
       ],
       "UpstreamPathTemplate": "/users/email/{email}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
-      },
-      "SwaggerKey": "auth",
-      "DangerousAcceptAnyServerCertificateValidator": true
-    },
-    {
-      "DownstreamPathTemplate": "/api/users/{userId}/roles",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5001
-        }
-      ],
-      "UpstreamPathTemplate": "/users/{userId}/roles",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
-      },
-      "SwaggerKey": "auth",
-      "DangerousAcceptAnyServerCertificateValidator": true
-    },
-    {
-      "DownstreamPathTemplate": "/api/users",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5001
-        }
-      ],
-      "UpstreamPathTemplate": "/users",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -206,26 +163,6 @@
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "DownstreamPathTemplate": "/api/users/{userId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5001
-        }
-      ],
-      "UpstreamPathTemplate": "/users/{userId}",
-      "UpstreamHttpMethod": [ "DELETE" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      },
-      "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator"
-      },
-      "SwaggerKey": "auth",
-      "DangerousAcceptAnyServerCertificateValidator": true
-    },
-    {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -240,7 +177,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "profiles",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -255,12 +192,12 @@
         }
       ],
       "UpstreamPathTemplate": "/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT","DELETE" ],
+      "UpstreamHttpMethod": [ "POST", "PUT","DELETE", "PATCH" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "profiles",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -280,7 +217,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -300,7 +237,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -320,7 +257,27 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
+      },
+      "SwaggerKey": "matches",
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/chats/{chatId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/chats/{chatId}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -340,7 +297,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -360,7 +317,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -380,7 +337,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -400,7 +357,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -420,7 +377,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -440,7 +397,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true
@@ -460,7 +417,7 @@
         "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin, Moderator, User"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
       },
       "SwaggerKey": "matches",
       "DangerousAcceptAnyServerCertificateValidator": true

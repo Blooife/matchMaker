@@ -3,7 +3,4 @@ using MediatR;
 
 namespace Match.Application.UseCases.ChatUseCases.Queries.GetByProfilesIds;
 
-public sealed record GetChatByProfilesIdsQuery(string FirstProfileId, string SecondProfileId) : IRequest<ChatResponseDto>
-{
-    
-}
+public sealed record GetChatByProfilesIdsQuery(string FirstProfileId, string SecondProfileId) : IRequest<ChatResponseDto>;

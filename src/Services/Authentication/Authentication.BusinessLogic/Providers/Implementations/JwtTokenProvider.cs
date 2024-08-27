@@ -5,7 +5,7 @@ using Authentication.BusinessLogic.Providers.Interfaces;
 using Authentication.DataLayer.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Models;
+using Shared.Options;
 
 namespace Authentication.BusinessLogic.Providers.Implementations;
 
@@ -39,7 +39,7 @@ public class JwtTokenProvider : IJwtTokenProvider
             Issuer = _jwtOptions.Issuer,
             Subject = new ClaimsIdentity(claimList),
             IssuedAt = DateTime.UtcNow,
-            Expires = _jwtOptions.Expires,
+            Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.ExpiresInMinutes),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 

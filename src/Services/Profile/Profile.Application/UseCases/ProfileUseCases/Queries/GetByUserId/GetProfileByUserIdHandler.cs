@@ -22,6 +22,7 @@ public class GetProfileByUserIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper,
         
         var mappedProfile = _mapper.Map<ProfileResponseDto>(profile);
         var cacheKey = $"{_cacheKeyPrefix}:{profile.Id}";
+        
         await _cacheService.SetAsync(cacheKey, mappedProfile, cancellationToken:cancellationToken);
         
         return mappedProfile;

@@ -2,8 +2,8 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Language.Response;
 using Profile.Application.Exceptions;
-using Profile.Application.Services.Interfaces;
-using Profile.Domain.Interfaces;
+using Profile.Domain.Interfaces.Repositories;
+using Profile.Domain.Interfaces.Services;
 
 namespace Profile.Application.UseCases.LanguageUseCases.Queries.GetById;
 
@@ -14,6 +14,7 @@ public class GetLanguageByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IC
     public async Task<LanguageResponseDto> Handle(GetLanguageByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.LanguageId}";
+        
         var cachedData = await _cacheService.GetAsync<LanguageResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -29,6 +30,7 @@ public class GetLanguageByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IC
         }
         
         var mappedLanguage = _mapper.Map<LanguageResponseDto>(language);
+        
         await _cacheService.SetAsync(cacheKey, mappedLanguage, cancellationToken:cancellationToken);
         
         return mappedLanguage;

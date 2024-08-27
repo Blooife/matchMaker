@@ -7,6 +7,6 @@ public class LanguageMapping : AutoMapper.Profile
 {
     public LanguageMapping()
     {
-        CreateMap<Language, LanguageResponseDto>();
+        CreateMap<Language, LanguageResponseDto>().ReverseMap();
     }
 }

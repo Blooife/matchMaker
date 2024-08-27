@@ -18,9 +18,11 @@ namespace Authentication.BusinessLogic.Services.Implementations;
 public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogger<AuthService> _logger,
     IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider, IValidator<UserRequestDto> _validator, IProducerService _producerService) : IAuthService
 {
+    private const int RefreshTokenExpiresInDays = 7;
     public async Task<GeneralResponseDto> RegisterAsync(UserRequestDto registrationRequestDto)
     {
         await _validator.ValidateAndThrowAsync(registrationRequestDto);
+        
         var user = _mapper.Map<User>(registrationRequestDto);
         
         var result = await _userRepository.RegisterAsync(user, registrationRequestDto.Password);
@@ -34,6 +36,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
         await _userRepository.AddToRoleAsync(user, Roles.User);
         
         var message = _mapper.Map<UserCreatedMessage>(user);
+        
         await _producerService.ProduceAsync(message);
         
         return new  GeneralResponseDto() { Message = "User registered successfully"};
@@ -42,6 +45,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
     public async Task<LoginResponseDto> LoginAsync(UserRequestDto loginRequestDto, CancellationToken cancellationToken)
     {
         await _validator.ValidateAndThrowAsync(loginRequestDto, cancellationToken);
+        
         var user = await _userRepository.GetByEmailAsync(loginRequestDto.Email, cancellationToken);
             
         if (user is null)
@@ -58,19 +62,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
             throw new LoginException(ExceptionMessages.LoginFailed);
         }
         
-        var roles = await _userRepository.GetRolesAsync(user);
-        var token = _jwtTokenProvider.GenerateToken(user, roles);
-            
-        var refreshToken = _refreshTokenProvider.GenerateRefreshToken();
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiredAt = DateTime.Now.AddDays(7).ToUniversalTime();
-
-        await _userRepository.UpdateUserAsync(user);
-            
-        var loginResponseDto = _mapper.Map<LoginResponseDto>(user);
-        loginResponseDto.JwtToken = token;
-
-        return loginResponseDto;
+        return await GetLoginResponseDtoWithGeneratedTokens(user);
     }
     
     public async Task<LoginResponseDto> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
@@ -89,18 +81,21 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
             throw new LoginException("Refresh token expired");
         }
 
+        return await GetLoginResponseDtoWithGeneratedTokens(user);
+    }
+
+    private async Task<LoginResponseDto> GetLoginResponseDtoWithGeneratedTokens(User user)
+    {
         var roles = await _userRepository.GetRolesAsync(user);
-        var token = _jwtTokenProvider.GenerateToken(user, roles);
             
-        var refreshTokenGenerated = _refreshTokenProvider.GenerateRefreshToken();
-        user.RefreshToken = refreshTokenGenerated;
-        user.RefreshTokenExpiredAt = DateTime.Now.AddDays(7).ToUniversalTime();
+        user.RefreshToken = _refreshTokenProvider.GenerateRefreshToken();
+        user.RefreshTokenExpiredAt = DateTime.UtcNow.AddDays(RefreshTokenExpiresInDays);
 
         await _userRepository.UpdateUserAsync(user);
             
         var loginResponseDto = _mapper.Map<LoginResponseDto>(user);
-        loginResponseDto.JwtToken = token;
-
+        loginResponseDto.JwtToken = _jwtTokenProvider.GenerateToken(user, roles);
+        
         return loginResponseDto;
     }
 }

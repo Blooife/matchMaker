@@ -1,15 +1,16 @@
 using MediatR;
 using Profile.Application.Kafka.Producers;
-using Profile.Domain.Interfaces;
+using Profile.Domain.Interfaces.Services;
 using Shared.Messages.Profile;
 
 namespace Profile.Application.UseCases.ProfileUseCases.Commands.DeletePermanently;
 
-public class DeleteProfilesPermanentlyHandler(IDbCleanupService _cleanupService, ProducerService _producerService) : IRequestHandler<DeleteProfilesPermanentlyCommand>
+public class DeleteProfilesPermanentlyHandler(IDbCleanupService _cleanupService, IProducerService _producerService) : IRequestHandler<DeleteProfilesPermanentlyCommand>
 {
     public async Task Handle(DeleteProfilesPermanentlyCommand request, CancellationToken cancellationToken)
     {
         _cleanupService.DeleteOldRecords(request.Ids);
+        
         await _producerService.ProduceAsync(new ManyProfilesDeletedMessage(request.Ids));
     }
 }

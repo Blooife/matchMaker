@@ -1,10 +1,11 @@
 using AutoMapper;
-using Match.Application.Services.Interfaces;
+using Match.Application.Services;
 using Match.Infrastructure.Context;
 using Match.Infrastructure.Mapper;
-using Match.Infrastructure.Services;
-using Match.Domain.Interfaces;
-using Match.Infrastructure.Implementations;
+using Match.Domain.Interfaces.Repositories;
+using Match.Domain.Interfaces.Services;
+using Match.Infrastructure.Implementations.Repositories;
+using Match.Infrastructure.Implementations.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
@@ -19,6 +20,7 @@ public static class ServiceExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.ConfigureGrpcClient();
         services.AddScoped<IDbCleanupService, DbCleanupService>();
+        services.AddScoped<IChatService, ChatService>();
     }
     
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)

@@ -2,8 +2,8 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.City.Response;
 using Profile.Application.Exceptions;
-using Profile.Application.Services.Interfaces;
-using Profile.Domain.Interfaces;
+using Profile.Domain.Interfaces.Repositories;
+using Profile.Domain.Interfaces.Services;
 
 namespace Profile.Application.UseCases.CountryUseCases.Queries.GetAllCitiesFromCountry;
 
@@ -14,6 +14,7 @@ public class GetAllCitiesFromCountryHandler(IUnitOfWork _unitOfWork, IMapper _ma
     public async Task<IEnumerable<CityResponseDto>> Handle(GetAllCitiesFromCountryQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.CountryId}:cities";
+        
         var cachedData = await _cacheService.GetAsync<IEnumerable<CityResponseDto>>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -31,6 +32,7 @@ public class GetAllCitiesFromCountryHandler(IUnitOfWork _unitOfWork, IMapper _ma
         var cities = await _unitOfWork.CountryRepository.GetAllCitiesFromCountryAsync(request.CountryId, cancellationToken);
         
         var mappedCities = _mapper.Map<List<CityResponseDto>>(cities);
+        
         await _cacheService.SetAsync(cacheKey, mappedCities, cancellationToken:cancellationToken);
         
         return mappedCities;

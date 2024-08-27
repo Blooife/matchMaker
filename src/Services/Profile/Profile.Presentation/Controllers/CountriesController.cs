@@ -10,7 +10,7 @@ namespace Profile.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = $"{Roles.Admin}, {Roles.Moderator}, {Roles.User}")]
+[Authorize(Roles = $"{Roles.User}")]
 public class CountriesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -35,9 +35,9 @@ public class CountriesController : ControllerBase
     {
         var query = new GetAllCitiesFromCountryQuery(id);
         
-        var countries = await _mediator.Send(query, cancellationToken);
+        var cities = await _mediator.Send(query, cancellationToken);
         
-        return Ok(countries);
+        return Ok(cities);
     }
     
     [HttpGet("{id}")]

@@ -2,7 +2,7 @@ namespace Match.Application.Exceptions;
 
 public class ProfilesAreNotMatchedException : Exception
 {
-    public ProfilesAreNotMatchedException(string message) : base(message)
+    public ProfilesAreNotMatchedException() : base("Profiles are not matched")
     {
 
     }

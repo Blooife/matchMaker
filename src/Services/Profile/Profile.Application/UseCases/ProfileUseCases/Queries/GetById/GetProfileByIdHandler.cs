@@ -2,11 +2,8 @@ using AutoMapper;
 using MediatR;
 using Profile.Application.DTOs.Profile.Response;
 using Profile.Application.Exceptions;
-
-using Profile.Application.Services.Interfaces;
-
-using Profile.Domain.Interfaces;
-
+using Profile.Domain.Interfaces.Repositories;
+using Profile.Domain.Interfaces.Services;
 
 namespace Profile.Application.UseCases.ProfileUseCases.Queries.GetById;
 
@@ -17,6 +14,7 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
     public async Task<ProfileResponseDto> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
     {
         var cacheKey = $"{_cacheKeyPrefix}:{request.ProfileId}";
+        
         var cachedData = await _cacheService.GetAsync<ProfileResponseDto>(cacheKey, cancellationToken);
         
         if (cachedData is not null)
@@ -24,7 +22,7 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
             return cachedData;
         }
         
-        var profile = await _unitOfWork.ProfileRepository.FirstOrDefaultAsync(request.ProfileId, cancellationToken);
+        var profile = await _unitOfWork.ProfileRepository.GetAllProfileInfoAsync(userProfile => userProfile.Id == request.ProfileId, cancellationToken);
         
         if (profile is null)
         {
@@ -32,6 +30,7 @@ public class GetProfileByIdHandler(IUnitOfWork _unitOfWork, IMapper _mapper, ICa
         }
         
         var mappedProfile = _mapper.Map<ProfileResponseDto>(profile);
+        
         await _cacheService.SetAsync(cacheKey, mappedProfile, cancellationToken:cancellationToken);
         
         return mappedProfile;
