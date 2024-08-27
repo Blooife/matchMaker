@@ -16,7 +16,7 @@ using Shared.Models;
 namespace Authentication.BusinessLogic.Services.Implementations;
 
 public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogger<AuthService> _logger,
-    IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider, IValidator<UserRequestDto> _validator, ProducerService _producerService) : IAuthService
+    IJwtTokenProvider _jwtTokenProvider, IRefreshTokenProvider _refreshTokenProvider, IValidator<UserRequestDto> _validator, IProducerService _producerService) : IAuthService
 {
     public async Task<GeneralResponseDto> RegisterAsync(UserRequestDto registrationRequestDto)
     {
@@ -47,7 +47,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
         if (user is null)
         {
             _logger.LogError("Login failed: user with email = {email} was not found", loginRequestDto.Email);
-            throw new LoginException(ExceptionMessages.LoginFailed);
+            throw new NotFoundException(loginRequestDto.Email);
         }
 
         var isValid = await _userRepository.CheckPasswordAsync(user, loginRequestDto.Password);
@@ -80,7 +80,7 @@ public class AuthService(IUserRepository _userRepository, IMapper _mapper, ILogg
         if (user is null)
         {
             _logger.LogError("Refresh failed: user with refresh token = {token} was not found", refreshToken);
-            throw new LoginException(ExceptionMessages.LoginFailed);
+            throw new NotFoundException(refreshToken);
         }
             
         if(user.RefreshTokenExpiredAt < DateTime.Now)

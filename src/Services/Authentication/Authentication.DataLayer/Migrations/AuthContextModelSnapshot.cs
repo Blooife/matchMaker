@@ -132,31 +132,31 @@ namespace Authentication.DataLayer.Migrations
                         {
                             Id = "b2103436-0d48-4b80-8a35-2551a2b47e5b",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c2ac8e71-24d1-4b49-a3bf-47752f3736a9",
+                            ConcurrencyStamp = "ead82014-38b0-42ba-b146-e34a4da4baf1",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAELLhhAairQigh5X2t0ZRTy5zLse2W+vgS11izYN7vu2YnpqmzyCj6cIZRFSEyrFE9Q==",
-                            SecurityStamp = "238a2e53-3ffb-45c9-a527-a8ff3d59d723"
+                            PasswordHash = "AQAAAAIAAYagAAAAEASOYdzVVe9ucTg7HeascbDicjgPuKjEObfZDL4fqpOzVMGIPWGfK1otR86ea8HK6g==",
+                            SecurityStamp = "e909f3cd-60ac-4481-b464-82dad1d5f862"
                         },
                         new
                         {
                             Id = "cf7ddbd5-3717-489a-84ab-8c4df32780a1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7ea6e6b3-0790-45d6-b106-a6bcb2b9260d",
+                            ConcurrencyStamp = "a9df5ada-00d2-4456-8fca-3a5f7b37ff95",
                             Email = "moderator@gmail.com",
                             EmailConfirmed = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEKBrLGHicYZkXdRSUGk09betp1xndybcEywNY57bWKQpgWS1HeKlVUJNw/nWm5x3lQ==",
-                            SecurityStamp = "2e908bbb-bebf-4f52-ab9c-92a37a841a95"
+                            PasswordHash = "AQAAAAIAAYagAAAAEAymx3LJkLG4vk6pdH+jDrrRWsBdvkzBAm1XAcMoliKmiKTbThy+W8kMprScLLTP9w==",
+                            SecurityStamp = "4e0afa29-050c-47cd-bf7a-f5677f304475"
                         },
                         new
                         {
                             Id = "7fb23b7f-1dbe-469d-b3c2-51bd1dc24048",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5e071767-6f8e-4a09-bd1e-a0cd9f343548",
+                            ConcurrencyStamp = "742f2eb4-f807-4216-9805-c2abe1f4b12e",
                             Email = "user@gmail.com",
                             EmailConfirmed = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEEqNhR+Cp3rjvT17bADKmVSMG6+dEHX15lGOce3N+4YWipe3euLm3zJfT5Gp9xkX1A==",
-                            SecurityStamp = "80b59ea8-e8cb-4c9c-8b07-fee1dc5e2e20"
+                            PasswordHash = "AQAAAAIAAYagAAAAEEjCEdVaPa761+/qC3u+7eVLGxQlkYlTgKoiv5cyOAgDThMAA+9oSqisWsTxOFU8lQ==",
+                            SecurityStamp = "21efabd3-153f-454d-920f-5cc01587ba9e"
                         });
                 });
 

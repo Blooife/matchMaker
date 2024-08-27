@@ -39,3 +39,5 @@ app.ConfigureAndScheduleHangfireJobs();
 app.ApplyMigrations(app.Services);
 
 app.Run();
+
+public partial class Program;
